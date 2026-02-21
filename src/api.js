@@ -33,7 +33,11 @@ async function request(method, path, body, requireAuth = false) {
     ...tokenHeaders,
   };
 
-  const options = { method, headers };
+  const options = {
+    method,
+    headers,
+    credentials: 'include',
+  };
   if (body !== undefined) {
     options.body = JSON.stringify(body);
   }
@@ -83,6 +87,15 @@ export async function apiSignup(email, password, name) {
  */
 export async function apiLogout() {
   return request('POST', '/auth/logout', undefined, true);
+}
+
+/**
+ * GET /auth/me
+ * Restores user session from backend cookie.
+ * @returns {{ user: User }}
+ */
+export async function apiMe() {
+  return request('GET', '/auth/me', undefined, true);
 }
 
 // ---------- Papers / Feed ----------

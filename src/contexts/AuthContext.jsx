@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { apiLogout, setAuthToken, clearAuthToken } from '../api';
+import { apiLogout, apiMe, setAuthToken, clearAuthToken } from '../api';
 
 const AuthContext = createContext();
 
@@ -16,8 +16,18 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Session is memory-only to keep frontend state aligned with backend API calls.
-    setIsLoading(false);
+    const restoreSession = async () => {
+      try {
+        const data = await apiMe();
+        setUser(data.user || null);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    restoreSession();
   }, []);
 
   // Called after a successful login or signup API response.

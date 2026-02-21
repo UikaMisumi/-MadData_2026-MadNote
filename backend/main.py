@@ -1,7 +1,7 @@
 from datetime import datetime
 import uuid
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Query
+from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 # Internal Modules
@@ -15,6 +15,7 @@ except ImportError:
     from database import db_manager
 
 app = FastAPI(title="MadNote API", version="v1")
+AUTH_COOKIE_NAME = "madnote_token"
 
 app.add_middleware(
     CORSMiddleware,
@@ -39,11 +40,19 @@ def sanitize_user(user: dict | None):
     return safe
 
 
-async def get_current_user(authorization: str = Header(None)):
-    if not authorization or not authorization.startswith("Bearer "):
+async def get_current_user(
+    authorization: str = Header(None),
+    cookie_token: str | None = Cookie(default=None, alias=AUTH_COOKIE_NAME),
+):
+    token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ", 1)[1]
+    elif cookie_token:
+        token = cookie_token
+
+    if not token:
         return None
 
-    token = authorization.split(" ", 1)[1]
     try:
         payload = auth.jwt.decode(token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
         email = payload.get("sub")
@@ -99,7 +108,7 @@ async def health_check():
 
 # --- Auth Routes ---
 @app.post("/api/v1/auth/signup", status_code=201)
-async def signup(user_info: dict):
+async def signup(user_info: dict, response: Response):
     email = str(user_info.get("email", "")).strip()
     password = str(user_info.get("password", ""))
 
@@ -128,11 +137,19 @@ async def signup(user_info: dict):
     users[email] = new_user
     auth.save_users(users)
     token = auth.create_access_token({"sub": email})
+    response.set_cookie(
+        key=AUTH_COOKIE_NAME,
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=7 * 24 * 3600,
+        path="/",
+    )
     return {"user": sanitize_user(new_user), "token": token}
 
 
 @app.post("/api/v1/auth/login")
-async def login(credentials: dict):
+async def login(credentials: dict, response: Response):
     email = str(credentials.get("email", "")).strip()
     password = str(credentials.get("password", ""))
 
@@ -142,11 +159,26 @@ async def login(credentials: dict):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = auth.create_access_token({"sub": user["email"]})
+    response.set_cookie(
+        key=AUTH_COOKIE_NAME,
+        value=token,
+        httponly=True,
+        samesite="lax",
+        max_age=7 * 24 * 3600,
+        path="/",
+    )
     return {"user": sanitize_user(user), "token": token}
 
 
+@app.get("/api/v1/auth/me")
+async def auth_me(user=Depends(get_current_user)):
+    user = require_user(user)
+    return {"user": sanitize_user(user)}
+
+
 @app.post("/api/v1/auth/logout")
-async def logout(_: dict = Depends(get_current_user)):
+async def logout(response: Response, _: dict = Depends(get_current_user)):
+    response.delete_cookie(key=AUTH_COOKIE_NAME, path="/")
     return {"success": True}
 
 

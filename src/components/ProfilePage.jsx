@@ -192,6 +192,7 @@ const ProfilePage = () => {
           showPrivBadge={false}
           showKebab={false}
           className={activeTab}
+          layout="rows"
         />
 
         {postsToRender.length === 0 && (

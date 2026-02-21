@@ -251,6 +251,7 @@
   margin: 18px auto 0;
 }
 
+
 .tab-empty {
   margin: 24px auto 0;
   max-width: 980px;
@@ -320,4 +321,5 @@
   .profile-tabs {
     top: 64px;
   }
+
 }

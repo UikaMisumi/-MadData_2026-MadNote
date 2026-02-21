@@ -8,7 +8,7 @@ function SettingsPage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
