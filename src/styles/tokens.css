@@ -1,5 +1,32 @@
 /* Design Tokens - source of truth for theme and component styling */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
+  /* Index5 design language */
+  --mn-font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mn-bg-base: #f8fafc;
+  --mn-bg-card: #ffffff;
+  --mn-text-strong: #0f172a;
+  --mn-text-main: #334155;
+  --mn-text-muted: #64748b;
+  --mn-border-subtle: rgba(148, 163, 184, 0.2);
+  --mn-shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --mn-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --mn-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --mn-transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --mn-transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --mn-brand-50: #f0fdfa;
+  --mn-brand-100: #ccfbf1;
+  --mn-brand-200: #99f6e4;
+  --mn-brand-300: #5eead4;
+  --mn-brand-400: #2dd4bf;
+  --mn-brand-500: #14b8a6;
+  --mn-brand-600: #0d9488;
+  --mn-brand-700: #0f766e;
+  --mn-brand-800: #115e59;
+  --mn-brand-900: #134e4a;
+
   /* Base card tokens */
   --card-w: 236px;
   --gutter: 16px;
@@ -9,7 +36,7 @@
   --shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   --shadow-hov: 0 6px 15px rgba(0, 0, 0, 0.16);
   --dur: 0.25s;
-  --font-prim: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-prim: var(--mn-font-sans);
 
   /* Animation & modal tokens */
   --dur-snap: 0.45s;
@@ -67,6 +94,14 @@
   --overlay-bg: rgba(0,0,0,0.5);
   --overlay-dark: rgba(0,0,0,0.7);
   --color-tertiary: var(--text-tertiary);
+
+  /* New aliases for gradual migration */
+  --bg-page-modern: var(--mn-bg-base);
+  --card-modern: var(--mn-bg-card);
+  --text-modern: var(--mn-text-main);
+  --text-modern-strong: var(--mn-text-strong);
+  --text-modern-muted: var(--mn-text-muted);
+  --border-modern: var(--mn-border-subtle);
 }
 
 /* Light theme colors */

@@ -46,6 +46,11 @@ function HomePage({ searchTerm }) {
   return (
     <div className="home-page">
       <div className="home-content">
+        <header className="discover-head">
+          <h2>Discover</h2>
+          <p>AI-powered semantic lineage and cross-disciplinary insights</p>
+        </header>
+
         {searchTerm && (
           <div className="search-info">
             <h2>Search Results</h2>
