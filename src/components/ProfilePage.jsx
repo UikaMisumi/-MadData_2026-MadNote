@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { apiGetLikedPapers, apiGetSavedPapers, apiUpdateUser } from '../api';
+import { usePosts } from '../contexts/PostsContext';
+import {
+  apiGetLikedPapers,
+  apiGetSavedPapers,
+  apiUpdateUser,
+} from '../api';
 import MasonryGrid from './MasonryGrid';
 import FloatingActionButton from './FloatingActionButton';
 import EditProfileModal from './EditProfileModal';
@@ -9,6 +14,7 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
   const { user, logout, updateUser } = useAuth();
+  const { updateLikeCount, updateSaveCount } = usePosts();
   const [activeTab, setActiveTab] = useState('likes');
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
@@ -86,6 +92,66 @@ const ProfilePage = () => {
       .join('')
       .slice(0, 2)
       .toUpperCase();
+  };
+
+  const handleProfileLikeToggle = async (paperId) => {
+    try {
+      const result = await updateLikeCount(paperId);
+      if (!result) return null;
+
+      setLikedPosts((prev) => (
+        result.liked
+          ? prev.map((p) => (
+              p.id === paperId
+                ? { ...p, is_liked: true, likes_count: result.likes_count }
+                : p
+            ))
+          : prev.filter((p) => p.id !== paperId)
+      ));
+
+      setSavedPosts((prev) => (
+        prev.map((p) => (
+          p.id === paperId
+            ? { ...p, is_liked: result.liked, likes_count: result.likes_count }
+            : p
+        ))
+      ));
+
+      return result;
+    } catch (err) {
+      console.error('ProfilePage: like toggle failed', err);
+      return null;
+    }
+  };
+
+  const handleProfileSaveToggle = async (paperId) => {
+    try {
+      const result = await updateSaveCount(paperId);
+      if (!result) return null;
+
+      setSavedPosts((prev) => (
+        result.saved
+          ? prev.map((p) => (
+              p.id === paperId
+                ? { ...p, is_saved: true, saves_count: result.saves_count }
+                : p
+            ))
+          : prev.filter((p) => p.id !== paperId)
+      ));
+
+      setLikedPosts((prev) => (
+        prev.map((p) => (
+          p.id === paperId
+            ? { ...p, is_saved: result.saved, saves_count: result.saves_count }
+            : p
+        ))
+      ));
+
+      return result;
+    } catch (err) {
+      console.error('ProfilePage: save toggle failed', err);
+      return null;
+    }
   };
 
   if (!user) {
@@ -193,6 +259,8 @@ const ProfilePage = () => {
           showKebab={false}
           className={activeTab}
           layout="rows"
+          onLikeToggle={handleProfileLikeToggle}
+          onSaveToggle={handleProfileSaveToggle}
         />
 
         {postsToRender.length === 0 && (

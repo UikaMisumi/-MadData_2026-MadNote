@@ -11,6 +11,8 @@ const PostCard = ({
   isSelected = false,
   onToggleSelect,
   onOpenGraph,
+  onLikeToggle,
+  onSaveToggle,
 }) => {
   const { updateLikeCount, updateSaveCount } = usePosts();
   const { user } = useAuth();
@@ -64,7 +66,9 @@ const PostCard = ({
     const nextLiked = !isLiked;
     setIsLiked(nextLiked);
     setLikesCount((prev) => (nextLiked ? prev + 1 : Math.max(0, prev - 1)));
-    const result = await updateLikeCount(post.id);
+    const result = onLikeToggle
+      ? await onLikeToggle(post.id)
+      : await updateLikeCount(post.id);
     if (result) {
       setIsLiked(result.liked);
       setLikesCount(result.likes_count);
@@ -77,7 +81,9 @@ const PostCard = ({
     const nextSaved = !isSaved;
     setIsSaved(nextSaved);
     setSavesCount((prev) => (nextSaved ? prev + 1 : Math.max(0, prev - 1)));
-    const result = await updateSaveCount(post.id);
+    const result = onSaveToggle
+      ? await onSaveToggle(post.id)
+      : await updateSaveCount(post.id);
     if (result) {
       setIsSaved(result.saved);
       setSavesCount(result.saves_count);
