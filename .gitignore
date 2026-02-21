@@ -33,9 +33,10 @@ p33-backup.git/
 
 # Python (Backend)
 backend/venv/
-backend/.venv/
-backend/env/
-__pycache__/
-*.py[cod]
-*$py.class
+backend/__pycache__/
+backend/*.py[cod]
 .env
+
+# Local Data Persistence (Do NOT upload these)
+backend/users.json
+backend/interactions.json

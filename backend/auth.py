@@ -4,22 +4,23 @@ from passlib.context import CryptContext
 import json
 import os
 
-SECRET_KEY = "madnote_secret_key_2026" # Change for production
+# Security configuration
+SECRET_KEY = "madnote_secret_key_2026"  # Keep this private
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
-USERS_PATH = "users.json"
+USERS_FILE = "users.json"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def load_users():
-    if os.path.exists(USERS_PATH):
-        with open(USERS_PATH, "r") as f:
+    if os.path.exists(USERS_FILE):
+        with open(USERS_FILE, "r") as f:
             return json.load(f)
     return {}
 
 def save_users(users):
-    with open(USERS_PATH, "w") as f:
-        json.dump(users, f)
+    with open(USERS_FILE, "w") as f:
+        json.dump(users, f, indent=4)
 
 def get_password_hash(password):
     return pwd_context.hash(password)
