@@ -29,3 +29,13 @@ nul
  
 .claude/
 p33-backup.git/
+
+
+# Python (Backend)
+backend/venv/
+backend/.venv/
+backend/env/
+__pycache__/
+*.py[cod]
+*$py.class
+.env
