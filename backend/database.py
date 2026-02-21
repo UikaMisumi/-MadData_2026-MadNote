@@ -2,8 +2,8 @@ import pandas as pd
 import os
 import json
 
-# Path configuration
-JSON_PATH = "../final_posts_en.json"
+# Paths configuration
+CSV_PATH = "../xiaohongshu_full_topics.csv"
 TITLES_ABSTRACTS_PATH = "../extracted_titles_abstracts.json"
 KEYWORDS_PATH = "../keywords_with_keybert.json"
 INTERACTIONS_FILE = "interactions.json"
@@ -16,68 +16,83 @@ class DataManager:
         self.comments = self.load_json_file(COMMENTS_FILE, {})
 
     def load_data(self):
-        """Loads and merges data from multiple JSON sources."""
-        if not os.path.exists(JSON_PATH):
-            print(f"Error: {JSON_PATH} not found.")
-            return pd.DataFrame()
-        
+        """Merges CSV, extended abstracts, and KeyBERT keywords into a single DataFrame."""
         try:
-            # Load main data
-            with open(JSON_PATH, 'r', encoding='utf-8') as f:
-                main_data = json.load(f)
-            df = pd.DataFrame(main_data)
+            # 1. Load Keywords (Main source for IDs)
+            if not os.path.exists(KEYWORDS_PATH):
+                print(f"Critical Error: {KEYWORDS_PATH} not found.")
+                return pd.DataFrame()
+            
+            with open(KEYWORDS_PATH, 'r', encoding='utf-8') as f:
+                kw_data = json.load(f)
+            df = pd.DataFrame(kw_data)
+            df['id'] = df['id'].astype(str)
+            # rename dynamic_keywords to keywords for API consistency
+            df = df.rename(columns={'dynamic_keywords': 'keywords'})
 
-            # Load and merge abstracts from extracted_titles_abstracts.json
+            # 2. Load and Merge CSV (For authors, categories, citations)
+            if os.path.exists(CSV_PATH):
+                csv_df = pd.read_csv(CSV_PATH)
+                # Join on 'title' as IDs might not exist in original CSV
+                df = df.merge(
+                    csv_df[['title', 'authors', 'category', 'update_date', 'citations']], 
+                    on='title', 
+                    how='left'
+                )
+
+            # 3. Load and Merge Detailed Abstracts
             if os.path.exists(TITLES_ABSTRACTS_PATH):
                 with open(TITLES_ABSTRACTS_PATH, 'r', encoding='utf-8') as f:
-                    abstracts_data = json.load(f)
-                # Assuming abstracts_data is a list of dicts with 'id' or 'title'
-                abs_df = pd.DataFrame(abstracts_data)
-                if 'abstract' in abs_df.columns:
-                    # Merge on 'id' if exists, otherwise you might need to map by title
-                    df = df.merge(abs_df[['id', 'abstract']], on='id', how='left', suffixes=('', '_new'))
-                    df['abstract'] = df['abstract_new'].fillna(df.get('social_content', ''))
-            
-            # Load and merge keywords from keywords_with_keybert.json
-            if os.path.exists(KEYWORDS_PATH):
-                with open(KEYWORDS_PATH, 'r', encoding='utf-8') as f:
-                    keywords_data = json.load(f)
-                # Map keywords to the dataframe using 'id'
-                kw_df = pd.DataFrame(list(keywords_data.items()), columns=['id', 'keywords'])
-                df = df.merge(kw_df, on='id', how='left')
+                    abs_data = json.load(f)
+                abs_df = pd.DataFrame(abs_data)
+                # Merge based on title
+                df = df.merge(abs_df[['title', 'abstract']], on='title', how='left', suffixes=('_csv', ''))
+                # If extended abstract exists, use it; otherwise use CSV abstract
+                if 'abstract_csv' in df.columns:
+                    df['abstract'] = df['abstract'].fillna(df['abstract_csv'])
+                    df = df.drop(columns=['abstract_csv'])
 
-            # Field Mapping & Stabilization
-            df = df.rename(columns={
-                'display_title': 'title',
-                'innovation': 'ai_summary'
-            })
-            df['id'] = df['id'].astype(str)
+            # 4. Data Refinement & Author Synthesis
+            # Map 'innovation' logic or other placeholders if needed
+            df['ai_summary'] = df['abstract'].apply(lambda x: str(x)[:200] + "..." if pd.notnull(x) else "")
 
-            # Author Synthesis
             def format_author(row):
-                raw_authors = row.get('authors', 'Anonymous')
-                first_author = raw_authors[0] if isinstance(raw_authors, list) and len(raw_authors) > 0 else str(raw_authors).split(',')[0]
+                raw = row.get('authors', 'Anonymous')
+                # Basic parsing for "First Author, Second Author" or "Author and Author"
+                if isinstance(raw, str):
+                    name = raw.replace(' and ', ', ').split(',')[0].strip()
+                else:
+                    name = 'Anonymous'
+                
                 return {
-                    "name": first_author,
-                    "username": first_author.lower().replace(" ", "_"),
+                    "name": name,
+                    "username": name.lower().replace(" ", "_"),
                     "avatar": None
                 }
+            
             df['author'] = df.apply(format_author, axis=1)
 
-            # Interaction Counts
-            df['likes_count'] = df.get('likesCount', 0).fillna(0).astype(int)
-            df['saves_count'] = df.get('savesCount', 0).fillna(0).astype(int)
+            # 5. Global interaction counts defaults
+            df['likes_count'] = 0
+            df['saves_count'] = 0
             
+            # Ensure update_date exists
+            df['update_date'] = df['update_date'].fillna('2026-02-13')
+
+            print(f"Database initialized with {len(df)} papers.")
             return df
+
         except Exception as e:
-            print(f"Error loading data: {e}")
+            print(f"Data merge error: {e}")
             return pd.DataFrame()
 
     def load_json_file(self, filename, default_value):
         if os.path.exists(filename):
             with open(filename, "r", encoding='utf-8') as f:
-                try: return json.load(f)
-                except: return default_value
+                try:
+                    return json.load(f)
+                except:
+                    return default_value
         return default_value
 
     def save_interactions(self):
@@ -85,7 +100,8 @@ class DataManager:
             json.dump(self.interactions, f, indent=4)
 
     def save_comments(self):
+        # UTF-8 is critical for supporting Emojis sent from the frontend
         with open(COMMENTS_FILE, "w", encoding='utf-8') as f:
-            json.dump(self.comments, f, indent=4)
+            json.dump(self.comments, f, indent=4, ensure_ascii=False)
 
 db_manager = DataManager()
