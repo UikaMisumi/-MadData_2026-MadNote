@@ -3,7 +3,8 @@ import os
 import json
 
 # Paths relative to the backend folder
-CSV_PATH = "../xiaohongshu_full_topics.csv"
+# Ensure final_posts_en.json is in the project root directory
+JSON_PATH = "../final_posts_en.json"
 INTERACTIONS_FILE = "interactions.json"
 COMMENTS_FILE = "comments.json"
 
@@ -14,30 +15,45 @@ class DataManager:
         self.comments = self.load_json_file(COMMENTS_FILE, {})
 
     def load_data(self):
-        """Loads and cleans the central CSV paper repository."""
-        if not os.path.exists(CSV_PATH):
-            print(f"Critical Error: {CSV_PATH} not found.")
-            return pd.DataFrame(columns=["id", "title", "abstract", "authors", "category", "update_date"])
+        """Loads and adapts the enriched JSON data for the API."""
+        if not os.path.exists(JSON_PATH):
+            print(f"Error: {JSON_PATH} not found. Please ensure it is in the root directory.")
+            return pd.DataFrame()
         
-        df = pd.read_csv(CSV_PATH)
-        # Assign stable string IDs based on row index
-        df['id'] = df.index.astype(str)
-        # Parse authors string into a list for frontend chips
-        df['authors'] = df['authors'].fillna("").apply(
-            lambda x: [a.strip() for a in str(x).split(',') if a.strip()]
-        )
-        # Ensure numeric fields exist
-        df['citations'] = df.get('citations', 0).fillna(0).astype(int)
-        # Placeholder for AI summary (populated by enrichment script)
-        if 'ai_summary' not in df.columns:
-            df['ai_summary'] = None
+        try:
+            with open(JSON_PATH, 'r', encoding='utf-8') as f:
+                data = json.load(f)
             
-        return df
+            df = pd.DataFrame(data)
+            
+            # Map JSON fields to match our API Specification
+            # display_title -> title
+            # social_content -> abstract (for compatibility with existing frontend logic)
+            # innovation -> ai_summary
+            df = df.rename(columns={
+                'display_title': 'title',
+                'social_content': 'abstract',
+                'innovation': 'ai_summary'
+            })
+            
+            # Ensure ID is a string (e.g., "paper-0")
+            df['id'] = df['id'].astype(str)
+            
+            # Ensure numeric fields have defaults if they are missing
+            if 'likesCount' in df.columns:
+                df['likes_count'] = df['likesCount'].fillna(0).astype(int)
+            else:
+                df['likes_count'] = 0
+                
+            return df
+        except Exception as e:
+            print(f"Error loading JSON data: {e}")
+            return pd.DataFrame()
 
     def load_json_file(self, filename, default_value):
-        """Helper to load local JSON storage files."""
+        """Helper to load local JSON storage files for users and comments."""
         if os.path.exists(filename):
-            with open(filename, "r") as f:
+            with open(filename, "r", encoding='utf-8') as f:
                 try:
                     return json.load(f)
                 except json.JSONDecodeError:
@@ -45,12 +61,14 @@ class DataManager:
         return default_value
 
     def save_interactions(self):
-        with open(INTERACTIONS_FILE, "w") as f:
+        """Persists user likes and saves to interactions.json."""
+        with open(INTERACTIONS_FILE, "w", encoding='utf-8') as f:
             json.dump(self.interactions, f, indent=4)
 
     def save_comments(self):
-        with open(COMMENTS_FILE, "w") as f:
+        """Persists nested comments to comments.json."""
+        with open(COMMENTS_FILE, "w", encoding='utf-8') as f:
             json.dump(self.comments, f, indent=4)
 
-# Global instance
+# Global singleton instance
 db_manager = DataManager()
