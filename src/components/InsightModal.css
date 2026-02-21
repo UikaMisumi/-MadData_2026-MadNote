@@ -1,0 +1,105 @@
+.insight-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.insight-panel {
+  width: min(720px, 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 30px 70px -26px rgba(15, 23, 42, 0.48);
+  padding: 22px;
+  position: relative;
+}
+
+.insight-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.insight-panel header h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.insight-panel header p {
+  margin: 6px 0 0;
+  color: var(--mn-brand-700);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.insight-loading {
+  margin-top: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 20px;
+}
+
+.insight-content {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.insight-content .reveal-block {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 14px;
+}
+
+.insight-content .reveal-block p {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.insight-content .reveal-block strong {
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.insight-content .chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.insight-content .chips span {
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}

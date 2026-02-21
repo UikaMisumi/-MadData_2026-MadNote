@@ -1,98 +1,100 @@
-/* Floating Action Button - FAB */
 .fab {
   position: fixed;
   right: 24px;
-  width: var(--fab);
-  height: var(--fab);
-  border-radius: 50%;
-  border: 0;
-  background: var(--fab-bg);
-  color: var(--fab-clr);
-  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  background: rgba(255, 255, 255, 0.95);
+  color: #334155;
   cursor: pointer;
-  box-shadow: var(--fab-shadow);
+  box-shadow: 0 12px 24px -16px rgba(15, 23, 42, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, transform 0.2s, opacity 0.2s;
   z-index: 100;
   user-select: none;
+  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
 }
 
 .fab:hover {
-  background: var(--fab-bg-hov);
-  transform: scale(1.1);
+  background: #fff;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
 }
 
 .fab:active {
-  transform: scale(0.95);
+  transform: translateY(0);
 }
 
-/* Positioning */
 .fab.top {
-  bottom: 88px; /* sits right above nav-bar height (mobile) */
+  bottom: 88px;
 }
 
 .fab.refresh {
   bottom: 32px;
 }
 
-/* Hide state */
 .fab.hide {
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.8);
+  transform: scale(0.92);
 }
 
-/* Icon-specific styling */
-.fab.top {
-  font-weight: bold;
+.fab-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
 }
 
-.fab.refresh {
-  font-size: 18px;
-  font-weight: normal;
+.fab-icon.refresh {
+  width: 23px;
+  height: 23px;
 }
 
-/* Mobile responsive */
+.fab-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.fab-icon.refresh svg {
+  width: 23px;
+  height: 23px;
+}
+
+.fab-icon .spin {
+  animation: fab-spin 420ms ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes fab-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @media (max-width: 768px) {
   .fab {
     right: 16px;
     width: 40px;
     height: 40px;
-    font-size: 18px;
+    border-radius: 10px;
   }
-  
+
   .fab.top {
     bottom: 76px;
   }
-  
+
   .fab.refresh {
     bottom: 20px;
-    font-size: 16px;
   }
 }
 
-/* Accessibility */
 .fab:focus {
-  outline: 2px solid var(--prim);
+  outline: 2px solid var(--mn-brand-500);
   outline-offset: 2px;
 }
 
 .fab:focus:not(:focus-visible) {
   outline: none;
-}
-
-/* Animation for refresh icon */
-.fab.refresh:active {
-  animation: spin 0.5s ease-in-out;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg) scale(0.95);
-  }
-  to {
-    transform: rotate(360deg) scale(0.95);
-  }
 }

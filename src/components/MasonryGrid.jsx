@@ -1,9 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import PostCard from './PostCard';
 import PostModal from './PostModal';
 import './MasonryGrid.css';
 
-const MasonryGrid = ({ posts, showStats = true, showPrivBadge = false, className = '', showKebab = false, onDelete }) => {
+const MasonryGrid = ({
+  posts,
+  showStats = true,
+  showPrivBadge = false,
+  className = '',
+  showKebab = false,
+  onDelete,
+  selectedIds = new Set(),
+  onToggleSelect,
+  onOpenGraph,
+}) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const gridRef = useRef(null);
@@ -43,6 +53,9 @@ const MasonryGrid = ({ posts, showStats = true, showPrivBadge = false, className
             showKebab={showKebab}
             onClick={handleCardClick}
             onDelete={onDelete}
+            isSelected={selectedIds.has(post.id)}
+            onToggleSelect={onToggleSelect}
+            onOpenGraph={onOpenGraph}
           />
         ))}
       </div>
@@ -51,6 +64,7 @@ const MasonryGrid = ({ posts, showStats = true, showPrivBadge = false, className
         post={selectedPost}
         isOpen={isModalOpen}
         onClose={handleModalClose}
+        onOpenGraph={onOpenGraph}
       />
     </>
   );

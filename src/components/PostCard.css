@@ -11,6 +11,28 @@
   transition: transform 0.35s var(--mn-transition-smooth), box-shadow 0.35s var(--mn-transition-smooth), border-color 0.25s ease;
 }
 
+.paper-checkbox {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--mn-brand-600);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.xh-post:hover .paper-checkbox,
+.paper-checkbox:checked {
+  opacity: 1;
+}
+
+.xh-post:has(.paper-checkbox:checked) {
+  box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.28), var(--mn-shadow-hover);
+}
+
 .xh-post:hover {
   transform: translateY(-2px);
   box-shadow: var(--mn-shadow-hover);
