@@ -54,7 +54,7 @@ function LoginPage() {
       navigate('/');
     } catch (err) {
       if (err.status === 0) {
-        setLoginError('Backend is not running on http://127.0.0.1:8000.');
+        setLoginError('Backend is not running on http://localhost:8000.');
       } else if (err.status === 401) {
         setLoginError('Invalid email or password.');
       } else {
