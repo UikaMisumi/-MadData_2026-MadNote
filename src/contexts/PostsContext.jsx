@@ -22,7 +22,7 @@ export const PostsProvider = ({ children }) => {
     return `${key}_${userId}`;
   };
 
-  // 榛樿绀轰緥甯栧瓙鏁版嵁
+  // Default demo post data
   const defaultPosts = [
     {
       id: 'demo-1',
@@ -42,7 +42,7 @@ export const PostsProvider = ({ children }) => {
       comments: [
         {
           id: 'comment-1',
-          text: 'This world looks amazing! What\'s the name? 馃槏',
+          text: 'This world looks amazing! What\'s the name? 😏',
           author: { name: 'CuriousUser', avatar: 'https://picsum.photos/32/32?random=11' },
           timestamp: '2 hours ago',
           likesCount: 3,
@@ -56,7 +56,7 @@ export const PostsProvider = ({ children }) => {
             },
             {
               id: 'reply-1-2',
-              text: 'Thanks for sharing! Going to check it out right now 馃殌',
+              text: 'Thanks for sharing! Going to check it out right now 🔥',
               author: { name: 'WorldHunter', avatar: 'https://picsum.photos/32/32?random=35' },
               timestamp: '45 minutes ago',
               likesCount: 1
@@ -102,14 +102,14 @@ export const PostsProvider = ({ children }) => {
       comments: [
         {
           id: 'comment-2',
-          text: 'I was there too! Amazing performance! 馃幍馃帳',
+          text: 'I was there too! Amazing performance! 🎵🎤',
           author: { name: 'ConcertGoer', avatar: 'https://picsum.photos/32/32?random=14' },
           timestamp: '1 day ago',
           likesCount: 8,
           replies: [
             {
               id: 'reply-2-1',
-              text: 'The bass drop was insane! My headset almost fell off 馃槀',
+              text: 'The bass drop was insane! My headset almost fell off 😄',
               author: { name: 'BassHead', avatar: 'https://picsum.photos/32/32?random=36' },
               timestamp: '20 hours ago',
               likesCount: 5
@@ -146,17 +146,17 @@ export const PostsProvider = ({ children }) => {
     },
     {
       id: 'demo-5',
-      title: 'Cozy Caf茅 Hangout Session',
-      content: 'Spent the afternoon at this adorable virtual caf茅 with friends. Perfect place to relax and chat!',
+      title: 'Cozy Cafe Hangout Session',
+      content: 'Spent the afternoon at this adorable virtual cafe with friends. Perfect place to relax and chat!',
       imageUrl: 'https://picsum.photos/400/500?random=5',
       image: 'https://picsum.photos/400/500?random=5',
       author: {
         id: 'demo-user-5',
-        name: 'Caf茅 Lover',
+        name: 'Cafe Lover',
         avatar: 'https://picsum.photos/40/40?random=17'
       },
-      tags: ['Caf茅', 'Cozy', 'Friends', 'Relaxing'],
-      location: 'Virtual Caf茅',
+      tags: ['Cafe', 'Cozy', 'Friends', 'Relaxing'],
+      location: 'Virtual Cafe',
       likesCount: 67,
       savesCount: 23,
       comments: [],
@@ -299,14 +299,14 @@ export const PostsProvider = ({ children }) => {
           replies: [
             {
               id: 'reply-10-1',
-              text: 'Right?! And the 3D maze perspective is mind-blowing 馃く',
+              text: 'Right?! And the 3D maze perspective is mind-blowing 🤯',
               author: { name: 'RetroGamer', avatar: 'https://picsum.photos/32/32?random=28' },
               timestamp: '11 hours ago',
               likesCount: 7
             },
             {
               id: 'reply-10-2',
-              text: 'Wait until you try Space Invaders in there! 馃殌馃懡',
+              text: 'Wait until you try Space Invaders in there! 🔥👾',
               author: { name: 'ClassicGamer', avatar: 'https://picsum.photos/32/32?random=37' },
               timestamp: '9 hours ago',
               likesCount: 4
@@ -315,7 +315,7 @@ export const PostsProvider = ({ children }) => {
         },
         {
           id: 'comment-11',
-          text: 'The synthwave music really completes the vibe! 馃幎馃挏',
+          text: 'The synthwave music really completes the vibe! 🎶✨',
           author: { name: 'SynthwaveFan', avatar: 'https://picsum.photos/32/32?random=30' },
           timestamp: '10 hours ago',
           likesCount: 12,
@@ -411,7 +411,7 @@ export const PostsProvider = ({ children }) => {
     };
 
     loadAllUserPosts();
-  }, []); // 鍙湪缁勪欢mount鏃跺姞杞戒竴娆?
+  }, []); // Load once on mount
   useEffect(() => {
     // Load saved counts for default posts (user-specific)
     const defaultPostCountsKey = getUserStorageKey('defaultPostCounts');
@@ -433,7 +433,7 @@ export const PostsProvider = ({ children }) => {
   }, [userPosts, user?.id]);
 
   const addPost = (newPost) => {
-    // 濡傛灉甯栧瓙宸茬粡鏈塈D锛屽氨浣跨敤鐜版湁ID锛涘惁鍒欑敓鎴愭柊ID
+    // Reuse existing post id when provided, otherwise generate a new one.
     const postWithId = {
       ...newPost,
       id: newPost.id || `user-post-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -442,12 +442,12 @@ export const PostsProvider = ({ children }) => {
     
     console.log('PostsContext: adding post for user', user?.id, postWithId);
     
-    // 鍙繚瀛樺埌褰撳墠鐢ㄦ埛鐨勫瓨鍌ㄤ腑
+    // Save only to the current user's storage key
     const currentUserPosts = JSON.parse(localStorage.getItem(getUserStorageKey('userPosts')) || '[]');
     const updatedCurrentUserPosts = [postWithId, ...currentUserPosts];
     localStorage.setItem(getUserStorageKey('userPosts'), JSON.stringify(updatedCurrentUserPosts));
     
-    // 閲嶆柊鍔犺浇鎵€鏈夌敤鎴峰笘瀛愪互鏇存柊鏄剧ず
+    // Reload all users' posts to refresh merged feed
     const loadAllUserPosts = () => {
       const allUserPosts = [];
       
@@ -469,13 +469,13 @@ export const PostsProvider = ({ children }) => {
     
     loadAllUserPosts();
     
-    console.log('馃摑 PostsContext: 鐢ㄦ埛', user?.id, '鐨勫笘瀛愬凡娣诲姞');
+    console.log('PostsContext: added post for user', user?.id);
     
     return postWithId;
   };
 
   const removePost = (postId) => {
-    // 鍙粠褰撳墠鐢ㄦ埛鐨勫瓨鍌ㄤ腑鍒犻櫎
+    // Remove only from the current user's storage key
     const currentUserPosts = JSON.parse(localStorage.getItem(getUserStorageKey('userPosts')) || '[]');
     const updatedCurrentUserPosts = currentUserPosts.filter(post => post.id !== postId);
     localStorage.setItem(getUserStorageKey('userPosts'), JSON.stringify(updatedCurrentUserPosts));
@@ -502,7 +502,7 @@ export const PostsProvider = ({ children }) => {
   };
 
   const updatePost = (postId, updates) => {
-    // 鍙洿鏂板綋鍓嶇敤鎴风殑瀛樺偍涓殑甯栧瓙
+    // Update only in the current user's storage key
     const currentUserPosts = JSON.parse(localStorage.getItem(getUserStorageKey('userPosts')) || '[]');
     const updatedCurrentUserPosts = currentUserPosts.map(post => 
       post.id === postId ? { ...post, ...updates } : post
@@ -562,7 +562,7 @@ export const PostsProvider = ({ children }) => {
     setUserPosts(updatedUserPosts);
     localStorage.setItem(getUserStorageKey('userPosts'), JSON.stringify(updatedUserPosts));
 
-    console.log('馃挰 Added comment to post', postId, newComment);
+    console.log('PostsContext: added comment to post', postId, newComment);
     return newComment;
   };
 
@@ -605,7 +605,7 @@ export const PostsProvider = ({ children }) => {
     setUserPosts(updatedUserPosts);
     localStorage.setItem(getUserStorageKey('userPosts'), JSON.stringify(updatedUserPosts));
 
-    console.log('馃挰 Added reply to comment', commentId, newReply);
+    console.log('PostsContext: added reply to comment', commentId, newReply);
     return newReply;
   };
 
@@ -654,7 +654,7 @@ export const PostsProvider = ({ children }) => {
     setUserPosts(updatedUserPosts);
     localStorage.setItem(getUserStorageKey('userPosts'), JSON.stringify(updatedUserPosts));
 
-    console.log('鉂わ笍 Updated comment like count', commentId, isLiked ? '+1' : '-1');
+    console.log('PostsContext: updated comment like count', commentId, isLiked ? '+1' : '-1');
   };
 
   const deleteComment = (commentId, isReply = false, parentCommentId = null) => {
@@ -687,7 +687,7 @@ export const PostsProvider = ({ children }) => {
     setUserPosts(updatedUserPosts);
     localStorage.setItem(getUserStorageKey('userPosts'), JSON.stringify(updatedUserPosts));
 
-    console.log('馃棏锔?Deleted comment', commentId);
+    console.log('PostsContext: deleted comment', commentId);
   };
 
   const deletePost = (postId) => {
@@ -700,7 +700,7 @@ export const PostsProvider = ({ children }) => {
     const updatedPosts = posts.filter(post => post.id !== postId);
     setPosts(updatedPosts);
     
-    console.log('馃棏锔?Deleted post:', postId);
+    console.log('PostsContext: deleted post:', postId);
   };
 
   const updateLikeCount = (postId, isLiked) => {
@@ -741,7 +741,7 @@ export const PostsProvider = ({ children }) => {
       localStorage.setItem(getUserStorageKey('defaultPostCounts'), JSON.stringify(defaultPostCounts));
     }
 
-    console.log('鉂わ笍 Updated like count for post', postId, isLiked ? '+1' : '-1');
+    console.log('PostsContext: updated like count for post', postId, isLiked ? '+1' : '-1');
   };
 
   const updateSaveCount = (postId, isSaved) => {
@@ -782,7 +782,7 @@ export const PostsProvider = ({ children }) => {
       localStorage.setItem(getUserStorageKey('defaultPostCounts'), JSON.stringify(defaultPostCounts));
     }
 
-    console.log('馃捑 Updated save count for post', postId, isSaved ? '+1' : '-1');
+    console.log('PostsContext: updated save count for post', postId, isSaved ? '+1' : '-1');
   };
 
   const getCurrentUserPosts = () => {
@@ -792,9 +792,9 @@ export const PostsProvider = ({ children }) => {
   };
 
   const value = {
-    posts, // 鍚堝苟鍚庣殑鎵€鏈夊笘瀛?(鐢ㄤ簬HomePage鏄剧ず)
-    userPosts, // 鎵€鏈夌敤鎴风殑甯栧瓙 (閲嶅懡鍚嶄絾淇濇寔鍏煎鎬?
-    getCurrentUserPosts, // 褰撳墠鐢ㄦ埛鐨勫笘瀛?(鐢ㄤ簬ProfilePage鏄剧ず)
+    posts, // merged feed posts (used on HomePage)
+    userPosts, // all users' posts (legacy key kept for compatibility)
+    getCurrentUserPosts, // current user's own posts (used on ProfilePage)
     addPost,
     removePost,
     updatePost,

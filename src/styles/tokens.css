@@ -1,4 +1,4 @@
-/* Design Tokens - Xiaohongshu Card System */
+/* Design Tokens - source of truth for theme and component styling */
 :root {
   /* Base card tokens */
   --card-w: 236px;
@@ -36,20 +36,27 @@
   --border-primary: rgba(255, 255, 255, 0.08);
   --border-secondary: rgba(255, 255, 255, 0.12);
   
-  /* Compatibility aliases for other variable names */
+  /* Compatibility aliases (legacy names kept to avoid regressions) */
   --bg-page: var(--bg-primary);
   --bg-panel: var(--bg-secondary);
   --bg-card: var(--bg-secondary);
   --hover-bg: var(--bg-tertiary);
   --accent: var(--prim);
+  --border-color: var(--border-primary);
   --color-primary: var(--text-primary);
   --color-secondary: var(--text-secondary);
   --color-accent: var(--prim);
+  --font-family-base: var(--font-prim);
+  --font-family-title: var(--font-prim);
   --radius-sm: 6px;
   --radius-lg: 12px;
   --padding: 24px;
   --font-base: 14px;
   --font-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
   
   /* Additional theme tokens */
   --shadow-lg: 0 4px 20px rgba(0,0,0,0.3);
@@ -79,14 +86,21 @@
   --bg-card: var(--bg-secondary);
   --hover-bg: var(--bg-tertiary);
   --accent: var(--prim);
+  --border-color: var(--border-primary);
   --color-primary: var(--text-primary);
   --color-secondary: var(--text-secondary);
   --color-accent: var(--prim);
+  --font-family-base: var(--font-prim);
+  --font-family-title: var(--font-prim);
   --radius-sm: 6px;
   --radius-lg: 12px;
   --padding: 24px;
   --font-base: 14px;
   --font-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
   
   /* Additional theme tokens for light theme */
   --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);

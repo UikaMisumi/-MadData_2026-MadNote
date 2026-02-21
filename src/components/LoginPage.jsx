@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './LoginPage.css';
@@ -12,28 +12,28 @@ function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // 楠岃瘉瑙勫垯
-  const validateEmail = (email) => {
-    if (!email) return 'Email is required.';
+  // Validation rules
+  const validateEmail = (value) => {
+    if (!value) return 'Email is required.';
     return '';
   };
 
-  const validatePassword = (password) => {
-    if (!password) return 'Password is required.';
+  const validatePassword = (value) => {
+    if (!value) return 'Password is required.';
     return '';
   };
 
-  // 瀹炴椂楠岃瘉澶勭悊
+  // Real-time validation handlers
   const handleEmailBlur = () => {
     const error = validateEmail(email);
-    setErrors(prev => ({ ...prev, email: error }));
-    setLoginError(''); // 娓呴櫎鐧诲綍閿欒
+    setErrors((prev) => ({ ...prev, email: error }));
+    setLoginError('');
   };
 
   const handlePasswordBlur = () => {
     const error = validatePassword(password);
-    setErrors(prev => ({ ...prev, password: error }));
-    setLoginError(''); // 娓呴櫎鐧诲綍閿欒
+    setErrors((prev) => ({ ...prev, password: error }));
+    setLoginError('');
   };
 
   const isFormValid = () => {
@@ -44,47 +44,45 @@ function LoginPage() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    
-    // 鍏ㄩ潰楠岃瘉
+
+    // Full-form validation
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-    
+
     setErrors({
       email: emailError,
       password: passwordError
     });
-    
+
     if (!isFormValid()) {
       return;
     }
-    
+
     setIsLoading(true);
     setLoginError('');
 
     try {
-      // 妯℃嫙API璋冪敤 POST /api/auth/login
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 鑾峰彇娉ㄥ唽鐢ㄦ埛鏁版嵁
+      // Mock API call: POST /api/auth/login
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Load registered users from localStorage
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       const passwordHash = btoa(password);
-      const foundUser = registeredUsers.find(user =>
-        user.email === email.trim() && user.passwordHash === passwordHash
+      const foundUser = registeredUsers.find(
+        (existingUser) => existingUser.email === email.trim() && existingUser.passwordHash === passwordHash
       );
 
-      // 妫€鏌ユ紨绀鸿处鎴锋垨娉ㄥ唽鐢ㄦ埛
+      // Demo account or registered user
       let loginUser = null;
-      
+
       if (email === 'demo@example.com' && password === 'Demo123!') {
-        // 婕旂ず璐︽埛
         loginUser = {
           id: '1',
           name: 'Demo User',
-          email: email,
+          email,
           avatar: 'https://picsum.photos/40/40?random=1'
         };
       } else if (foundUser) {
-        // 娉ㄥ唽鐢ㄦ埛
         loginUser = {
           id: foundUser.id,
           name: foundUser.name,
@@ -94,12 +92,9 @@ function LoginPage() {
       }
 
       if (loginUser) {
-        // 浣跨敤AuthContext鐨刲ogin鏂规硶
         login(loginUser, 'mock-jwt-token');
-        
-        // 璺宠浆鍒伴椤?        navigate('/');
+        navigate('/');
       } else {
-        // 鐧诲綍澶辫触
         setLoginError('Invalid email or password.');
       }
     } catch {
@@ -119,8 +114,8 @@ function LoginPage() {
         <div className="login-header">
           <div className="logo">MadNote</div>
           <h2>Sign In</h2>
-          <button 
-            className="close-btn" 
+          <button
+            className="close-btn"
             onClick={handleClose}
             aria-label="Close login modal"
           >
@@ -129,7 +124,7 @@ function LoginPage() {
             </svg>
           </button>
         </div>
-        
+
         <form className="login-form" onSubmit={handleSignIn}>
           {loginError && (
             <div className="login-error" role="alert">
@@ -139,7 +134,7 @@ function LoginPage() {
               {loginError}
             </div>
           )}
-          
+
           <label htmlFor="email-input">
             <span>Email</span>
             <input
@@ -151,7 +146,7 @@ function LoginPage() {
               onBlur={handleEmailBlur}
               required
               aria-required="true"
-              aria-describedby={errors.email ? "email-error" : undefined}
+              aria-describedby={errors.email ? 'email-error' : undefined}
               className={errors.email ? 'input-error' : ''}
             />
             {errors.email && (
@@ -163,7 +158,7 @@ function LoginPage() {
               </span>
             )}
           </label>
-          
+
           <label htmlFor="password-input">
             <span>Password</span>
             <input
@@ -175,7 +170,7 @@ function LoginPage() {
               onBlur={handlePasswordBlur}
               required
               aria-required="true"
-              aria-describedby={errors.password ? "password-error" : undefined}
+              aria-describedby={errors.password ? 'password-error' : undefined}
               className={errors.password ? 'input-error' : ''}
             />
             {errors.password && (
@@ -187,15 +182,15 @@ function LoginPage() {
               </span>
             )}
           </label>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="primary-btn"
             disabled={isLoading || !isFormValid()}
           >
             {isLoading ? 'Signing In...' : 'Login'}
           </button>
-          
+
           <p className="switch-link">
             New here? <Link to="/signup">Sign Up</Link>
           </p>

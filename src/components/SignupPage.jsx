@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './LoginPage.css'; // 澶嶇敤鐧诲綍椤垫牱寮?
+import './LoginPage.css'; // Reuse login modal styles
 function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -9,7 +9,7 @@ function SignupPage() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  // 闅忔満鐢ㄦ埛鍚嶇敓鎴愬櫒
+  // Random username generator
   const generateRandomUsername = () => {
     const adjectives = [
       'Amazing', 'Awesome', 'Bright', 'Creative', 'Cool', 'Dynamic', 'Epic', 'Fantastic',
@@ -34,7 +34,7 @@ function SignupPage() {
     return `${randomAdjective}${randomNoun}${randomNumber}`;
   };
 
-  // 楠岃瘉瑙勫垯
+  // Validation rules
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) return 'Email is required.';
@@ -62,7 +62,7 @@ function SignupPage() {
     return '';
   };
 
-  // 瀹炴椂楠岃瘉澶勭悊
+  // Real-time validation handlers
   const handleEmailBlur = () => {
     const error = validateEmail(email);
     setErrors(prev => ({ ...prev, email: error }));
@@ -72,7 +72,7 @@ function SignupPage() {
     const error = validatePassword(password);
     setErrors(prev => ({ ...prev, password: error }));
     
-    // 濡傛灉confirm password宸插～鍐欙紝涔熻閲嶆柊楠岃瘉
+    // Revalidate confirm password if it already has a value
     if (confirmPassword) {
       const confirmError = validateConfirmPassword(confirmPassword, password);
       setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
@@ -95,7 +95,7 @@ function SignupPage() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     
-    // 鍏ㄩ潰楠岃瘉
+    // Full-form validation
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
     const confirmError = validateConfirmPassword(confirmPassword, password);
@@ -113,10 +113,10 @@ function SignupPage() {
     setIsLoading(true);
 
     try {
-      // 妯℃嫙API璋冪敤 POST /api/auth/signup
+      // Mock API call: POST /api/auth/signup
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // 妫€鏌ラ偖绠辨槸鍚﹀凡瀛樺湪
+      // Check whether email already exists
       const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
       const emailExists = registeredUsers.find(user => user.email === email.trim()) || 
                           email.trim() === 'demo@example.com';
@@ -126,25 +126,26 @@ function SignupPage() {
         return;
       }
       
-      // 鍒涘缓鏂扮敤鎴锋暟鎹?      const randomUsername = generateRandomUsername();
+      // Build new user data
+      const randomUsername = generateRandomUsername();
       const newUser = {
         id: Date.now().toString(),
         name: randomUsername,
-        username: randomUsername, // 娣诲姞username瀛楁
+        username: randomUsername,
         email: email.trim(),
         avatar: 'https://picsum.photos/40/40?random=' + Date.now()
       };
 
-      // 绠€鍗曠殑瀵嗙爜鍝堝笇锛堝疄闄呴」鐩腑搴斾娇鐢ㄦ洿瀹夊叏鐨勬柟娉曪級
-      const passwordHash = btoa(password); // base64 缂栫爜浣滀负绠€鍗曞搱甯?
-      // 淇濆瓨娉ㄥ唽鐢ㄦ埛鏁版嵁
+      // NOTE: simple base64 for demo only, replace with secure hashing in backend
+      const passwordHash = btoa(password);
+      // Save registered user data
       registeredUsers.push({
         ...newUser,
         passwordHash: passwordHash
       });
       localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
       
-      // 妯℃嫙娉ㄥ唽鎴愬姛
+      // Registration success feedback
       alert('Account created successfully! Please sign in.');
       navigate('/login');
     } catch (error) {
