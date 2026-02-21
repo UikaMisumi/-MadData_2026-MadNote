@@ -71,8 +71,7 @@ function HomePage({ searchTerm }) {
             ) : (
               <div className="no-posts">
                 <h3>Welcome to MadNote</h3>
-                <p>Share your virtual moments and discover amazing content from the community</p>
-                <p>Start by uploading your first post!</p>
+                <p>Discover content from the community while we migrate to backend-driven data.</p>
               </div>
             )}
           </div>

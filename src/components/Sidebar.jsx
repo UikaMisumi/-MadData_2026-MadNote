@@ -21,17 +21,6 @@ function Sidebar() {
       )
     },
     { 
-      id: 'upload', 
-      label: 'Upload', 
-      path: '/upload', 
-      icon: (
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-        </svg>
-      ),
-      disabled: !isAuthenticated
-    },
-    { 
       id: 'notifications', 
       label: 'Notifications', 
       path: '/notifications', 
@@ -39,8 +28,7 @@ function Sidebar() {
         <svg viewBox="0 0 24 24" width="20" height="20">
           <path fill="currentColor" d="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21"/>
         </svg>
-      ),
-      badge: isAuthenticated ? 2 : 0
+      )
     }
   ];
 

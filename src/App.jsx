@@ -10,7 +10,6 @@ import Layout from './components/Layout';
 import HomePage from './components/HomePage';
 import AboutUs from './components/AboutUs';
 import OtherInfo from './components/OtherInfo';
-import UploadForm from './components/UploadForm';
 import NotificationsPage from './components/NotificationsPage';
 import SettingsPage from './components/SettingsPage';
 import LoginPage from './components/LoginPage';
@@ -41,7 +40,6 @@ function App() {
                     <Route path="/" element={<HomePage searchTerm={searchTerm} />} />
                     <Route path="/about-us" element={<AboutUs />} />
                     <Route path="/other-info" element={<OtherInfo />} />
-                    <Route path="/upload" element={<UploadForm />} />
                     <Route path="/notifications" element={<NotificationsPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/settings" element={<SettingsPage />} />

@@ -7,7 +7,6 @@ function Navbar() {
       <h2>MadNote</h2>
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/upload">Upload</Link>
         <Link to="/about-us">About Us</Link>
         <Link to="/other-info">Other Info</Link>
       </nav>

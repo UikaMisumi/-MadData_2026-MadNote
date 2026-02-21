@@ -47,9 +47,6 @@ function Header({ onSearch }) {
           <Nav.Link as={Link} to="/" className="nav-link-custom">
             Discover
           </Nav.Link>
-          <Nav.Link as={Link} to="/upload" className="nav-link-custom">
-            Upload
-          </Nav.Link>
           <Nav.Link as={Link} to="/notifications" className="nav-link-custom">
             Notifications
           </Nav.Link>

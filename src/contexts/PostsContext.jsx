@@ -420,6 +420,7 @@ export const PostsProvider = ({ children }) => {
     // Apply saved counts to default posts
     const updatedDefaultPosts = defaultPosts.map(post => ({
       ...post,
+      comments: [],
       likesCount: defaultPostCounts[post.id]?.likesCount ?? post.likesCount,
       savesCount: defaultPostCounts[post.id]?.savesCount ?? post.savesCount
     }));
