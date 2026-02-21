@@ -1,99 +1,110 @@
-﻿import React, { useState } from 'react';
-import { Navbar, Nav, Form, InputGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useTheme } from '../contexts/ThemeContext';
-import './Header.css';
+﻿// src/components/Header.jsx
+import React from 'react';
+// Import your existing AuthContext (Adjust the path if necessary)
+import { useAuth } from '../contexts/AuthContext';
 
-function Header({ onSearch }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { toggleTheme, isDark } = useTheme();
+const Header = () => {
+  const { user, logout } = useAuth();
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (onSearch) {
-      onSearch(searchTerm);
-    }
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    // 瀹炴椂鎼滅储
-    if (onSearch && e.target.value.length > 2) {
-      onSearch(e.target.value);
-    } else if (onSearch && e.target.value.length === 0) {
-      onSearch(''); // 娓呯┖鎼滅储
-    }
+  // Helper function to get user initials for the avatar placeholder
+  const getInitials = (name) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
 
   return (
-    <Navbar 
-      expand="lg" 
-      className="custom-navbar px-4" 
-      fixed="top"
-      aria-label="Main navigation"
-    >
-      <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
-        MadNote
-      </Navbar.Brand>
+    <nav className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
       
-      <Navbar.Toggle 
-        aria-controls="main-nav" 
-        aria-label="Toggle navigation"
-        className="navbar-toggle-custom"
-      />
-      
-      <Navbar.Collapse id="main-nav">
-        <Nav className="me-auto nav-links-custom">
-          <Nav.Link as={Link} to="/" className="nav-link-custom">
-            Discover
-          </Nav.Link>
-          <Nav.Link as={Link} to="/notifications" className="nav-link-custom">
-            Notifications
-          </Nav.Link>
-        </Nav>
+      {/* Logo Section */}
+      <div className="flex items-center gap-2 cursor-pointer">
+        <span className="text-2xl">🧠</span>
+        <h1 className="font-bold text-2xl tracking-tight text-gray-900">MadNote.</h1>
+      </div>
+
+      <div className="flex items-center gap-6">
         
-        <Form className="d-flex search-form-custom mx-auto" onSubmit={handleSearchSubmit}>
-          <InputGroup className="search-input-group">
-            <Form.Control
-              type="text"
-              placeholder="Search posts or users..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="search-input-custom"
-              aria-label="Search posts or users"
-            />
-            <button type="submit" className="search-btn-custom" aria-label="Submit search">
-              <svg viewBox="0 0 24 24" width="20" height="20">
-                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        {/* Category Navigation (Hidden on mobile devices) */}
+        <div className="hidden md:flex gap-3">
+          <span className="px-5 py-2 bg-gray-900 text-white text-sm font-semibold rounded-full cursor-pointer shadow-md">
+            All Feed
+          </span>
+          <span className="px-5 py-2 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-semibold rounded-full cursor-pointer transition">
+            🤖 Robotics
+          </span>
+          <span className="px-5 py-2 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-semibold rounded-full cursor-pointer transition">
+            💡 Foundation Models
+          </span>
+        </div>
+
+        {/* User Account / Auth Section */}
+        {user ? (
+          // Authenticated State: Show User Profile & Dropdown
+          <div className="relative group z-50">
+            {/* Clickable Profile Badge */}
+            <div className="flex items-center gap-3 cursor-pointer p-1 pr-3 rounded-full hover:bg-gray-100 transition border border-transparent hover:border-gray-200">
+              
+              {/* Gradient Avatar */}
+              <div className="w-9 h-9 bg-gradient-to-tr from-indigo-600 to-purple-500 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                {getInitials(user.name)}
+              </div>
+              
+              {/* User Info (Hidden on mobile) */}
+              <div className="hidden md:block text-sm">
+                <p className="font-bold text-gray-900 leading-none">{user.name}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{user.bio || 'Researcher'}</p>
+              </div>
+              
+              {/* Dropdown Chevron Icon */}
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
               </svg>
-            </button>
-          </InputGroup>
-        </Form>
-        
-        <Nav className="nav-right-custom">
-          {/* Theme Toggle Button */}
-          <button 
-            className="theme-toggle-btn" 
-            onClick={toggleTheme}
-            aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-            title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-          >
-            {isDark ? (
-              // Sun icon for light mode
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
-              </svg>
-            ) : (
-              // Moon icon for dark mode
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12.34 2.02C6.59 1.82 2 6.42 2 12c0 5.52 4.48 10 10 10 3.71 0 6.93-2.02 8.66-5.02-7.51-.25-13.66-6.69-13.66-14.96 0-.67.05-1.35.14-2.02.09-.67-.4-1.16-.8-1.16z"/>
-              </svg>
-            )}
-          </button>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+            </div>
+            
+            {/* Dropdown Menu (Revealed on hover via Tailwind 'group-hover') */}
+            <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transform origin-top-right scale-95 opacity-0 invisible group-hover:scale-100 group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div className="p-4 border-b border-gray-100 bg-gray-50">
+                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Account</p>
+                <p className="text-sm font-bold text-gray-900 truncate">{user.email}</p>
+              </div>
+              
+              {/* Navigation Links inside Dropdown */}
+              <div className="p-2">
+                <a href="#" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition">
+                  <span>👤</span> My Profile
+                </a>
+                <a href="#" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition">
+                  <span>📚</span> My Library
+                </a>
+                <a href="#" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition">
+                  <span>⚙️</span> Settings
+                </a>
+              </div>
+              
+              {/* Sign Out Action */}
+              <div className="p-2 border-t border-gray-100">
+                <button 
+                  onClick={logout}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition"
+                >
+                  <span>🚪</span> Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Unauthenticated State: Show Login/Signup Buttons
+          <div className="flex gap-3">
+             <button className="text-sm font-bold text-gray-600 hover:text-gray-900 px-2">
+               Log In
+             </button>
+             <button className="px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-full hover:bg-indigo-700 transition shadow-md">
+               Sign Up
+             </button>
+          </div>
+        )}
+      </div>
+    </nav>
   );
-}
+};
 
 export default Header;

@@ -1,13 +1,101 @@
-html, body, #root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Base body styling matching the new UI */
+  body {
+    @apply bg-[#F3F4F6] text-gray-900 font-sans selection:bg-indigo-100 relative overflow-x-hidden;
+  }
+  
+  /* Custom Scrollbar for a modern look */
+  ::-webkit-scrollbar { 
+    width: 4px; 
+    background: transparent; 
+  }
+  ::-webkit-scrollbar-thumb { 
+    background: #cbd5e1; 
+    border-radius: 4px; 
+  }
 }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+@layer utilities {
+  /* Masonry grid layout for the text-heavy paper cards */
+  .masonry-grid { 
+    column-gap: 1.5rem; 
+  }
+  @media (min-width: 768px) { 
+    .masonry-grid { column-count: 2; } 
+  }
+  @media (min-width: 1024px) { 
+    .masonry-grid { column-count: 3; } 
+  }
+  
+  /* Prevent cards from breaking across columns */
+  .card { 
+    break-inside: avoid; 
+    margin-bottom: 1.5rem; 
+  }
+
+  /* Animations for the Action Bar and Modals */
+  .fade-up { 
+    transform: translateY(100%); 
+    opacity: 0; 
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+  }
+  .fade-up.show { 
+    transform: translateY(0); 
+    opacity: 1; 
+  }
+  
+  /* Glassmorphism overlay for modals */
+  .modal-overlay { 
+    backdrop-filter: blur(12px); 
+  }
+  
+  /* Staggered reveal animation for AI Insights */
+  .reveal-block { 
+    opacity: 0; 
+    transform: translateY(10px); 
+    animation: fadeReveal 0.6s forwards; 
+  }
+  @keyframes fadeReveal { 
+    to { opacity: 1; transform: translateY(0); } 
+  }
+
+  /* Smooth slide-in for the fullscreen paper reading modal */
+  .fullscreen-modal { 
+    transform: translateY(30px); 
+    opacity: 0; 
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+    pointer-events: none; 
+  }
+  .fullscreen-modal.open { 
+    transform: translateY(0); 
+    opacity: 1; 
+    pointer-events: auto; 
+  }
+
+  /* Expand animation for the Smart Recommendation block */
+  .expand-recommendation { 
+    max-height: 0; 
+    overflow: hidden; 
+    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease; 
+    opacity: 0; 
+  }
+  .expand-recommendation.active { 
+    max-height: 500px; 
+    opacity: 1; 
+  }
+
+  /* Pop animation for the Like button */
+  .like-pop { 
+    animation: pop 0.3s ease-out; 
+  }
+  @keyframes pop { 
+    0% { transform: scale(1); } 
+    50% { transform: scale(1.3); } 
+    100% { transform: scale(1); } 
+  }
 }
