@@ -6,7 +6,7 @@ import './Header.css';
 
 function Header({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -74,13 +74,6 @@ function Header({ onSearch }) {
         </Form>
         
         <Nav className="nav-right-custom">
-          <Nav.Link href="#" className="nav-link-custom">
-            Creator Studio
-          </Nav.Link>
-          <Nav.Link href="#" className="nav-link-custom">
-            Partnerships
-          </Nav.Link>
-          
           {/* Theme Toggle Button */}
           <button 
             className="theme-toggle-btn" 
