@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiLogout } from '../api';
 
 const AuthContext = createContext();
 
@@ -15,24 +16,30 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 检查localStorage中是否有用户信息
+    // Restore session from localStorage (token + user cache)
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
-    
+
     if (storedUser && token) {
       setUser(JSON.parse(storedUser));
     }
-    
+
     setIsLoading(false);
   }, []);
 
+  // Called after a successful login or signup API response
   const login = (userData, token) => {
     localStorage.setItem('user', JSON.stringify(userData));
     localStorage.setItem('token', token);
     setUser(userData);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await apiLogout();
+    } catch {
+      // Ignore server errors — clear session regardless
+    }
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     setUser(null);
@@ -50,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     updateUser,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
   return (

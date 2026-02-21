@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { apiUpdatePassword } from '../api';
 import './ResetPasswordModal.css';
 
 const ResetPasswordModal = ({ isOpen, onClose }) => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -13,17 +16,9 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Clear error when user starts typing
+    setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -56,55 +51,30 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, you would call:
-      // await fetch('/api/users/:id/password', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   },
-      //   body: JSON.stringify({
-      //     current: formData.currentPassword,
-      //     new: formData.newPassword
-      //   })
-      // });
+      // PUT /api/v1/users/:userId/password
+      await apiUpdatePassword(user.id, formData.currentPassword, formData.newPassword);
 
-      console.log('Password reset successful');
-      
-      // Show success message
+      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       alert('Password updated successfully!');
-      
-      // Reset form and close modal
-      setFormData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
       onClose();
-      
-    } catch (error) {
-      console.error('Password reset failed:', error);
-      setErrors({ submit: 'Failed to update password. Please try again.' });
+    } catch (err) {
+      if (err.status === 400) {
+        setErrors({ currentPassword: 'Current password is incorrect.' });
+      } else {
+        setErrors({ submit: 'Failed to update password. Please try again.' });
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleCancel = () => {
-    setFormData({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    });
+    setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     setErrors({});
     onClose();
   };
@@ -115,11 +85,9 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
     <div className="modal-backdrop">
       <form className="modal card reset-password-modal" onSubmit={handleSubmit}>
         <h2>Reset password</h2>
-        
+
         {errors.submit && (
-          <div className="error-banner">
-            {errors.submit}
-          </div>
+          <div className="error-banner">{errors.submit}</div>
         )}
 
         {/* Current Password */}
@@ -185,16 +153,11 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
           </label>
         </div>
 
-        {/* Form Actions */}
         <footer className="modal-footer">
           <button type="button" className="ghost" onClick={handleCancel}>
             Cancel
           </button>
-          <button 
-            type="submit" 
-            className="primary" 
-            disabled={isSubmitting}
-          >
+          <button type="submit" className="primary" disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update Password'}
           </button>
         </footer>
