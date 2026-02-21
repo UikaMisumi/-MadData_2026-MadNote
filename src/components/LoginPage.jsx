@@ -96,8 +96,8 @@ function LoginPage() {
             <span>Email</span>
             <input
               id="email-input"
-              type="email"
-              placeholder="Enter your email"
+              type="text"
+              placeholder="Enter account name or email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={handleEmailBlur}

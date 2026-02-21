@@ -1,0 +1,16 @@
+{
+    "qa_signup_20260221@example.com": {
+        "id": "1",
+        "email": "qa_signup_20260221@example.com",
+        "password": "$2b$12$OAMTyR6Th927noNgUTNDOext9YiDZjDsgi5i2vELWr1w5LfqmIyiW",
+        "name": "QA User",
+        "username": "qa_signup_20260221"
+    },
+    "plain_account_20260221": {
+        "id": "2",
+        "email": "plain_account_20260221",
+        "password": "$2b$12$T5soNWow9eihV30Palz4NOUEjZXavCmtTAV8brq2idOSyeMZWUo6u",
+        "name": "Plain QA",
+        "username": "plain_account_20260221"
+    }
+}
