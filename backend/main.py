@@ -1,75 +1,111 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Depends, HTTPException, status, Query, Header
 from fastapi.middleware.cors import CORSMiddleware
-import json
-import os
+from typing import Optional, List
+import auth
+from database import db_manager
 
-app = FastAPI()
+app = FastAPI(title="MadNote API", version="v1")
 
-# 1. CORS Configuration: Allows your React frontend to talk to this API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 2. File Path Settings
-# This is a placeholder for your prepared data. 
-# Make sure "mock_data.json" exists in the same 'backend' folder.
-DATA_PATH = "mock_data.json"
+# --- Helper for Auth ---
+async def get_current_user(authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+    token = authorization.split(" ")[1]
+    try:
+        payload = auth.jwt.decode(token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
+        email = payload.get("sub")
+        users = auth.load_users()
+        return users.get(email)
+    except auth.JWTError:
+        return None
 
-def load_data():
-    """Helper function to load your prepared paper data."""
-    if os.path.exists(DATA_PATH):
-        try:
-            with open(DATA_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except json.JSONDecodeError:
-            print("Error: mock_data.json has invalid JSON format.")
-            return []
-    print(f"Warning: {DATA_PATH} not found. Returning empty list.")
-    return []
+# --- Auth Endpoints ---
+@app.post("/api/v1/auth/signup")
+async def signup(user_data: dict):
+    users = auth.load_users()
+    if user_data['email'] in users:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    new_user = {
+        "id": str(len(users) + 1),
+        "email": user_data['email'],
+        "password": auth.get_password_hash(user_data['password']),
+        "name": user_data.get('name', 'New Scholar'),
+        "username": user_data['email'].split('@')[0],
+        "avatar": None,
+        "bio": None
+    }
+    users[user_data['email']] = new_user
+    auth.save_users(users)
+    token = auth.create_access_token(data={"sub": new_user['email']})
+    return {"user": new_user, "token": token}
 
-# 3. API Endpoints
+@app.post("/api/v1/auth/login")
+async def login(credentials: dict):
+    users = auth.load_users()
+    user = users.get(credentials['email'])
+    if not user or not auth.verify_password(credentials['password'], user['password']):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    token = auth.create_access_token(data={"sub": user['email']})
+    return {"user": user, "token": token}
+
+# --- Paper Endpoints ---
+@app.get("/api/v1/papers")
+async def get_papers(page: int = 1, size: int = 10, category: str = None, user=Depends(get_current_user)):
+    df = db_manager.df
+    if category:
+        df = df[df['category'] == category]
+    
+    df = df.sort_values(by="update_date", ascending=False)
+    total = len(df)
+    start, end = (page-1)*size, page*size
+    items = df.iloc[start:end].to_dict(orient="records")
+    
+    # Inject is_liked/is_saved
+    if user:
+        user_id = user['id']
+        liked_ids = db_manager.interactions["likes"].get(user_id, [])
+        saved_ids = db_manager.interactions["saves"].get(user_id, [])
+        for item in items:
+            item["is_liked"] = item["id"] in liked_ids
+            item["is_saved"] = item["id"] in saved_ids
+
+    return {"items": items, "page": page, "size": size, "has_more": end < total, "total": total}
+
+@app.get("/api/v1/papers/search")
+async def search_papers(q: str, page: int = 1, size: int = 10):
+    mask = db_manager.df['title'].str.contains(q, case=False, na=False) | \
+           db_manager.df['abstract'].str.contains(q, case=False, na=False)
+    results = db_manager.df[mask]
+    start, end = (page-1)*size, page*size
+    return {"items": results.iloc[start:end].to_dict(orient="records"), "total": len(results)}
+
+# --- Interaction Endpoints ---
+@app.post("/api/v1/papers/{paper_id}/like")
+async def toggle_like(paper_id: str, user=Depends(get_current_user)):
+    if not user: raise HTTPException(status_code=401)
+    user_id = user['id']
+    likes = db_manager.interactions["likes"].get(user_id, [])
+    
+    if paper_id in likes:
+        likes.remove(paper_id)
+        status = False
+    else:
+        likes.append(paper_id)
+        status = True
+    
+    db_manager.interactions["likes"][user_id] = likes
+    db_manager.save_interactions()
+    return {"liked": status}
 
 @app.get("/")
-def home():
-    """Health check endpoint."""
-    return {"status": "Backend is running", "data_source": DATA_PATH}
-
-@app.get("/api/v1/feed")
-async def get_feed(
-    page: int = Query(1, ge=1), 
-    size: int = Query(10, ge=1, le=50)
-):
-    """
-    Feed endpoint with Pagination.
-    Adapts to your frontend's useInfiniteScroll logic.
-    """
-    all_papers = load_data()
-    
-    # Slicing logic for pagination
-    start = (page - 1) * size
-    end = start + size
-    paged_items = all_papers[start:end]
-    
-    # Tell frontend if there's more to load
-    has_more = end < len(all_papers)
-    
-    return {
-        "items": paged_items,
-        "page": page,
-        "size": size,
-        "has_more": has_more,
-        "total": len(all_papers)
-    }
-
-@app.post("/api/v1/interact")
-async def interact(interaction: dict):
-    """
-    Placeholder for user interactions (Like/Save).
-    In the future, this will update your database.
-    """
-    print(f"Received interaction: {interaction}")
-    return {"status": "success", "received": interaction}
+def health():
+    return {"status": "Academic Red backend ready", "spec_version": "v1"}
