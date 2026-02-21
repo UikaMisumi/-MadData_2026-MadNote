@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { apiLogin } from '../api';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -12,7 +13,6 @@ function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Validation rules
   const validateEmail = (value) => {
     if (!value) return 'Email is required.';
     return '';
@@ -23,90 +23,47 @@ function LoginPage() {
     return '';
   };
 
-  // Real-time validation handlers
   const handleEmailBlur = () => {
-    const error = validateEmail(email);
-    setErrors((prev) => ({ ...prev, email: error }));
+    setErrors((prev) => ({ ...prev, email: validateEmail(email) }));
     setLoginError('');
   };
 
   const handlePasswordBlur = () => {
-    const error = validatePassword(password);
-    setErrors((prev) => ({ ...prev, password: error }));
+    setErrors((prev) => ({ ...prev, password: validatePassword(password) }));
     setLoginError('');
   };
 
-  const isFormValid = () => {
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
-    return !emailError && !passwordError;
-  };
+  const isFormValid = () => !validateEmail(email) && !validatePassword(password);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
 
-    // Full-form validation
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
+    setErrors({ email: emailError, password: passwordError });
 
-    setErrors({
-      email: emailError,
-      password: passwordError
-    });
-
-    if (!isFormValid()) {
-      return;
-    }
+    if (emailError || passwordError) return;
 
     setIsLoading(true);
     setLoginError('');
 
     try {
-      // Mock API call: POST /api/auth/login
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Load registered users from localStorage
-      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const passwordHash = btoa(password);
-      const foundUser = registeredUsers.find(
-        (existingUser) => existingUser.email === email.trim() && existingUser.passwordHash === passwordHash
-      );
-
-      // Demo account or registered user
-      let loginUser = null;
-
-      if (email === 'demo@example.com' && password === 'Demo123!') {
-        loginUser = {
-          id: '1',
-          name: 'Demo User',
-          email,
-          avatar: 'https://picsum.photos/40/40?random=1'
-        };
-      } else if (foundUser) {
-        loginUser = {
-          id: foundUser.id,
-          name: foundUser.name,
-          email: foundUser.email,
-          avatar: foundUser.avatar
-        };
-      }
-
-      if (loginUser) {
-        login(loginUser, 'mock-jwt-token');
-        navigate('/');
-      } else {
+      // POST /api/v1/auth/login
+      const data = await apiLogin(email.trim(), password);
+      login(data.user, data.token);
+      navigate('/');
+    } catch (err) {
+      if (err.status === 401) {
         setLoginError('Invalid email or password.');
+      } else {
+        setLoginError('Login failed. Please try again.');
       }
-    } catch {
-      setLoginError('Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleClose = () => {
-    navigate('/');
-  };
+  const handleClose = () => navigate('/');
 
   return (
     <div className="login-modal-backdrop" onClick={handleClose}>
@@ -140,7 +97,7 @@ function LoginPage() {
             <input
               id="email-input"
               type="email"
-              placeholder="Enter your email (try: demo@example.com)"
+              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={handleEmailBlur}
@@ -164,7 +121,7 @@ function LoginPage() {
             <input
               id="password-input"
               type="password"
-              placeholder="Enter your password (try: Demo123!)"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onBlur={handlePasswordBlur}

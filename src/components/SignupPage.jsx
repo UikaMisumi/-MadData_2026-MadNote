@@ -1,163 +1,90 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { apiSignup } from '../api';
 import './LoginPage.css'; // Reuse login modal styles
+
 function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [signupError, setSignupError] = useState('');
   const navigate = useNavigate();
-
-  // Random username generator
-  const generateRandomUsername = () => {
-    const adjectives = [
-      'Amazing', 'Awesome', 'Bright', 'Creative', 'Cool', 'Dynamic', 'Epic', 'Fantastic',
-      'Glowing', 'Happy', 'Incredible', 'Joyful', 'Kinetic', 'Legendary', 'Magical', 'Noble',
-      'Outstanding', 'Powerful', 'Quantum', 'Radiant', 'Stellar', 'Thunderous', 'Ultimate', 'Vibrant',
-      'Wonderful', 'Xtreme', 'Youthful', 'Zealous', 'Cosmic', 'Digital', 'Electric', 'Futuristic',
-      'Genius', 'Heroic', 'Infinite', 'Luminous', 'Mystic', 'Phoenix', 'Shadow', 'Turbo'
-    ];
-    
-    const nouns = [
-      'Explorer', 'Creator', 'Dreamer', 'Builder', 'Hunter', 'Wizard', 'Knight', 'Ninja',
-      'Pilot', 'Rider', 'Warrior', 'Guardian', 'Master', 'Legend', 'Champion', 'Pioneer',
-      'Voyager', 'Seeker', 'Wanderer', 'Adventurer', 'Artist', 'Genius', 'Hero', 'Maverick',
-      'Phantom', 'Racer', 'Sage', 'Titan', 'Viper', 'Wolf', 'Dragon', 'Phoenix',
-      'Storm', 'Blade', 'Fire', 'Ice', 'Lightning', 'Nova', 'Comet', 'Galaxy'
-    ];
-    
-    const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
-    const randomNumber = Math.floor(Math.random() * 999) + 1;
-    
-    return `${randomAdjective}${randomNoun}${randomNumber}`;
-  };
+  const { login } = useAuth();
 
   // Validation rules
-  const validateEmail = (email) => {
+  const validateEmail = (v) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return 'Email is required.';
-    if (!emailRegex.test(email)) return 'Please enter a valid email address.';
+    if (!v) return 'Email is required.';
+    if (!emailRegex.test(v)) return 'Please enter a valid email address.';
     return '';
   };
 
-  const validatePassword = (password) => {
-    if (!password) return 'Password is required.';
-    if (password.length < 8) return 'Password must be at least 8 characters.';
-    
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumbers = /\d/.test(password);
-    
-    if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+  const validatePassword = (v) => {
+    if (!v) return 'Password is required.';
+    if (v.length < 8) return 'Password must be at least 8 characters.';
+    if (!/[A-Z]/.test(v) || !/[a-z]/.test(v) || !/\d/.test(v)) {
       return 'Password must include uppercase, lowercase, and a number.';
     }
     return '';
   };
 
-  const validateConfirmPassword = (confirmPassword, password) => {
-    if (!confirmPassword) return 'Please confirm your password.';
-    if (confirmPassword !== password) return 'Passwords do not match.';
+  const validateConfirmPassword = (v, pw) => {
+    if (!v) return 'Please confirm your password.';
+    if (v !== pw) return 'Passwords do not match.';
     return '';
   };
 
-  // Real-time validation handlers
-  const handleEmailBlur = () => {
-    const error = validateEmail(email);
-    setErrors(prev => ({ ...prev, email: error }));
-  };
+  const handleEmailBlur = () =>
+    setErrors((prev) => ({ ...prev, email: validateEmail(email) }));
 
   const handlePasswordBlur = () => {
-    const error = validatePassword(password);
-    setErrors(prev => ({ ...prev, password: error }));
-    
-    // Revalidate confirm password if it already has a value
+    setErrors((prev) => ({ ...prev, password: validatePassword(password) }));
     if (confirmPassword) {
-      const confirmError = validateConfirmPassword(confirmPassword, password);
-      setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
+      setErrors((prev) => ({ ...prev, confirmPassword: validateConfirmPassword(confirmPassword, password) }));
     }
   };
 
-  const handleConfirmPasswordBlur = () => {
-    const error = validateConfirmPassword(confirmPassword, password);
-    setErrors(prev => ({ ...prev, confirmPassword: error }));
-  };
+  const handleConfirmPasswordBlur = () =>
+    setErrors((prev) => ({ ...prev, confirmPassword: validateConfirmPassword(confirmPassword, password) }));
 
-  const isFormValid = () => {
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
-    const confirmError = validateConfirmPassword(confirmPassword, password);
-    
-    return !emailError && !passwordError && !confirmError;
-  };
+  const isFormValid = () =>
+    !validateEmail(email) &&
+    !validatePassword(password) &&
+    !validateConfirmPassword(confirmPassword, password);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    
-    // Full-form validation
+
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
     const confirmError = validateConfirmPassword(confirmPassword, password);
-    
-    setErrors({
-      email: emailError,
-      password: passwordError,
-      confirmPassword: confirmError
-    });
-    
-    if (!isFormValid()) {
-      return;
-    }
-    
+    setErrors({ email: emailError, password: passwordError, confirmPassword: confirmError });
+
+    if (emailError || passwordError || confirmError) return;
+
     setIsLoading(true);
+    setSignupError('');
 
     try {
-      // Mock API call: POST /api/auth/signup
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Check whether email already exists
-      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      const emailExists = registeredUsers.find(user => user.email === email.trim()) || 
-                          email.trim() === 'demo@example.com';
-      
-      if (emailExists) {
-        setErrors({ email: 'Email already exists. Please use a different email.' });
-        return;
+      // POST /api/v1/auth/signup  — backend generates username if not provided
+      const data = await apiSignup(email.trim(), password, '');
+      login(data.user, data.token);
+      navigate('/');
+    } catch (err) {
+      if (err.status === 400) {
+        setErrors((prev) => ({ ...prev, email: 'Email already exists. Please use a different email.' }));
+      } else {
+        setSignupError('Registration failed. Please try again.');
       }
-      
-      // Build new user data
-      const randomUsername = generateRandomUsername();
-      const newUser = {
-        id: Date.now().toString(),
-        name: randomUsername,
-        username: randomUsername,
-        email: email.trim(),
-        avatar: 'https://picsum.photos/40/40?random=' + Date.now()
-      };
-
-      // NOTE: simple base64 for demo only, replace with secure hashing in backend
-      const passwordHash = btoa(password);
-      // Save registered user data
-      registeredUsers.push({
-        ...newUser,
-        passwordHash: passwordHash
-      });
-      localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-      
-      // Registration success feedback
-      alert('Account created successfully! Please sign in.');
-      navigate('/login');
-    } catch (error) {
-      alert('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleClose = () => {
-    navigate('/');
-  };
+  const handleClose = () => navigate('/');
 
   return (
     <div className="login-modal-backdrop" onClick={handleClose}>
@@ -165,8 +92,8 @@ function SignupPage() {
         <div className="login-header">
           <div className="logo">MadNote</div>
           <h2>Sign Up</h2>
-          <button 
-            className="close-btn" 
+          <button
+            className="close-btn"
             onClick={handleClose}
             aria-label="Close signup modal"
           >
@@ -175,8 +102,14 @@ function SignupPage() {
             </svg>
           </button>
         </div>
-        
+
         <form className="login-form" onSubmit={handleSignUp}>
+          {signupError && (
+            <div className="login-error" role="alert">
+              {signupError}
+            </div>
+          )}
+
           <label htmlFor="signup-email-input">
             <span>Email</span>
             <input
@@ -188,7 +121,7 @@ function SignupPage() {
               onBlur={handleEmailBlur}
               required
               aria-required="true"
-              aria-describedby={errors.email ? "email-error" : undefined}
+              aria-describedby={errors.email ? 'email-error' : undefined}
               className={errors.email ? 'input-error' : ''}
             />
             {errors.email && (
@@ -200,7 +133,7 @@ function SignupPage() {
               </span>
             )}
           </label>
-          
+
           <label htmlFor="signup-password-input">
             <span>Password</span>
             <input
@@ -212,7 +145,7 @@ function SignupPage() {
               onBlur={handlePasswordBlur}
               required
               aria-required="true"
-              aria-describedby={errors.password ? "password-error" : undefined}
+              aria-describedby={errors.password ? 'password-error' : undefined}
               className={errors.password ? 'input-error' : ''}
               minLength={8}
             />
@@ -225,7 +158,7 @@ function SignupPage() {
               </span>
             )}
           </label>
-          
+
           <label htmlFor="confirm-password-input">
             <span>Confirm Password</span>
             <input
@@ -237,7 +170,7 @@ function SignupPage() {
               onBlur={handleConfirmPasswordBlur}
               required
               aria-required="true"
-              aria-describedby={errors.confirmPassword ? "confirm-password-error" : undefined}
+              aria-describedby={errors.confirmPassword ? 'confirm-password-error' : undefined}
               className={errors.confirmPassword ? 'input-error' : ''}
               minLength={8}
             />
@@ -250,15 +183,15 @@ function SignupPage() {
               </span>
             )}
           </label>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="primary-btn"
             disabled={isLoading || !isFormValid()}
           >
             {isLoading ? 'Creating Account...' : 'Sign Up'}
           </button>
-          
+
           <p className="switch-link">
             Already have an account? <Link to="/login">Login</Link>
           </p>

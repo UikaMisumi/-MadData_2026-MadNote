@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { apiUpdatePassword } from '../api';
 import './SettingsPage.css';
 
 function SettingsPage() {
@@ -90,54 +91,21 @@ function SettingsPage() {
     setSuccessMessage('');
 
     try {
-      // 模拟API调用 PUT /api/user/password
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // 获取当前用户信息
-      const currentPasswordHash = btoa(currentPassword);
-      let isCurrentPasswordValid = false;
+      // PUT /api/v1/users/:userId/password
+      await apiUpdatePassword(user.id, currentPassword, newPassword);
 
-      // 检查演示账户
-      if (user.email === 'demo@example.com' && currentPassword === 'Demo123!') {
-        isCurrentPasswordValid = true;
-      } else {
-        // 检查注册用户
-        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const foundUser = registeredUsers.find(u => 
-          u.email === user.email && u.passwordHash === currentPasswordHash
-        );
-        isCurrentPasswordValid = !!foundUser;
-      }
-
-      if (!isCurrentPasswordValid) {
-        setErrors({ currentPassword: 'Current password is incorrect.' });
-        return;
-      }
-
-      // 更新密码哈希
-      const newPasswordHash = btoa(newPassword);
-      
-      if (user.email !== 'demo@example.com') {
-        // 更新注册用户的密码
-        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        const userIndex = registeredUsers.findIndex(u => u.email === user.email);
-        if (userIndex !== -1) {
-          registeredUsers[userIndex].passwordHash = newPasswordHash;
-          localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-        }
-      }
-      
-      // 密码修改成功
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setErrors({});
       setSuccessMessage('Password changed successfully!');
-      
-      // 3秒后清除成功消息
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
-      setErrors({ general: 'Failed to change password. Please try again.' });
+    } catch (err) {
+      if (err.status === 400) {
+        setErrors({ currentPassword: 'Current password is incorrect.' });
+      } else {
+        setErrors({ general: 'Failed to change password. Please try again.' });
+      }
     } finally {
       setIsChangingPassword(false);
     }
@@ -200,7 +168,7 @@ function SettingsPage() {
                 <input
                   id="current-password"
                   type="password"
-                  placeholder="Enter current password (Demo123!)"
+                  placeholder="Enter current password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   onBlur={handleCurrentPasswordBlur}
