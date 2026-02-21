@@ -5,8 +5,14 @@ from datetime import datetime
 import uuid
 
 # Internal Modules
-import auth
-from database import db_manager
+try:
+    # Package import path: `python -m uvicorn backend.main:app`
+    from . import auth
+    from .database import db_manager
+except ImportError:
+    # Script import path fallback
+    import auth
+    from database import db_manager
 
 app = FastAPI(title="MadNote API", version="v1")
 

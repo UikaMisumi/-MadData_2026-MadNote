@@ -119,14 +119,20 @@
 }
 
 .mn-account-trigger {
-  border: 0;
+  border: 1px solid transparent;
   background: transparent;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
   border-radius: 999px;
-  padding: 2px 6px 2px 2px;
+  padding: 2px 8px 2px 2px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.mn-account-trigger:hover {
+  border-color: rgba(203, 213, 225, 0.95);
+  background: rgba(248, 250, 252, 0.75);
 }
 
 .mn-avatar {
@@ -161,21 +167,39 @@
   text-overflow: ellipsis;
 }
 
+.mn-account-caret {
+  color: #64748b;
+  display: inline-flex;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.mn-account-caret.open {
+  transform: rotate(180deg);
+  color: #0f172a;
+}
+
 .mn-account-menu {
   position: absolute;
   right: 0;
   top: calc(100% + 8px);
-  width: 160px;
+  min-width: 180px;
   background: #fff;
   border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: 12px;
-  box-shadow: var(--mn-shadow-card);
+  border-radius: 14px;
+  box-shadow: 0 22px 36px -24px rgba(15, 23, 42, 0.55);
   padding: 8px;
-  display: none;
+  display: grid;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.98);
+  transform-origin: top right;
+  transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
-.mn-account:hover .mn-account-menu {
-  display: grid;
+.mn-account-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
 .mn-account-menu a,

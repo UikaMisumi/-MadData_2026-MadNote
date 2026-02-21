@@ -68,7 +68,9 @@ function SignupPage() {
       login(data.user, data.token);
       navigate('/');
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === 0) {
+        setSignupError('Backend is not running on http://127.0.0.1:8000.');
+      } else if (err.status === 400) {
         setErrors((prev) => ({ ...prev, email: 'Email already exists. Please use a different email.' }));
       } else {
         setSignupError('Registration failed. Please try again.');

@@ -4,7 +4,7 @@
  * Base URL: http://localhost:8000/api/v1  (spec: BACKEND_API_SPEC.md)
  */
 
-const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = 'http://127.0.0.1:8000/api/v1';
 
 // ---------- helpers ----------
 
@@ -28,7 +28,14 @@ async function request(method, path, body, requireAuth = false) {
     options.body = JSON.stringify(body);
   }
 
-  const res = await fetch(`${BASE_URL}${path}`, options);
+  let res;
+  try {
+    res = await fetch(`${BASE_URL}${path}`, options);
+  } catch (networkError) {
+    const error = new Error('Backend is unreachable. Please start API server on http://127.0.0.1:8000.');
+    error.status = 0;
+    throw error;
+  }
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
