@@ -1,7 +1,7 @@
 # Backend API Specification
 
 > Project: MadNote — Academic Recommendation Platform
-> Version: v1
+> Version: v1.1
 > Date: 2026-02-21
 > Audience: **Backend Developer**
 
@@ -80,6 +80,11 @@ HTTP status codes: `200 OK`, `201 Created`, `400 Bad Request`, `401 Unauthorized
   "abstract": "string",
   "ai_summary": "string | null",
   "authors": ["string"],
+  "author": {
+    "name": "string",
+    "username": "string | null",
+    "avatar": "string | null"
+  },
   "category": "string",
   "citations": 112,
   "update_date": "2026-02-13",
@@ -89,7 +94,14 @@ HTTP status codes: `200 OK`, `201 Created`, `400 Bad Request`, `401 Unauthorized
 }
 ```
 
-> `isLiked` and `isSaved` are **user-specific** and must be injected when a valid JWT token is present:
+> **`author` object** is synthesized from the `authors` array by the backend:
+> - `name`: first element of `authors` (e.g. `"Alice Wang"`)
+> - `username`: lowercase, spaces replaced by `_` (e.g. `"alice_wang"`)
+> - `avatar`: `null` (frontend falls back to `/default-avatar.png`)
+>
+> This field is required — `PostCard` and `PostModal` both read `post.author.name`, `post.author.avatar`, and `post.author.username`.
+
+> `is_liked` and `is_saved` are **user-specific** and must be injected when a valid JWT token is present:
 >
 > ```json
 > {
@@ -98,6 +110,8 @@ HTTP status codes: `200 OK`, `201 Created`, `400 Bad Request`, `401 Unauthorized
 >   "is_saved": false
 > }
 > ```
+>
+> These default to `false` when no token is provided.
 
 ### User
 
@@ -163,12 +177,14 @@ Sign in with email and password.
 
 #### `POST /api/v1/auth/signup`
 
-Register a new user. The backend generates a random `username` if not provided.
+Register a new user.
 
 **Request body:**
 ```json
 { "email": "user@example.com", "password": "Secret123!", "name": "Alice" }
 ```
+
+> `name` is optional — the frontend currently sends `name: ""` (empty string). If `name` is absent or empty, the backend must generate both `name` and `username` randomly.
 
 **Response `201`:**
 ```json
@@ -455,8 +471,8 @@ Use **JWT Bearer tokens**.
 | Endpoint | Status | Notes |
 |---|---|---|
 | `GET /` | Keep | Health check |
-| `GET /api/v1/feed` | Rename/merge | Merge into `GET /api/v1/papers` |
-| `POST /api/v1/interact` | Replace | Replace with `/papers/{id}/like` and `/papers/{id}/save` |
+| `GET /api/v1/feed` | **Done** — renamed | Now served by `GET /api/v1/papers` |
+| `POST /api/v1/interact` | **Done** — replaced | Now `/papers/{id}/like` and `/papers/{id}/save` |
 
 ---
 
@@ -468,7 +484,7 @@ Use **JWT Bearer tokens**.
 
 3. **authors field:** The CSV `authors` column may be a single string. Split by `;` or `,` to produce a list.
 
-4. **AI Summary:** Produce `ai_summary` offline and store as an additional column in the CSV (or a sidecar JSON file). The frontend will display this in `PostModal`.
+4. **AI Summary:** Produce `ai_summary` offline and store as an additional column in the CSV (or a sidecar JSON file). `PostModal` displays it with priority: `ai_summary` → `abstract` → `content`. If `ai_summary` is not ready, `null` is acceptable and the frontend falls back gracefully.
 
 5. **Interactions storage:** Since there is no database requirement stated yet, a simple approach is to store likes/saves in a JSON file (`interactions.json`) on disk, or use SQLite via `aiosqlite`.
 
@@ -479,3 +495,5 @@ Use **JWT Bearer tokens**.
    `GET /api/v1/categories` → `["Foundation_Models", "NLP", ...]`
 
    Useful for the `CategoryNav` filter bar in the frontend.
+
+8. **User-uploaded posts not implemented (v1):** The `ProfilePage` Posts tab has been removed. There is no `GET /api/v1/users/{user_id}/posts` endpoint required in v1. Users interact with the platform via like/save only; post creation is out of scope for this release.
