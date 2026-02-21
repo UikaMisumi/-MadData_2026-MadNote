@@ -8,7 +8,7 @@ function SettingsPage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [theme, setTheme] = useState('dark');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -78,7 +78,7 @@ function SettingsPage() {
 
   const handleThemeChange = (nextTheme) => {
     setTheme(nextTheme);
-    localStorage.setItem('theme', nextTheme);
+    document.documentElement.setAttribute('data-theme', nextTheme);
     setSuccessMessage(`Theme switched to ${nextTheme} mode.`);
     setTimeout(() => setSuccessMessage(''), 2000);
   };

@@ -5,11 +5,20 @@
  */
 
 const BASE_URL = 'http://127.0.0.1:8000/api/v1';
+let authToken = null;
 
 // ---------- helpers ----------
 
 function getToken() {
-  return localStorage.getItem('token');
+  return authToken;
+}
+
+export function setAuthToken(token) {
+  authToken = token || null;
+}
+
+export function clearAuthToken() {
+  authToken = null;
 }
 
 function authHeaders() {
@@ -18,9 +27,10 @@ function authHeaders() {
 }
 
 async function request(method, path, body, requireAuth = false) {
+  const tokenHeaders = requireAuth ? authHeaders() : {};
   const headers = {
     'Content-Type': 'application/json',
-    ...(requireAuth ? authHeaders() : authHeaders()), // always send token if present
+    ...tokenHeaders,
   };
 
   const options = { method, headers };
