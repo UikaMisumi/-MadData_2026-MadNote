@@ -1,0 +1,255 @@
+.comment-item {
+  margin-bottom: 16px;
+}
+
+.comment-item.is-reply {
+  margin-left: 32px;
+  margin-bottom: 12px;
+  border-left: 2px solid var(--border-secondary);
+  padding-left: 16px;
+}
+
+.comment-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border-primary);
+}
+
+.comment-item.is-reply .comment-avatar {
+  width: 28px;
+  height: 28px;
+}
+
+.comment-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.comment-author {
+  color: var(--color-primary);
+  font-size: var(--font-base);
+  font-weight: 600;
+}
+
+.comment-time {
+  color: var(--color-secondary);
+  font-size: var(--font-sm);
+}
+
+.delete-comment {
+  background: none;
+  border: none;
+  color: var(--color-tertiary);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+  opacity: 0;
+  margin-left: auto;
+}
+
+.comment-item:hover .delete-comment {
+  opacity: 1;
+}
+
+.delete-comment:hover {
+  background: var(--hover-bg);
+  color: var(--color-accent);
+}
+
+.comment-text {
+  color: var(--color-primary);
+  font-size: var(--font-base);
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
+  font-size: var(--font-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.action-btn:hover {
+  background: var(--hover-bg);
+  color: var(--color-primary);
+}
+
+.action-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.like-btn.liked {
+  color: var(--color-accent);
+}
+
+.like-btn.liked svg {
+  animation: heartBeat 0.3s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.reply-btn:hover {
+  color: var(--color-accent);
+}
+
+.toggle-replies {
+  font-weight: 500;
+}
+
+.toggle-replies svg {
+  transition: transform 0.3s ease;
+}
+
+.replies-container {
+  margin-top: 12px;
+  border-left: 2px solid var(--border-secondary);
+  padding-left: 16px;
+  margin-left: 44px;
+}
+
+/* 评论项的进入动画 */
+.comment-item {
+  animation: slideInComment 0.3s ease-out;
+}
+
+@keyframes slideInComment {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .comment-item.is-reply {
+    margin-left: 20px;
+    padding-left: 12px;
+  }
+
+  .comment-main {
+    gap: 8px;
+  }
+
+  .comment-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .comment-item.is-reply .comment-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .comment-actions {
+    gap: 12px;
+  }
+
+  .action-btn {
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+  .replies-container {
+    margin-left: 32px;
+    padding-left: 12px;
+  }
+}
+
+/* 回复按钮激活状态 */
+.reply-btn.active {
+  color: var(--color-accent);
+  background: var(--hover-bg);
+}
+
+/* 悬停效果 */
+.comment-item:hover {
+  background: var(--hover-bg);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  margin: 0 -8px 16px -8px;
+}
+
+.comment-item.is-reply:hover {
+  margin: 0 -8px 12px 24px;
+}
+
+/* 亮色主题特定样式 */
+[data-theme="light"] .comment-item.is-reply {
+  border-left-color: var(--border-primary);
+}
+
+[data-theme="light"] .replies-container {
+  border-left-color: var(--border-primary);
+}
+
+/* 评论长度限制视觉提示 */
+.comment-text {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* 特殊表情符号处理 */
+.comment-text {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", var(--font-family-base);
+}
+
+/* 评论操作按钮状态 */
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+.action-btn:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* 评论删除确认 */
+.delete-comment:active {
+  transform: scale(0.9);
+}

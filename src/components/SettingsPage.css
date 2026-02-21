@@ -1,0 +1,263 @@
+.settings-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.settings-container {
+  background: var(--bg-panel);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid #2A2A2A;
+}
+
+.settings-header {
+  padding: 24px;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-family: var(--font-family-title);
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.settings-content {
+  padding: 0;
+}
+
+.settings-section {
+  padding: 24px;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+}
+
+.settings-section h2 {
+  margin: 0 0 8px 0;
+  font-family: var(--font-family-title);
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.section-description {
+  margin: 0 0 24px 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 24px 24px 24px;
+  padding: 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-sm);
+  color: #22c55e;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.success-message svg {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.error-alert {
+  padding: 12px;
+  background: rgba(255, 0, 31, 0.1);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.password-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.password-form label span {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.password-form input {
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid #2A2A2A;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  transition: all 0.2s;
+}
+
+.password-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 0, 31, 0.1);
+}
+
+.password-form input::placeholder {
+  color: var(--text-secondary);
+}
+
+.input-error {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(255, 0, 31, 0.2) !important;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.error-message svg {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.change-password-btn {
+  margin-top: 8px;
+  padding: 12px 24px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #FFF;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-start;
+}
+
+.change-password-btn:hover:not(:disabled) {
+  background: #E60032;
+  transform: translateY(-1px);
+}
+
+.change-password-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.theme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid #2A2A2A;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-option:hover {
+  border-color: var(--accent);
+  background: rgba(255, 0, 31, 0.05);
+}
+
+.theme-option input[type="radio"] {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.theme-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.theme-name {
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.theme-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.theme-option input[type="radio"]:checked + .theme-option-content .theme-name {
+  color: var(--accent);
+}
+
+.settings-error {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--bg-panel);
+  border-radius: var(--radius-lg);
+  border: 1px solid #2A2A2A;
+}
+
+.settings-error h2 {
+  margin: 0 0 16px 0;
+  color: var(--text-primary);
+  font-family: var(--font-family-title);
+  font-size: var(--font-size-lg);
+}
+
+.settings-error p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 16px 12px;
+  }
+  
+  .settings-header {
+    padding: 20px 16px;
+  }
+  
+  .settings-section {
+    padding: 20px 16px;
+  }
+  
+  .success-message {
+    margin: 0 16px 20px 16px;
+  }
+  
+  .change-password-btn {
+    width: 100%;
+    align-self: stretch;
+  }
+}

@@ -1,0 +1,76 @@
+:root {
+  /* 颜色 */
+  --bg-page:       #0D0D0D;      /* 页面背景 */
+  --bg-panel:      #1A1A1A;      /* 卡片/Modal 背景 */
+  --bg-card:       #1F1F1F;      /* 卡片内部背景 */
+  --text-primary:  #FFFFFF;      /* 主文字 */
+  --text-secondary:#B3B3B3;      /* 次文字、占位 */
+  --accent:        #FF001F;      /* 小红书红 */
+  --hover-bg:      #2A2A2A;      /* 悬停背景 */
+  
+  /* 向后兼容（保持原有变量名） */
+  --color-primary: #FFFFFF;
+  --color-secondary:#B3B3B3;
+  --color-accent:  #FF001F;
+
+  /* 字体 */
+  --font-family-base:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-title: "Inter", sans-serif;
+
+  /* 字号 */
+  --font-size-base: 14px;
+  --font-size-sm:   12px;
+  --font-size-lg:   18px;
+  --font-size-xl:   20px;
+  
+  /* 向后兼容（保持原有变量名） */
+  --font-base:     14px;
+  --font-sm:       12px;
+  --font-lg:       18px;
+  --font-xl:       20px;
+
+  /* 圆角 */
+  --radius-sm:     8px;
+  --radius-lg:     12px;
+
+  /* 间距 */
+  --gutter:        16px;         /* 栅格列间距 */
+  --padding:       24px;         /* 主内容左右内边距 */
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--color-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-base);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+h1, .logo {
+  font-family: var(--font-family-title);
+  font-size: var(--font-xl);
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}

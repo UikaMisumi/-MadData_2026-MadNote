@@ -1,0 +1,155 @@
+.action-bar {
+  height: 48px;
+  background: var(--bg-secondary);
+  border-radius: 24px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin: 16px;
+  border-top: 1px solid var(--border-primary);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  font-family: 'Roboto', sans-serif;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  position: relative;
+}
+
+.action-btn:hover {
+  background: var(--hover-bg);
+  color: var(--color-primary);
+}
+
+.action-btn svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.action-text {
+  font-size: var(--font-sm);
+  font-weight: 500;
+}
+
+.action-count {
+  font-size: var(--font-sm);
+  color: var(--color-secondary);
+  margin-left: 4px;
+}
+
+/* Like按钮激活状态 */
+.action-btn.liked {
+  color: var(--color-accent);
+}
+
+.action-btn.liked svg {
+  color: var(--color-accent);
+}
+
+/* Save按钮相关样式 */
+.save-btn {
+  position: relative;
+}
+
+.action-btn.saved {
+  color: #FFD700;
+}
+
+.action-btn.saved svg {
+  color: #FFD700;
+}
+
+/* 保存成功提示 */
+.save-tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 1000;
+  animation: fadeInTooltip 0.2s ease-in-out;
+}
+
+.save-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--bg-tertiary);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .action-bar {
+    padding: 0 12px;
+    gap: 16px;
+  }
+  
+  .action-btn {
+    padding: 6px 8px;
+  }
+  
+  .action-text {
+    display: none;
+  }
+  
+  .action-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeInTooltip {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* 可访问性增强 */
+.action-btn:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.action-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* 暗色主题适配 */
+@media (prefers-color-scheme: dark) {
+  .save-tooltip {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+  
+  .save-tooltip::after {
+    border-top-color: var(--bg-tertiary);
+  }
+}

@@ -1,0 +1,228 @@
+.comment-input-container {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.comment-input-container.reply-mode {
+  margin-left: 0;
+  margin-top: 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  border-left: 3px solid var(--color-accent);
+}
+
+.reply-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 4px 0;
+}
+
+.reply-to {
+  font-size: var(--font-sm);
+  color: var(--color-secondary);
+}
+
+.reply-to strong {
+  color: var(--color-accent);
+}
+
+.cancel-reply {
+  background: none;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancel-reply:hover {
+  background: var(--hover-bg);
+  color: var(--color-primary);
+}
+
+.comment-form {
+  width: 100%;
+}
+
+.comment-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.comment-input-wrapper:focus-within {
+  border-color: var(--color-accent);
+}
+
+.comment-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-primary);
+  font-size: var(--font-base);
+  font-family: inherit;
+  resize: none;
+  min-height: 20px;
+  max-height: 120px;
+  line-height: 1.5;
+  padding: 4px 0;
+}
+
+.comment-textarea::placeholder {
+  color: var(--color-secondary);
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.emoji-button {
+  background: none;
+  border: none;
+  color: var(--color-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji-button:hover {
+  background: var(--hover-bg);
+  color: var(--color-accent);
+  transform: scale(1.1);
+}
+
+.char-counter {
+  font-size: var(--font-sm);
+  color: var(--color-tertiary);
+  min-width: 60px;
+  text-align: right;
+}
+
+.char-counter .warning {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.submit-button {
+  background: var(--color-accent);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: var(--prim-hov);
+  transform: scale(1.05);
+}
+
+.submit-button:disabled {
+  background: var(--bg-tertiary);
+  color: var(--color-tertiary);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 焦点状态 */
+.comment-textarea:focus {
+  outline: none;
+}
+
+/* 动画效果 */
+.comment-input-container.reply-mode {
+  animation: slideInReply 0.3s ease-out;
+}
+
+@keyframes slideInReply {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .comment-input-container.reply-mode {
+    margin-left: 24px;
+    padding: 8px;
+  }
+
+  .comment-actions {
+    gap: 4px;
+  }
+
+  .char-counter {
+    min-width: 50px;
+    font-size: 11px;
+  }
+
+  .emoji-button,
+  .submit-button {
+    padding: 6px;
+    min-width: 32px;
+    height: 32px;
+  }
+}
+
+/* 键盘快捷键提示 */
+.comment-input-wrapper::after {
+  content: 'Ctrl+Enter to send, Esc to cancel';
+  position: absolute;
+  bottom: -24px;
+  right: 0;
+  font-size: 11px;
+  color: var(--color-tertiary);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.comment-input-wrapper:focus-within::after {
+  opacity: 0.7;
+}
+
+.comment-input-container.reply-mode .comment-input-wrapper::after {
+  content: 'Ctrl+Enter to send, Esc to cancel reply';
+}
+
+/* 暗色主题优化 */
+[data-theme="dark"] .comment-input-container.reply-mode {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* 亮色主题优化 */
+[data-theme="light"] .comment-input-container.reply-mode {
+  background: rgba(0, 0, 0, 0.02);
+}
