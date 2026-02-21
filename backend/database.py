@@ -1,11 +1,13 @@
+
 import pandas as pd
 import os
 import json
 
-# Paths configuration
+# File path configurations
 CSV_PATH = "../xiaohongshu_full_topics.csv"
 TITLES_ABSTRACTS_PATH = "../extracted_titles_abstracts.json"
 KEYWORDS_PATH = "../keywords_with_keybert.json"
+FINAL_POSTS_PATH = "../final_posts_en.json"
 INTERACTIONS_FILE = "interactions.json"
 COMMENTS_FILE = "comments.json"
 
@@ -16,82 +18,99 @@ class DataManager:
         self.comments = self.load_json_file(COMMENTS_FILE, {})
 
     def load_data(self):
-        """Merges CSV, extended abstracts, and KeyBERT keywords into a single DataFrame."""
+        """Merges multiple data sources, ensuring fields match the frontend UI mapping."""
         try:
-            # 1. Load Keywords (Main source for IDs)
+            # 1. Base data on Keywords file (contains IDs and key points data)
             if not os.path.exists(KEYWORDS_PATH):
-                print(f"Critical Error: {KEYWORDS_PATH} not found.")
+                print(f"Error: {KEYWORDS_PATH} not found.")
                 return pd.DataFrame()
             
             with open(KEYWORDS_PATH, 'r', encoding='utf-8') as f:
-                kw_data = json.load(f)
-            df = pd.DataFrame(kw_data)
+                df = pd.DataFrame(json.load(f))
             df['id'] = df['id'].astype(str)
-            # rename dynamic_keywords to keywords for API consistency
+            # Map dynamic_keywords -> keywords (Frontend 'Key Points' section)
             df = df.rename(columns={'dynamic_keywords': 'keywords'})
 
-            # 2. Load and Merge CSV (For authors, categories, citations)
-            if os.path.exists(CSV_PATH):
-                csv_df = pd.read_csv(CSV_PATH)
-                # Join on 'title' as IDs might not exist in original CSV
-                df = df.merge(
-                    csv_df[['title', 'authors', 'category', 'update_date', 'citations']], 
-                    on='title', 
-                    how='left'
-                )
+            # 2. Merge AI Summary (TL;DR) - retrieved from final_posts_en.json's innovation field
+            if os.path.exists(FINAL_POSTS_PATH):
+                with open(FINAL_POSTS_PATH, 'r', encoding='utf-8') as f:
+                    final_df = pd.DataFrame(json.load(f))
+                final_df['id'] = final_df['id'].astype(str)
+                # Map innovation -> ai_summary
+                final_df = final_df.rename(columns={
+                    'innovation': 'ai_summary',
+                    'likesCount': 'likes_count_init',
+                    'imageUrl': 'image_url'
+                })
+                # Merge by ID
+                df = df.merge(final_df[['id', 'ai_summary', 'likes_count_init', 'image_url']], on='id', how='left')
 
-            # 3. Load and Merge Detailed Abstracts
+            # 3. Merge Original Abstract - retrieved from extracted_titles_abstracts.json
             if os.path.exists(TITLES_ABSTRACTS_PATH):
                 with open(TITLES_ABSTRACTS_PATH, 'r', encoding='utf-8') as f:
-                    abs_data = json.load(f)
-                abs_df = pd.DataFrame(abs_data)
-                # Merge based on title
-                df = df.merge(abs_df[['title', 'abstract']], on='title', how='left', suffixes=('_csv', ''))
-                # If extended abstract exists, use it; otherwise use CSV abstract
-                if 'abstract_csv' in df.columns:
-                    df['abstract'] = df['abstract'].fillna(df['abstract_csv'])
-                    df = df.drop(columns=['abstract_csv'])
+                    abs_df = pd.DataFrame(json.load(f))
+                # Match using titles (strip whitespace and convert to lowercase to improve match rate)
+                abs_df['title_clean'] = abs_df['title'].str.strip().str.lower()
+                df['title_clean'] = df['title'].str.strip().str.lower()
+                
+                df = df.merge(abs_df[['title_clean', 'abstract']], on='title_clean', how='left')
+                df = df.drop(columns=['title_clean'])
 
-            # 4. Data Refinement & Author Synthesis
-            # Map 'innovation' logic or other placeholders if needed
-            df['ai_summary'] = df['abstract'].apply(lambda x: str(x)[:200] + "..." if pd.notnull(x) else "")
+            # 4. Merge Authors and Metadata - retrieved from xiaohongshu_full_topics.csv
+            if os.path.exists(CSV_PATH):
+                csv_df = pd.read_csv(CSV_PATH)
+                csv_df['title_clean'] = csv_df['title'].str.strip().str.lower()
+                df['title_clean'] = df['title'].str.strip().str.lower()
+                
+                df = df.merge(
+                    csv_df[['title_clean', 'authors', 'category', 'update_date', 'citations']], 
+                    on='title_clean', 
+                    how='left'
+                )
+                df = df.drop(columns=['title_clean'])
 
+            # 5. Synthesize Author Object (Required for PostCard/PostModal rendering)
             def format_author(row):
                 raw = row.get('authors', 'Anonymous')
-                # Basic parsing for "First Author, Second Author" or "Author and Author"
-                if isinstance(raw, str):
-                    name = raw.replace(' and ', ', ').split(',')[0].strip()
-                else:
+                if pd.isna(raw) or not isinstance(raw, str):
                     name = 'Anonymous'
+                else:
+                    # Extract the first author's name
+                    name = raw.replace(' and ', ', ').split(',')[0].strip()
                 
                 return {
                     "name": name,
                     "username": name.lower().replace(" ", "_"),
                     "avatar": None
                 }
-            
             df['author'] = df.apply(format_author, axis=1)
 
-            # 5. Global interaction counts defaults
-            df['likes_count'] = 0
+            # 6. Data cleaning and setting default values
+            if 'likes_count_init' in df.columns:
+                df['likes_count'] = df['likes_count_init'].fillna(0).astype(int)
+            else:
+                df['likes_count'] = 0
+                
             df['saves_count'] = 0
-            
-            # Ensure update_date exists
             df['update_date'] = df['update_date'].fillna('2026-02-13')
+            df['category'] = df['category'].fillna('General')
+            
+            if 'citations' in df.columns:
+                df['citations'] = df['citations'].fillna(0).astype(int)
+            else:
+                df['citations'] = 0
 
-            print(f"Database initialized with {len(df)} papers.")
             return df
-
         except Exception as e:
-            print(f"Data merge error: {e}")
+            print(f"DataManager Error: {e}")
             return pd.DataFrame()
 
     def load_json_file(self, filename, default_value):
         if os.path.exists(filename):
             with open(filename, "r", encoding='utf-8') as f:
-                try:
+                try: 
                     return json.load(f)
-                except:
+                except: 
                     return default_value
         return default_value
 
@@ -100,7 +119,7 @@ class DataManager:
             json.dump(self.interactions, f, indent=4)
 
     def save_comments(self):
-        # UTF-8 is critical for supporting Emojis sent from the frontend
+        # ensure_ascii=False ensures that Emojis in comments are correctly saved in JSON
         with open(COMMENTS_FILE, "w", encoding='utf-8') as f:
             json.dump(self.comments, f, indent=4, ensure_ascii=False)
 
