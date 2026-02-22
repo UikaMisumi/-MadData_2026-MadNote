@@ -2,28 +2,41 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { usePosts } from '../contexts/PostsContext';
 import './Header.css';
 
-function Header({ onSearch }) {
+const TOPIC_FALLBACKS = ['Foundation Models', 'Robotics', 'AI for Science', 'HCI', 'NLP & IR'];
+const normalizeTopic = (value) => String(value || '').trim().toLowerCase();
+
+function Header() {
   const { user, logout } = useAuth();
   const { toggleTheme, isDark } = useTheme();
+  const { category, setCategory, categories, query, setQuery } = usePosts();
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(query || '');
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountRef = useRef(null);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    onSearch && onSearch(searchTerm);
+    setQuery(searchTerm.trim());
   };
 
   const handleSearchChange = (e) => {
-    const next = e.target.value;
-    setSearchTerm(next);
-    if (onSearch && next.length > 2) onSearch(next);
-    if (onSearch && next.length === 0) onSearch('');
+    setSearchTerm(e.target.value);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setQuery(searchTerm.trim());
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchTerm, setQuery]);
+
+  useEffect(() => {
+    setSearchTerm(query || '');
+  }, [query]);
 
   const getInitials = (name) => {
     if (!name) return 'U';
@@ -58,6 +71,46 @@ function Header({ onSearch }) {
     };
   }, [isAccountMenuOpen]);
 
+  const categoryMap = (() => {
+    const map = new Map();
+    for (const raw of categories || []) {
+      const key = normalizeTopic(raw);
+      if (!key || key === 'all' || key === 'general' || map.has(key)) continue;
+      map.set(key, String(raw));
+    }
+    return map;
+  })();
+
+  const chipTopics = (() => {
+    const source = (categories || [])
+      .filter(Boolean)
+      .map((item) => String(item).trim())
+      .filter((item) => normalizeTopic(item) !== 'all')
+      .filter((item) => normalizeTopic(item) !== 'general')
+      .filter((item) => item !== '');
+    const merged = [...new Set(source)];
+    for (const fallback of TOPIC_FALLBACKS) {
+      if (!merged.some((item) => normalizeTopic(item) === normalizeTopic(fallback))) {
+        merged.push(fallback);
+      }
+      if (merged.length >= 6) break;
+    }
+    return merged.slice(0, 6);
+  })();
+
+  const applyTopic = (topic) => {
+    const rawCategory = categoryMap.get(normalizeTopic(topic));
+    if (rawCategory) {
+      setSearchTerm('');
+      setQuery('');
+      setCategory(rawCategory);
+      return;
+    }
+    setCategory('');
+    setQuery(topic);
+    setSearchTerm(topic);
+  };
+
   return (
     <nav className="mn-nav">
       <div className="mn-brand" onClick={() => navigate('/')}>
@@ -69,9 +122,27 @@ function Header({ onSearch }) {
       </div>
 
       <div className="mn-nav-center">
-        <button className="mn-chip active" type="button">All Feed</button>
-        <button className="mn-chip" type="button">Robotics</button>
-        <button className="mn-chip" type="button">Foundation Models</button>
+        <button
+          className={`mn-chip ${!category && !query ? 'active' : ''}`}
+          type="button"
+          onClick={() => {
+            setSearchTerm('');
+            setCategory('');
+            setQuery('');
+          }}
+        >
+          All Feed
+        </button>
+        {chipTopics.map((item) => (
+          <button
+            key={item}
+            className={`mn-chip ${normalizeTopic(category) === normalizeTopic(item) || normalizeTopic(query) === normalizeTopic(item) ? 'active' : ''}`}
+            type="button"
+            onClick={() => applyTopic(item)}
+          >
+            {item}
+          </button>
+        ))}
       </div>
 
       <div className="mn-nav-right">

@@ -53,6 +53,31 @@ class DataManager:
         separator = ";" if ";" in text else ","
         return [v.strip() for v in text.split(separator) if v.strip()]
 
+    def _format_topic_label(self, raw_value: Any) -> str:
+        """Normalizes topic/category labels for consistent UI filtering."""
+        if raw_value is None or (isinstance(raw_value, float) and pd.isna(raw_value)):
+            return ""
+        text = str(raw_value).strip()
+        if not text:
+            return ""
+        text = text.replace("_", " ").replace("-", " ")
+        lowered = text.lower()
+        aliases = {
+            "hci": "HCI",
+            "nlp ir": "NLP & IR",
+            "nlp & ir": "NLP & IR",
+            "foundation models": "Foundation Models",
+            "ai for science": "AI for Science",
+            "robotics": "Robotics",
+            "general": "",
+        }
+        if lowered in aliases:
+            return aliases[lowered]
+        words = [w for w in text.split() if w]
+        if not words:
+            return ""
+        return " ".join([w.upper() if len(w) <= 3 else w.capitalize() for w in words])
+
     def load_data(self):
         """
         Loads and merges data strictly adhering to the specified mapping rules.
@@ -218,7 +243,16 @@ class DataManager:
             return [str(value)]
 
         df["keywords"] = df["keywords"].apply(normalize_list)
-        df["tags"] = df["tags"].apply(normalize_list)
+        df["tags"] = df["tags"].apply(
+            lambda vals: [self._format_topic_label(v) for v in normalize_list(vals) if self._format_topic_label(v)]
+        )
+
+        # Replace generic categories with the first concrete topic tag when possible.
+        df["category"] = df["category"].apply(self._format_topic_label)
+        df["category"] = df.apply(
+            lambda row: row["category"] if row["category"] else (row["tags"][0] if isinstance(row["tags"], list) and row["tags"] else "Uncategorized"),
+            axis=1,
+        )
 
         # Handle authors safely
         if "authors" not in df.columns:

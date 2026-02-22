@@ -3,6 +3,17 @@ import { usePosts } from '../contexts/PostsContext';
 import { useAuth } from '../contexts/AuthContext';
 import './PostCard.css';
 
+const normalizeTopic = (value) => String(value || '').trim().toLowerCase();
+
+const deriveTopicLabel = (post) => {
+  const category = String(post.category || '').trim();
+  if (category && normalizeTopic(category) !== 'general') return category;
+  if (Array.isArray(post.tags) && post.tags.length > 0) {
+    return String(post.tags[0]).replace(/_/g, ' ').trim();
+  }
+  return 'Uncategorized';
+};
+
 const PostCard = ({
   post,
   onClick,
@@ -27,12 +38,13 @@ const PostCard = ({
   const summaryParts = summary.split('. ').filter(Boolean);
   const firstSentence = summaryParts[0] || '';
   const secondSentence = summaryParts[1] || summaryParts[0] || '';
+  const topicLabel = deriveTopicLabel(post);
   const related = Array.isArray(post.related_titles)
     ? post.related_titles.slice(0, 2)
-    : (post.tags || []).slice(0, 2).map((tag) => `Related topic: ${tag}`);
+    : (post.tags || []).slice(0, 2).map((tag) => `Related topic: ${String(tag).replace(/_/g, ' ')}`);
 
   const categoryClass = (() => {
-    const c = (post.category || '').toLowerCase();
+    const c = topicLabel.toLowerCase();
     if (c.includes('foundation')) return 'violet';
     if (c.includes('vision')) return 'emerald';
     if (c.includes('robot')) return 'amber';
@@ -129,7 +141,7 @@ const PostCard = ({
       )}
 
       <div className="card-head">
-        <span className={`category-chip ${categoryClass}`}>{post.category || 'General'}</span>
+        <span className={`category-chip ${categoryClass}`}>{topicLabel}</span>
         <span className="likes-meta">{likesCount} likes</span>
       </div>
 

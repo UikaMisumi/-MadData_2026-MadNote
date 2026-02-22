@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useAuth } from './AuthContext';
 import {
   apiFeed,
+  apiSearch,
+  apiCategories,
   apiLikePaper,
   apiSavePaper,
   apiGetComments,
@@ -27,20 +29,54 @@ export const PostsProvider = ({ children }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [category, setCategory] = useState('');
+  const [query, setQuery] = useState('');
+  const [categories, setCategories] = useState([]);
 
-  // Load first page whenever category or user changes
+  // Load first page whenever category, query, or auth context changes.
   useEffect(() => {
     setPosts([]);
     setPage(1);
     setHasMore(true);
-  }, [category, user?.id]);
+  }, [category, query, user?.id]);
+
+  // Load category options from backend to keep chips data-driven.
+  useEffect(() => {
+    let mounted = true;
+    const run = async () => {
+      try {
+        const data = await apiCategories();
+        if (!mounted) return;
+        const list = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.items)
+            ? data.items
+            : [];
+        setCategories(
+          list
+            .filter(Boolean)
+            .map((item) => String(item).trim())
+            .filter((item) => item && item.toLowerCase() !== 'general')
+        );
+      } catch (err) {
+        console.error('PostsContext: load categories failed', err);
+        if (mounted) setCategories([]);
+      }
+    };
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Fetch a page of papers from the API
-  const fetchPosts = useCallback(async (pageNum, cat) => {
+  const fetchPosts = useCallback(async (pageNum, cat, searchQuery) => {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const data = await apiFeed(pageNum, 10, cat);
+      const trimmedQuery = (searchQuery || '').trim();
+      const data = trimmedQuery
+        ? await apiSearch(trimmedQuery, pageNum, 10)
+        : await apiFeed(pageNum, 10, cat);
       const items = data.items || [];
       setPosts(prev => pageNum === 1 ? items : [...prev, ...items]);
       setHasMore(data.has_more ?? false);
@@ -54,14 +90,25 @@ export const PostsProvider = ({ children }) => {
   // Trigger fetch when page/category/auth user changes.
   // Login/logout resets the list; include user id so we always refetch after reset.
   useEffect(() => {
-    fetchPosts(page, category);
+    fetchPosts(page, category, query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, category, user?.id]);
+  }, [page, category, query, user?.id]);
 
   const loadMore = () => {
     if (hasMore && !isLoading) {
       setPage(prev => prev + 1);
     }
+  };
+
+  const refreshPosts = async () => {
+    if (isLoading) return;
+    setPosts([]);
+    setHasMore(true);
+    if (page === 1) {
+      await fetchPosts(1, category, query);
+      return;
+    }
+    setPage(1);
   };
 
   // ---------- Interactions ----------
@@ -148,8 +195,12 @@ export const PostsProvider = ({ children }) => {
     isLoading,
     hasMore,
     loadMore,
+    refreshPosts,
     category,
     setCategory,
+    query,
+    setQuery,
+    categories,
     // interaction helpers used by PostCard / PostModal
     updateLikeCount,
     updateSaveCount,

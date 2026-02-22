@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import './styles/tokens.css';
@@ -17,12 +17,6 @@ import SignupPage from './components/SignupPage';
 import ProfilePage from './components/ProfilePage';
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-  };
-
   return (
     <ThemeProvider>
       <AuthProvider>
@@ -37,9 +31,9 @@ function App() {
               <Route
                 path="/*"
                 element={
-                  <Layout onSearch={handleSearch}>
+                  <Layout>
                     <Routes>
-                      <Route path="/" element={<HomePage searchTerm={searchTerm} />} />
+                      <Route path="/" element={<HomePage />} />
                       <Route path="/about-us" element={<AboutUs />} />
                       <Route path="/other-info" element={<OtherInfo />} />
                       <Route path="/notifications" element={<NotificationsPage />} />

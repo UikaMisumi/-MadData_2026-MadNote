@@ -127,6 +127,14 @@ export async function apiGetPaper(paperId) {
   return request('GET', `/papers/${paperId}`);
 }
 
+/**
+ * GET /categories
+ * @returns {string[]}
+ */
+export async function apiCategories() {
+  return request('GET', '/categories');
+}
+
 // ---------- Recommendations ----------
 
 /**

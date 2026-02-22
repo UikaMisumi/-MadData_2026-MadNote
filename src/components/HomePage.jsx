@@ -7,9 +7,8 @@ import InsightModal from './InsightModal';
 import GraphModal from './GraphModal';
 import './HomePage.css';
 
-function HomePage({ searchTerm }) {
-  const { posts, hasMore, isLoading, loadMore } = usePosts();
-  const [filteredPosts, setFilteredPosts] = useState([]);
+function HomePage() {
+  const { posts, hasMore, isLoading, loadMore, refreshPosts, query } = usePosts();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [showInsightModal, setShowInsightModal] = useState(false);
@@ -17,28 +16,7 @@ function HomePage({ searchTerm }) {
   const [graphTitle, setGraphTitle] = useState('');
 
   useEffect(() => {
-    if (!posts) {
-      setFilteredPosts([]);
-      return;
-    }
-
-    let filtered = posts;
-    if (searchTerm && searchTerm.trim()) {
-      const term = searchTerm.toLowerCase().trim();
-      filtered = posts.filter((post) =>
-        post.title?.toLowerCase().includes(term) ||
-        post.content?.toLowerCase().includes(term) ||
-        post.description?.toLowerCase().includes(term) ||
-        post.tags?.some((tag) => tag.toLowerCase().includes(term)) ||
-        post.author?.name?.toLowerCase().includes(term)
-      );
-    }
-
-    setFilteredPosts(filtered);
-  }, [posts, searchTerm]);
-
-  useEffect(() => {
-    const visibleIds = new Set(filteredPosts.map((post) => post.id));
+    const visibleIds = new Set((posts || []).map((post) => post.id));
     setSelectedIds((prev) => {
       const next = new Set();
       prev.forEach((id) => {
@@ -46,12 +24,11 @@ function HomePage({ searchTerm }) {
       });
       return next;
     });
-  }, [filteredPosts]);
+  }, [posts]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setFilteredPosts((prev) => [...prev]);
+    await refreshPosts();
     setIsRefreshing(false);
   };
 
@@ -72,24 +49,24 @@ function HomePage({ searchTerm }) {
   return (
     <div className="home-page">
       <div className="home-content">
-        <header className="discover-head">
+        <header className="discover-head fade-up">
           <h2>Discover</h2>
           <p>AI-powered semantic lineage and cross-disciplinary insights</p>
         </header>
 
-        {searchTerm && (
-          <div className="search-info">
+        {query && (
+          <div className="search-info fade-up">
             <h2>Search Results</h2>
             <p>
-              {filteredPosts.length} result{filteredPosts.length !== 1 ? 's' : ''} for "{searchTerm}"
+              {(posts || []).length} result{(posts || []).length !== 1 ? 's' : ''} for "{query}"
             </p>
           </div>
         )}
 
-        {filteredPosts.length > 0 ? (
+        {(posts || []).length > 0 ? (
           <>
             <MasonryGrid
-              posts={filteredPosts}
+              posts={posts}
               showStats={true}
               showPrivBadge={false}
               selectedIds={selectedIds}
@@ -97,26 +74,24 @@ function HomePage({ searchTerm }) {
               onOpenGraph={handleOpenGraph}
             />
 
-            {!searchTerm && (
-              <div className="home-load-more-wrap">
-                {hasMore ? (
-                  <button
-                    type="button"
-                    className="home-load-more-btn"
-                    onClick={loadMore}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Loading...' : 'Load more'}
-                  </button>
-                ) : (
-                  <p className="home-load-more-end">All papers loaded</p>
-                )}
-              </div>
-            )}
+            <div className="home-load-more-wrap">
+              {hasMore ? (
+                <button
+                  type="button"
+                  className="home-load-more-btn"
+                  onClick={loadMore}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Loading...' : 'Load more'}
+                </button>
+              ) : (
+                <p className="home-load-more-end">All papers loaded</p>
+              )}
+            </div>
           </>
         ) : (
           <div className="home-empty">
-            {searchTerm ? (
+            {query ? (
               <div className="no-results">
                 <h3>No results found</h3>
                 <p>Try adjusting your search terms or browse all posts</p>
