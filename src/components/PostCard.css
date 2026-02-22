@@ -229,6 +229,55 @@
   font-weight: 600;
 }
 
+.xh-post.discover-card {
+  padding: 1.5rem;
+  border: 1px solid rgba(20, 184, 166, 0.32);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 253, 250, 0.7));
+  box-shadow: 0 18px 34px -24px rgba(13, 148, 136, 0.45);
+}
+
+.xh-post.discover-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(13, 148, 136, 0.5);
+}
+
+.xh-post.discover-card .title {
+  font-size: 28px;
+  line-height: 1.28;
+}
+
+.xh-post.discover-card .tldr p {
+  font-size: 15px;
+}
+
+.discover-rank-chip {
+  margin-left: auto;
+  border-radius: 999px;
+  border: 1px solid rgba(20, 184, 166, 0.35);
+  background: rgba(236, 253, 245, 0.9);
+  color: #0f766e;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+}
+
+.discover-keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 14px;
+}
+
+.discover-keyword-chip {
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(20, 184, 166, 0.14);
+  color: #0f766e;
+  border: 1px solid rgba(20, 184, 166, 0.25);
+}
+
 .kebab-container {
   position: absolute;
   top: 10px;

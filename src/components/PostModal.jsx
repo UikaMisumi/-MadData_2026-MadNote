@@ -11,7 +11,6 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
 
   const modalRef = useRef(null);
   const [activeTab, setActiveTab] = useState('ai');
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [isLiked, setIsLiked] = useState(post?.is_liked ?? false);
   const [isSaved, setIsSaved] = useState(post?.is_saved ?? false);
   const [likesCount, setLikesCount] = useState(post?.likes_count ?? post?.likesCount ?? 0);
@@ -20,12 +19,6 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
   const [replyTarget, setReplyTarget] = useState(null);
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [askValue, setAskValue] = useState('');
-
-  const mediaItems = useMemo(() => {
-    if (!post) return [];
-    if (Array.isArray(post.media) && post.media.length > 0) return post.media;
-    return [{ type: 'image', url: post.image_url || post.image || post.imageUrl }];
-  }, [post]);
 
   const related = useMemo(() => {
     if (!post) return [];
@@ -55,7 +48,6 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
     if (!isOpen || !post) return;
 
     setActiveTab('ai');
-    setCurrentSlide(0);
     setReplyTarget(null);
     setShowRecommendations(false);
     setAskValue('');
@@ -69,12 +61,6 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
-      if (mediaItems.length > 0 && e.key === 'ArrowLeft') {
-        setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
-      }
-      if (mediaItems.length > 0 && e.key === 'ArrowRight') {
-        setCurrentSlide((prev) => (prev + 1) % mediaItems.length);
-      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -282,27 +268,6 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
           </div>
 
           <aside className="paper-side">
-            <section className="media-card">
-              <div className="media-view">
-                {mediaItems[currentSlide]?.type === 'video' ? (
-                  <video src={mediaItems[currentSlide]?.url} controls autoPlay muted loop />
-                ) : (
-                  <img src={mediaItems[currentSlide]?.url} alt={post.title} />
-                )}
-              </div>
-              {mediaItems.length > 1 && (
-                <div className="media-nav">
-                  <button type="button" onClick={() => setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length)}>
-                    Prev
-                  </button>
-                  <span>{currentSlide + 1}/{mediaItems.length}</span>
-                  <button type="button" onClick={() => setCurrentSlide((prev) => (prev + 1) % mediaItems.length)}>
-                    Next
-                  </button>
-                </div>
-              )}
-            </section>
-
             <div className="side-actions">
               <button
                 type="button"
@@ -314,7 +279,6 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
               >
                 Read PDF
               </button>
-              <button type="button">GitHub</button>
             </div>
 
             <section className="graph-cta">

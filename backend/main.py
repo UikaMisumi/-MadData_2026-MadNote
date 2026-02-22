@@ -1,4 +1,5 @@
 from datetime import datetime
+import math
 import uuid
 
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Query, Response
@@ -99,6 +100,199 @@ def paginate_df(df, page: int, size: int):
     end = page * size
     chunk = df.iloc[start:end]
     return chunk, total, end < total
+
+
+def _norm_text(value: str | None):
+    return str(value or "").strip().lower()
+
+
+def _norm_set(values):
+    normalized = set()
+    for value in values or []:
+        text = _norm_text(value)
+        if text:
+            normalized.add(text)
+    return normalized
+
+
+def _normalize_keyword_label(value: str | None):
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return " ".join(text.split()).lower()
+
+
+def _display_keyword_label(value: str):
+    words = [w for w in str(value or "").split() if w]
+    if not words:
+        return ""
+    return " ".join([w.upper() if len(w) <= 3 else w.capitalize() for w in words])
+
+
+def _topic_default_keywords(topic: str):
+    key = _norm_text(topic)
+    fallback_map = {
+        "hci": ["Human Computer Interaction", "User Study", "UX", "Crowdsourcing", "Social Computing", "Accessibility"],
+        "robotics": ["Robot Learning", "Manipulation", "Vision Language", "Embodied AI", "Navigation", "Control Policy"],
+        "foundation models": ["Large Language Model", "Reasoning", "Instruction Tuning", "Alignment", "Multimodal", "Agent"],
+        "ai for science": ["Molecular Dynamics", "Protein Design", "Scientific Discovery", "Bioinformatics", "Medical AI", "Materials"],
+        "nlp & ir": ["Retrieval", "Information Extraction", "Summarization", "Question Answering", "Cross Lingual", "Benchmark"],
+    }
+    return fallback_map.get(key, ["Machine Learning", "Deep Learning", "Neural Network", "Optimization", "Benchmark", "Evaluation"])
+
+
+def _collect_topic_keywords(primary_topic: str, secondary_topics: list[str], limit: int = 12):
+    df = db_manager.df
+    if df.empty:
+        return []
+
+    topic_keys = _norm_set([primary_topic, *(secondary_topics or [])])
+    if not topic_keys:
+        return []
+
+    scores: dict[str, float] = {}
+    labels: dict[str, str] = {}
+
+    for row in df.to_dict(orient="records"):
+        row_topics = {_norm_text(row.get("category"))}
+        for tag in row.get("tags") or []:
+            row_topics.add(_norm_text(tag))
+        row_topics = {t for t in row_topics if t}
+        if not row_topics:
+            continue
+
+        overlap = row_topics.intersection(topic_keys)
+        if not overlap:
+            continue
+
+        # Primary topic carries stronger signal.
+        row_weight = 0.0
+        for key in overlap:
+            row_weight += 1.2 if key == _norm_text(primary_topic) else 0.8
+
+        for kw in row.get("keywords") or []:
+            normalized = _normalize_keyword_label(kw)
+            if not normalized:
+                continue
+            scores[normalized] = scores.get(normalized, 0.0) + row_weight
+            if normalized not in labels:
+                labels[normalized] = _display_keyword_label(str(kw))
+
+    ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
+    items = [labels[k] for k, _ in ranked[: max(1, min(30, int(limit)))]]
+    if items:
+        return items
+
+    fallback = _topic_default_keywords(primary_topic)
+    return fallback[: max(1, min(30, int(limit)))]
+
+
+def _collect_keyword_expansion(
+    primary_topic: str,
+    secondary_topics: list[str],
+    seed_keywords: list[str],
+    limit: int = 10,
+):
+    df = db_manager.df
+    if df.empty:
+        return _topic_default_keywords(primary_topic)[: max(1, min(30, int(limit)))]
+
+    topic_keys = _norm_set([primary_topic, *(secondary_topics or [])])
+    seed_norm = _norm_set(seed_keywords)
+    if not seed_norm:
+        return _collect_topic_keywords(primary_topic, secondary_topics, limit=limit)
+
+    scores: dict[str, float] = {}
+    labels: dict[str, str] = {}
+
+    for row in df.to_dict(orient="records"):
+        row_topics = {_norm_text(row.get("category"))}
+        for tag in row.get("tags") or []:
+            row_topics.add(_norm_text(tag))
+        row_topics = {t for t in row_topics if t}
+
+        row_keywords_raw = row.get("keywords") or []
+        row_keywords_norm = [_normalize_keyword_label(k) for k in row_keywords_raw if _normalize_keyword_label(k)]
+        if not row_keywords_norm:
+            continue
+
+        has_topic_match = bool(row_topics.intersection(topic_keys)) if topic_keys else True
+        seed_overlap = [kw for kw in row_keywords_norm if kw in seed_norm or any(s in kw or kw in s for s in seed_norm)]
+        if not has_topic_match and not seed_overlap:
+            continue
+
+        weight = 1.0 + 0.4 * len(seed_overlap)
+        for kw_raw, kw_norm in zip(row_keywords_raw, row_keywords_norm):
+            if kw_norm in seed_norm:
+                continue
+            scores[kw_norm] = scores.get(kw_norm, 0.0) + weight
+            if kw_norm not in labels:
+                labels[kw_norm] = _display_keyword_label(str(kw_raw))
+
+    ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
+    items = [labels[k] for k, _ in ranked[: max(1, min(30, int(limit)))]]
+    if items:
+        return items
+    return _topic_default_keywords(primary_topic)[: max(1, min(30, int(limit)))]
+
+
+def _topic_match_score(primary_topic: str, secondary_topics: list[str], row: dict):
+    primary = _norm_text(primary_topic)
+    secondary = _norm_set(secondary_topics)
+    row_topics = set()
+    row_topics.add(_norm_text(row.get("category")))
+    for tag in row.get("tags") or []:
+        row_topics.add(_norm_text(tag))
+    row_topics = {v for v in row_topics if v}
+
+    if not primary and not secondary:
+        return 0.0
+
+    primary_hit = 1.0 if primary and primary in row_topics else 0.0
+    secondary_hit = 0.0
+    if secondary:
+        overlap = len(secondary.intersection(row_topics))
+        secondary_hit = overlap / max(1, len(secondary))
+
+    # Primary topic dominates; secondary topics refine.
+    return min(1.0, 0.7 * primary_hit + 0.3 * secondary_hit)
+
+
+def _keyword_overlap_score(selected_keywords: list[str], row: dict):
+    query = _norm_set(selected_keywords)
+    if not query:
+        return 0.0
+
+    paper_keywords = [_norm_text(k) for k in (row.get("keywords") or []) if _norm_text(k)]
+    if not paper_keywords:
+        return 0.0
+
+    hit = 0
+    for q in query:
+        if any(q in k or k in q for k in paper_keywords):
+            hit += 1
+    return hit / max(1, len(query))
+
+
+def _freshness_score(update_date_text: str | None):
+    try:
+        updated_at = datetime.fromisoformat(str(update_date_text).replace("Z", ""))
+    except Exception:
+        return 0.0
+    age_days = max(0, (datetime.utcnow() - updated_at).days)
+    tau = 30.0
+    return math.exp(-age_days / tau)
+
+
+def _popularity_score(row: dict, max_likes: float, max_saves: float, max_citations: float):
+    likes = max(0.0, float(row.get("likes_count") or 0))
+    saves = max(0.0, float(row.get("saves_count") or 0))
+    citations = max(0.0, float(row.get("citations") or 0))
+
+    likes_norm = math.log1p(likes) / math.log1p(max_likes) if max_likes > 0 else 0.0
+    saves_norm = math.log1p(saves) / math.log1p(max_saves) if max_saves > 0 else 0.0
+    cites_norm = math.log1p(citations) / math.log1p(max_citations) if max_citations > 0 else 0.0
+    return 0.5 * likes_norm + 0.2 * saves_norm + 0.3 * cites_norm
 
 
 @app.get("/")
@@ -256,6 +450,101 @@ async def recommendations(
 ):
     # Baseline: fallback to feed ordering. Personal ranking can be added later.
     return await get_papers(page=page, size=size, category=None, user=user)
+
+
+@app.post("/api/v1/recommend/for-you")
+async def recommend_for_you(payload: dict, user=Depends(get_current_user)):
+    """
+    Phase-1 Discover-for-You ranker.
+    Expected payload:
+    {
+      "primary_topic": "AI for Science",
+      "secondary_topics": ["HCI", "Multimodal"],
+      "style_preference": "Practical",
+      "page": 1,
+      "size": 10
+    }
+    """
+    page = int(payload.get("page", 1) or 1)
+    size = int(payload.get("size", 10) or 10)
+    page = max(1, page)
+    size = max(1, min(50, size))
+
+    primary_topic = str(payload.get("primary_topic", "") or "")
+    secondary_topics = payload.get("secondary_topics", []) or []
+    if not isinstance(secondary_topics, list):
+        secondary_topics = []
+
+    style_preference = _norm_text(payload.get("style_preference", ""))
+    selected_keywords = payload.get("selected_keywords", []) or []
+    if not isinstance(selected_keywords, list):
+        selected_keywords = []
+    selected_keywords = [str(v).strip() for v in selected_keywords if str(v).strip()]
+    if not selected_keywords:
+        selected_keywords = _collect_topic_keywords(primary_topic, secondary_topics, limit=12)
+
+    df = db_manager.df.copy()
+    if df.empty:
+        return {"items": [], "page": page, "size": size, "has_more": False, "total": 0}
+
+    rows = df.to_dict(orient="records")
+
+    max_likes = float(df.get("likes_count", 0).max() or 0)
+    max_saves = float(df.get("saves_count", 0).max() or 0)
+    max_citations = float(df.get("citations", 0).max() or 0)
+
+    ranked = []
+    for row in rows:
+        topic_match = _topic_match_score(primary_topic, secondary_topics, row)
+        keyword_overlap = _keyword_overlap_score(selected_keywords, row)
+        freshness = _freshness_score(row.get("update_date"))
+        popularity = _popularity_score(row, max_likes, max_saves, max_citations)
+
+        # Small style preferences for phase-1 sorting flavor.
+        style_boost = 0.0
+        title_text = _norm_text(row.get("title"))
+        if style_preference == "survey" and "survey" in title_text:
+            style_boost = 0.03
+        elif style_preference == "practical" and ("system" in title_text or "benchmark" in title_text):
+            style_boost = 0.03
+        elif style_preference == "method" and ("model" in title_text or "framework" in title_text):
+            style_boost = 0.03
+
+        score = (
+            0.45 * topic_match
+            + 0.35 * keyword_overlap
+            + 0.15 * freshness
+            + 0.05 * popularity
+            + style_boost
+        )
+
+        row["_rank_score"] = round(float(score), 6)
+        ranked.append(row)
+
+    ranked.sort(
+        key=lambda r: (
+            r.get("_rank_score", 0.0),
+            float(r.get("likes_count") or 0),
+            float(r.get("citations") or 0),
+        ),
+        reverse=True,
+    )
+
+    total = len(ranked)
+    start = (page - 1) * size
+    end = page * size
+    items = ranked[start:end]
+    items = [inject_interaction_status(item, user) for item in items]
+
+    return {
+        "items": items,
+        "page": page,
+        "size": size,
+        "has_more": end < total,
+        "total": total,
+        "mode": "discover_for_you",
+        "selected_keywords": selected_keywords,
+    }
 
 
 # --- Interaction Routes ---
@@ -506,3 +795,32 @@ async def get_categories():
     if db_manager.df.empty or "category" not in db_manager.df.columns:
         return []
     return sorted(db_manager.df["category"].dropna().astype(str).unique().tolist())
+
+
+@app.get("/api/v1/recommend/keywords")
+async def get_recommend_keywords(
+    primary_topic: str = Query(""),
+    secondary_topics: str = Query(""),
+    limit: int = Query(12, ge=1, le=30),
+):
+    secondary = [item.strip() for item in str(secondary_topics or "").split(",") if item.strip()]
+    items = _collect_topic_keywords(primary_topic, secondary, limit=limit)
+    return {"items": items, "primary_topic": primary_topic, "secondary_topics": secondary}
+
+
+@app.get("/api/v1/recommend/keywords/expand")
+async def get_recommend_keywords_expand(
+    primary_topic: str = Query(""),
+    secondary_topics: str = Query(""),
+    seed_keywords: str = Query(""),
+    limit: int = Query(10, ge=1, le=30),
+):
+    secondary = [item.strip() for item in str(secondary_topics or "").split(",") if item.strip()]
+    seed = [item.strip() for item in str(seed_keywords or "").split(",") if item.strip()]
+    items = _collect_keyword_expansion(primary_topic, secondary, seed, limit=limit)
+    return {
+        "items": items,
+        "primary_topic": primary_topic,
+        "secondary_topics": secondary,
+        "seed_keywords": seed,
+    }

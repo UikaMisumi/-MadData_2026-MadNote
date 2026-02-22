@@ -28,6 +28,21 @@
   font-size: 14px;
 }
 
+.discover-focus-grid {
+  padding: 0;
+}
+
+.masonry.rows.discover-focus-grid {
+  grid-template-columns: repeat(2, minmax(420px, 1fr));
+  gap: 22px;
+}
+
+@media (max-width: 1200px) {
+  .masonry.rows.discover-focus-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .search-info {
   margin: 0 0 20px;
   padding: 14px 16px;
@@ -48,6 +63,11 @@
   margin: 0;
   color: var(--mn-text-muted);
   font-size: 13px;
+}
+
+.discover-info {
+  border-color: rgba(20, 184, 166, 0.35);
+  background: linear-gradient(180deg, rgba(240, 253, 250, 0.9), rgba(255, 255, 255, 0.92));
 }
 
 .home-empty {

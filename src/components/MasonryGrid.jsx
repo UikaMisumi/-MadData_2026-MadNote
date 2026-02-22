@@ -16,6 +16,8 @@ const MasonryGrid = ({
   layout = 'masonry',
   onLikeToggle,
   onSaveToggle,
+  cardVariant = 'default',
+  discoverProfile = null,
 }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,6 +53,8 @@ const MasonryGrid = ({
           <PostCard
             key={post.id}
             post={post}
+            cardVariant={cardVariant}
+            discoverProfile={discoverProfile}
             showStats={showStats}
             showPrivBadge={showPrivBadge}
             showKebab={showKebab}

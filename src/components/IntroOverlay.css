@@ -108,6 +108,12 @@
   pointer-events: auto;
 }
 
+.intro-bubbles.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
 .intro-bubble-shell {
   position: absolute;
   transform: translate(-50%, 120vh) scale(0.42);
@@ -171,6 +177,127 @@
   width: 154px;
   height: 154px;
   font-size: 16px;
+}
+
+.intro-keyword-stage {
+  position: relative;
+  z-index: 6;
+  width: min(840px, calc(100vw - 56px));
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 28px 46px -28px rgba(15, 23, 42, 0.42);
+  padding: 24px;
+  animation: intro-keyword-in 0.34s ease;
+}
+
+@keyframes intro-keyword-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.intro-keyword-header h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.intro-keyword-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.intro-keyword-grid {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 110px;
+}
+
+.intro-keyword-loading {
+  margin: 16px 2px 0;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.intro-keyword-bubble {
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95), rgba(241, 245, 249, 0.92));
+  color: #1e293b;
+  font-weight: 700;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+
+.intro-keyword-bubble.size-lg {
+  min-height: 52px;
+  font-size: 16px;
+}
+
+.intro-keyword-bubble.size-md {
+  min-height: 46px;
+  font-size: 14px;
+}
+
+.intro-keyword-bubble.size-sm {
+  min-height: 42px;
+  font-size: 13px;
+}
+
+.intro-keyword-bubble:hover {
+  transform: translateY(-1px);
+  border-color: rgba(45, 212, 191, 0.75);
+}
+
+.intro-keyword-bubble.active {
+  border-color: rgba(13, 148, 136, 0.85);
+  background: linear-gradient(135deg, rgba(240, 253, 250, 0.98), rgba(204, 251, 241, 0.75));
+  color: #0f766e;
+}
+
+.intro-keyword-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.intro-keyword-btn {
+  min-width: 140px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.intro-keyword-btn.ghost {
+  border-color: rgba(203, 213, 225, 0.95);
+  background: rgba(255, 255, 255, 0.9);
+  color: #334155;
+}
+
+.intro-keyword-btn.primary {
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+  color: #fff;
+  box-shadow: 0 14px 24px -14px rgba(13, 148, 136, 0.65);
+}
+
+.intro-keyword-btn.primary:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
 }
 
 .bubbles-shown .intro-bubble-shell {
@@ -284,5 +411,19 @@
     width: 102px;
     height: 102px;
     font-size: 11px;
+  }
+
+  .intro-keyword-stage {
+    width: calc(100vw - 24px);
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .intro-keyword-actions {
+    flex-direction: column;
+  }
+
+  .intro-keyword-btn {
+    width: 100%;
   }
 }

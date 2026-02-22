@@ -11,7 +11,16 @@ const normalizeTopic = (value) => String(value || '').trim().toLowerCase();
 function Header() {
   const { user, logout } = useAuth();
   const { toggleTheme, isDark } = useTheme();
-  const { category, setCategory, categories, query, setQuery } = usePosts();
+  const {
+    category,
+    setCategory,
+    categories,
+    query,
+    setQuery,
+    startDiscoverForYou,
+    clearDiscoverProfile,
+    isDiscoverMode,
+  } = usePosts();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState(query || '');
@@ -24,6 +33,7 @@ function Header() {
   };
 
   const handleSearchChange = (e) => {
+    if (isDiscoverMode) clearDiscoverProfile();
     setSearchTerm(e.target.value);
   };
 
@@ -99,6 +109,7 @@ function Header() {
   })();
 
   const applyTopic = (topic) => {
+    clearDiscoverProfile();
     const rawCategory = categoryMap.get(normalizeTopic(topic));
     if (rawCategory) {
       setSearchTerm('');
@@ -109,6 +120,15 @@ function Header() {
     setCategory('');
     setQuery(topic);
     setSearchTerm(topic);
+  };
+
+  const applyDiscoverForYou = async () => {
+    const primary = category || chipTopics[0] || TOPIC_FALLBACKS[0];
+    const secondary = chipTopics
+      .filter((item) => normalizeTopic(item) !== normalizeTopic(primary))
+      .slice(0, 2);
+    setSearchTerm('');
+    await startDiscoverForYou(primary, secondary, 'practical');
   };
 
   return (
@@ -123,10 +143,18 @@ function Header() {
 
       <div className="mn-nav-center">
         <button
-          className={`mn-chip ${!category && !query ? 'active' : ''}`}
+          className={`mn-chip ${isDiscoverMode ? 'active' : ''}`}
+          type="button"
+          onClick={applyDiscoverForYou}
+        >
+          Discover For You
+        </button>
+        <button
+          className={`mn-chip ${!category && !query && !isDiscoverMode ? 'active' : ''}`}
           type="button"
           onClick={() => {
             setSearchTerm('');
+            clearDiscoverProfile();
             setCategory('');
             setQuery('');
           }}

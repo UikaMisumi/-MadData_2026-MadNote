@@ -8,12 +8,32 @@ import GraphModal from './GraphModal';
 import './HomePage.css';
 
 function HomePage() {
-  const { posts, hasMore, isLoading, loadMore, refreshPosts, query } = usePosts();
+  const {
+    posts,
+    hasMore,
+    isLoading,
+    loadMore,
+    refreshPosts,
+    query,
+    isDiscoverMode,
+    discoverProfile,
+  } = usePosts();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [showInsightModal, setShowInsightModal] = useState(false);
   const [showGraphModal, setShowGraphModal] = useState(false);
   const [graphTitle, setGraphTitle] = useState('');
+  const discoverPosts = isDiscoverMode ? (posts || []).slice(0, 5) : posts;
+  const discoverTopic = discoverProfile?.primary_topic || 'your interests';
+  const discoverKeywords = Array.isArray(discoverProfile?.selected_keywords)
+    ? discoverProfile.selected_keywords.slice(0, 3)
+    : [];
+
+  const discoverSubtitle = (() => {
+    if (!isDiscoverMode) return 'AI-powered semantic lineage and cross-disciplinary insights';
+    if (discoverKeywords.length === 0) return `Focused on ${discoverTopic}`;
+    return `Focused on ${discoverTopic}: ${discoverKeywords.join(' | ')}`;
+  })();
 
   useEffect(() => {
     const visibleIds = new Set((posts || []).map((post) => post.id));
@@ -50,8 +70,8 @@ function HomePage() {
     <div className="home-page">
       <div className="home-content">
         <header className="discover-head fade-up">
-          <h2>Discover</h2>
-          <p>AI-powered semantic lineage and cross-disciplinary insights</p>
+          <h2>{isDiscoverMode ? 'Discover For You' : 'Discover'}</h2>
+          <p>{discoverSubtitle}</p>
         </header>
 
         {query && (
@@ -63,31 +83,37 @@ function HomePage() {
           </div>
         )}
 
-        {(posts || []).length > 0 ? (
+        {(discoverPosts || []).length > 0 ? (
           <>
             <MasonryGrid
-              posts={posts}
+              posts={discoverPosts}
               showStats={true}
               showPrivBadge={false}
               selectedIds={selectedIds}
               onToggleSelect={handleToggleSelect}
               onOpenGraph={handleOpenGraph}
+              layout={isDiscoverMode ? 'rows' : 'masonry'}
+              className={isDiscoverMode ? 'discover-focus-grid' : ''}
+              cardVariant={isDiscoverMode ? 'discover' : 'default'}
+              discoverProfile={discoverProfile}
             />
 
-            <div className="home-load-more-wrap">
-              {hasMore ? (
-                <button
-                  type="button"
-                  className="home-load-more-btn"
-                  onClick={loadMore}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Loading...' : 'Load more'}
-                </button>
-              ) : (
-                <p className="home-load-more-end">All papers loaded</p>
-              )}
-            </div>
+            {!isDiscoverMode && (
+              <div className="home-load-more-wrap">
+                {hasMore ? (
+                  <button
+                    type="button"
+                    className="home-load-more-btn"
+                    onClick={loadMore}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Loading...' : 'Load more'}
+                  </button>
+                ) : (
+                  <p className="home-load-more-end">All papers loaded</p>
+                )}
+              </div>
+            )}
           </>
         ) : (
           <div className="home-empty">

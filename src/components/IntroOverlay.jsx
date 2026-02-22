@@ -4,14 +4,35 @@ import './IntroOverlay.css';
 
 const FALLBACK_TOPICS = ['Foundation Models', 'Robotics', 'AI for Science', 'HCI', 'NLP & IR'];
 const BUBBLE_SIZE_CLASS = ['size-xl', 'size-lg', 'size-xl', 'size-md', 'size-lg'];
+const KEYWORD_BUBBLE_SIZE = ['size-lg', 'size-md', 'size-md', 'size-sm', 'size-sm', 'size-sm'];
+const TOPIC_FALLBACK_KEYWORDS = {
+  'foundation models': ['Large Language Model', 'Reasoning', 'Alignment', 'Multimodal', 'Agent', 'Instruction Tuning'],
+  robotics: ['Robot Learning', 'Manipulation', 'Embodied AI', 'Navigation', 'Control Policy', 'Vision Language'],
+  'ai for science': ['Molecular Dynamics', 'Protein Design', 'Scientific Discovery', 'Medical AI', 'Materials', 'Bioinformatics'],
+  hci: ['User Study', 'UX', 'Human Computer Interaction', 'Crowdsourcing', 'Social Computing', 'Accessibility'],
+  'nlp & ir': ['Retrieval', 'Question Answering', 'Information Extraction', 'Summarization', 'Cross Lingual', 'Benchmark'],
+};
 const normalizeTopic = (value) => String(value || '').trim().toLowerCase();
 
 function IntroOverlay() {
-  const { categories, setCategory, setQuery } = usePosts();
+  const {
+    categories,
+    fetchDiscoverKeywords,
+    fetchDiscoverKeywordExpansion,
+    startDiscoverForYou,
+  } = usePosts();
   const [visible, setVisible] = useState(true);
   const [bubblesShown, setBubblesShown] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [stage, setStage] = useState('topic');
   const [selectedTopic, setSelectedTopic] = useState('');
+  const [secondaryTopics, setSecondaryTopics] = useState([]);
+  const [keywordOptions, setKeywordOptions] = useState([]);
+  const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [loadingKeywords, setLoadingKeywords] = useState(false);
+  const [expansionOptions, setExpansionOptions] = useState([]);
+  const [selectedExpansion, setSelectedExpansion] = useState([]);
+  const [loadingExpansion, setLoadingExpansion] = useState(false);
 
   const topics = useMemo(() => {
     const fromApi = (categories || [])
@@ -42,24 +63,99 @@ function IntroOverlay() {
     if (!bubblesShown) setBubblesShown(true);
   };
 
-  const handleTopicSelect = (topic, event) => {
-    event.stopPropagation();
-    setSelectedTopic(topic || '');
-    const rawCategory = (categories || []).find(
-      (item) => normalizeTopic(item) === normalizeTopic(topic)
-    );
+  const topicFallbackKeywords = (topic) => {
+    const key = normalizeTopic(topic);
+    return TOPIC_FALLBACK_KEYWORDS[key] || ['Machine Learning', 'Deep Learning', 'Optimization', 'Benchmark', 'Evaluation', 'Neural Network'];
+  };
 
-    if (rawCategory) {
-      setQuery('');
-      setCategory(String(rawCategory));
-    } else {
-      setCategory('');
-      setQuery(topic || '');
-    }
+  const handleTopicSelect = async (topic, event) => {
+    event.stopPropagation();
+    const pickedTopic = topic || '';
+    setSelectedTopic(pickedTopic);
+    const normalizedTopic = normalizeTopic(topic);
+    const secondary = topics
+      .filter((item) => normalizeTopic(item) !== normalizedTopic)
+      .slice(0, 2);
+    setSecondaryTopics(secondary);
+
+    setLoadingKeywords(true);
+    const keywords = await fetchDiscoverKeywords(pickedTopic, secondary, 12);
+    const initial = ((keywords && keywords.length > 0) ? keywords : topicFallbackKeywords(pickedTopic)).slice(0, 6);
+    setKeywordOptions(initial);
+    setSelectedKeywords(initial.slice(0, 3));
+    setLoadingKeywords(false);
+    setStage('keyword');
+  };
+
+  const toggleKeyword = (keyword) => {
+    setSelectedKeywords((prev) => {
+      if (prev.includes(keyword)) {
+        return prev.filter((item) => item !== keyword);
+      }
+      if (prev.length >= 5) return prev;
+      return [...prev, keyword];
+    });
+  };
+
+  const toggleExpansionKeyword = (keyword) => {
+    setSelectedExpansion((prev) => {
+      if (prev.includes(keyword)) {
+        return prev.filter((item) => item !== keyword);
+      }
+      if (prev.length >= 3) return prev;
+      return [...prev, keyword];
+    });
+  };
+
+  const handleNextStage = async (event) => {
+    event.stopPropagation();
+    if (selectedKeywords.length === 0 || loadingKeywords) return;
+    setLoadingExpansion(true);
+    const expanded = await fetchDiscoverKeywordExpansion(
+      selectedTopic,
+      secondaryTopics,
+      selectedKeywords,
+      10
+    );
+    const initial = (expanded || [])
+      .filter((item) => !selectedKeywords.includes(item))
+      .slice(0, 6);
+    const fallback = topicFallbackKeywords(selectedTopic)
+      .filter((item) => !selectedKeywords.includes(item))
+      .slice(0, 6);
+    const finalOptions = (initial.length > 0 ? initial : fallback);
+    setExpansionOptions(finalOptions);
+    setSelectedExpansion(finalOptions.slice(0, 2));
+    setLoadingExpansion(false);
+    setStage('expand');
+  };
+
+  const handleConfirmDiscover = async (event) => {
+    event.stopPropagation();
+    const finalKeywords = [...new Set([...selectedKeywords, ...selectedExpansion])].slice(0, 8);
+    await startDiscoverForYou(selectedTopic, secondaryTopics, 'practical', finalKeywords);
     setIsExiting(true);
     window.setTimeout(() => {
       setVisible(false);
     }, 620);
+  };
+
+  const handleBackToTopics = (event) => {
+    event.stopPropagation();
+    setStage('topic');
+    setSelectedTopic('');
+    setSecondaryTopics([]);
+    setKeywordOptions([]);
+    setSelectedKeywords([]);
+    setExpansionOptions([]);
+    setSelectedExpansion([]);
+  };
+
+  const handleBackToKeyword = (event) => {
+    event.stopPropagation();
+    setStage('keyword');
+    setExpansionOptions([]);
+    setSelectedExpansion([]);
   };
 
   if (!visible) return null;
@@ -78,7 +174,7 @@ function IntroOverlay() {
         <p>Tap anywhere to explore</p>
       </div>
 
-      <div className={`intro-bubbles ${bubblesShown ? 'active' : ''}`}>
+      <div className={`intro-bubbles ${bubblesShown ? 'active' : ''} ${stage !== 'topic' ? 'is-hidden' : ''}`}>
         {topics.map((topic, index) => (
           <div
             key={topic}
@@ -94,6 +190,88 @@ function IntroOverlay() {
           </div>
         ))}
       </div>
+
+      {bubblesShown && stage === 'keyword' && (
+        <div className="intro-keyword-stage" onClick={(event) => event.stopPropagation()}>
+          <div className="intro-keyword-header">
+            <h3>{selectedTopic}</h3>
+            <p>Round 2: Pick up to 5 seed keywords</p>
+          </div>
+
+          <div className="intro-keyword-grid">
+            {loadingKeywords && <p className="intro-keyword-loading">Loading keywords...</p>}
+            {!loadingKeywords && keywordOptions.map((keyword, index) => (
+              <button
+                key={keyword}
+                className={`intro-keyword-bubble ${KEYWORD_BUBBLE_SIZE[index] || 'size-sm'} ${selectedKeywords.includes(keyword) ? 'active' : ''}`}
+                type="button"
+                onClick={() => toggleKeyword(keyword)}
+              >
+                {keyword}
+              </button>
+            ))}
+          </div>
+
+          <div className="intro-keyword-actions">
+            <button
+              type="button"
+              className="intro-keyword-btn ghost"
+              onClick={handleBackToTopics}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              className="intro-keyword-btn primary"
+              onClick={handleNextStage}
+              disabled={selectedKeywords.length === 0 || loadingKeywords}
+            >
+              Next Round
+            </button>
+          </div>
+        </div>
+      )}
+
+      {bubblesShown && stage === 'expand' && (
+        <div className="intro-keyword-stage" onClick={(event) => event.stopPropagation()}>
+          <div className="intro-keyword-header">
+            <h3>{selectedTopic}</h3>
+            <p>Round 3: Add up to 3 expanded keywords</p>
+          </div>
+
+          <div className="intro-keyword-grid">
+            {loadingExpansion && <p className="intro-keyword-loading">Expanding keywords...</p>}
+            {!loadingExpansion && expansionOptions.map((keyword, index) => (
+              <button
+                key={keyword}
+                className={`intro-keyword-bubble ${KEYWORD_BUBBLE_SIZE[index] || 'size-sm'} ${selectedExpansion.includes(keyword) ? 'active' : ''}`}
+                type="button"
+                onClick={() => toggleExpansionKeyword(keyword)}
+              >
+                {keyword}
+              </button>
+            ))}
+          </div>
+
+          <div className="intro-keyword-actions">
+            <button
+              type="button"
+              className="intro-keyword-btn ghost"
+              onClick={handleBackToKeyword}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              className="intro-keyword-btn primary"
+              onClick={handleConfirmDiscover}
+              disabled={loadingExpansion}
+            >
+              Start Discover
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

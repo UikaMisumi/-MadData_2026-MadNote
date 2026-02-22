@@ -147,6 +147,53 @@ export async function apiRecommendations(page = 1, size = 10) {
   return request('GET', `/recommendations?${params}`);
 }
 
+/**
+ * POST /recommend/for-you
+ * @param {{
+ *   primary_topic?: string,
+ *   secondary_topics?: string[],
+ *   style_preference?: string,
+ *   page?: number,
+ *   size?: number
+ * }} payload
+ * @returns {PaginatedList<Paper> & { mode: string }}
+ */
+export async function apiDiscoverForYou(payload) {
+  return request('POST', '/recommend/for-you', payload);
+}
+
+/**
+ * GET /recommend/keywords?primary_topic=&secondary_topics=&limit=
+ * @returns {{ items: string[], primary_topic: string, secondary_topics: string[] }}
+ */
+export async function apiDiscoverKeywords(primaryTopic, secondaryTopics = [], limit = 12) {
+  const params = new URLSearchParams({
+    primary_topic: primaryTopic || '',
+    secondary_topics: (secondaryTopics || []).join(','),
+    limit: String(limit),
+  });
+  return request('GET', `/recommend/keywords?${params}`);
+}
+
+/**
+ * GET /recommend/keywords/expand?primary_topic=&secondary_topics=&seed_keywords=&limit=
+ * @returns {{ items: string[], primary_topic: string, secondary_topics: string[], seed_keywords: string[] }}
+ */
+export async function apiDiscoverKeywordExpansion(
+  primaryTopic,
+  secondaryTopics = [],
+  seedKeywords = [],
+  limit = 10
+) {
+  const params = new URLSearchParams({
+    primary_topic: primaryTopic || '',
+    secondary_topics: (secondaryTopics || []).join(','),
+    seed_keywords: (seedKeywords || []).join(','),
+    limit: String(limit),
+  });
+  return request('GET', `/recommend/keywords/expand?${params}`);
+}
+
 // ---------- Interactions ----------
 
 /**

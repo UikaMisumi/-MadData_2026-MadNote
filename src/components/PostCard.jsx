@@ -24,6 +24,8 @@ const PostCard = ({
   onOpenGraph,
   onLikeToggle,
   onSaveToggle,
+  cardVariant = 'default',
+  discoverProfile = null,
 }) => {
   const { updateLikeCount, updateSaveCount } = usePosts();
   const { user } = useAuth();
@@ -45,6 +47,14 @@ const PostCard = ({
   const keyPointText = Array.isArray(post.keywords) && post.keywords.length > 0
     ? post.keywords.filter(Boolean).slice(0, 3).join(' / ')
     : (secondSentence || 'Open this paper for detailed insights.');
+  const selectedKeywords = Array.isArray(discoverProfile?.selected_keywords)
+    ? discoverProfile.selected_keywords
+    : [];
+  const matchedKeywords = (Array.isArray(post.keywords) ? post.keywords : [])
+    .map((item) => String(item || '').trim())
+    .filter(Boolean)
+    .filter((keyword) => selectedKeywords.some((selected) => normalizeTopic(selected) === normalizeTopic(keyword)))
+    .slice(0, 3);
 
   const categoryClass = (() => {
     const c = topicLabel.toLowerCase();
@@ -115,7 +125,7 @@ const PostCard = ({
   };
 
   return (
-    <article className={`xh-post ${isDeleting ? 'deleting' : ''}`} onClick={handleCardClick}>
+    <article className={`xh-post ${cardVariant === 'discover' ? 'discover-card' : ''} ${isDeleting ? 'deleting' : ''}`} onClick={handleCardClick}>
       {onToggleSelect && (
         <input
           type="checkbox"
@@ -146,6 +156,9 @@ const PostCard = ({
       <div className="card-head">
         <span className={`category-chip ${categoryClass}`}>{topicLabel}</span>
         <span className="likes-meta">{likesCount} likes</span>
+        {cardVariant === 'discover' && (
+          <span className="discover-rank-chip">Top Match</span>
+        )}
       </div>
 
       <h3 className="title">{post.title}</h3>
@@ -158,6 +171,16 @@ const PostCard = ({
         <li><strong>Author:</strong> {post.author?.name || 'Anonymous'}</li>
         <li><strong>Key point:</strong> {keyPointText}</li>
       </ul>
+
+      {cardVariant === 'discover' && matchedKeywords.length > 0 && (
+        <div className="discover-keyword-row">
+          {matchedKeywords.map((keyword) => (
+            <span key={`${post.id}-${keyword}`} className="discover-keyword-chip">
+              {keyword}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="related">
         <p>Related</p>

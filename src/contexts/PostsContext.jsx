@@ -4,6 +4,9 @@ import {
   apiFeed,
   apiSearch,
   apiCategories,
+  apiDiscoverForYou,
+  apiDiscoverKeywords,
+  apiDiscoverKeywordExpansion,
   apiLikePaper,
   apiSavePaper,
   apiGetComments,
@@ -31,13 +34,15 @@ export const PostsProvider = ({ children }) => {
   const [category, setCategory] = useState('');
   const [query, setQuery] = useState('');
   const [categories, setCategories] = useState([]);
+  const [discoverProfile, setDiscoverProfile] = useState(null);
+  const discoverKey = JSON.stringify(discoverProfile || {});
 
   // Load first page whenever category, query, or auth context changes.
   useEffect(() => {
     setPosts([]);
     setPage(1);
     setHasMore(true);
-  }, [category, query, user?.id]);
+  }, [category, query, user?.id, discoverKey]);
 
   // Load category options from backend to keep chips data-driven.
   useEffect(() => {
@@ -69,14 +74,24 @@ export const PostsProvider = ({ children }) => {
   }, []);
 
   // Fetch a page of papers from the API
-  const fetchPosts = useCallback(async (pageNum, cat, searchQuery) => {
+  const fetchPosts = useCallback(async (pageNum, cat, searchQuery, profile) => {
     if (isLoading) return;
     setIsLoading(true);
     try {
       const trimmedQuery = (searchQuery || '').trim();
+      const discoverEnabled = Boolean(profile?.enabled && profile?.primary_topic);
       const data = trimmedQuery
         ? await apiSearch(trimmedQuery, pageNum, 10)
-        : await apiFeed(pageNum, 10, cat);
+        : discoverEnabled
+          ? await apiDiscoverForYou({
+            primary_topic: profile.primary_topic,
+            secondary_topics: profile.secondary_topics || [],
+            selected_keywords: profile.selected_keywords || [],
+            style_preference: profile.style_preference || '',
+            page: pageNum,
+            size: 10,
+          })
+          : await apiFeed(pageNum, 10, cat);
       const items = data.items || [];
       setPosts(prev => pageNum === 1 ? items : [...prev, ...items]);
       setHasMore(data.has_more ?? false);
@@ -90,9 +105,9 @@ export const PostsProvider = ({ children }) => {
   // Trigger fetch when page/category/auth user changes.
   // Login/logout resets the list; include user id so we always refetch after reset.
   useEffect(() => {
-    fetchPosts(page, category, query);
+    fetchPosts(page, category, query, discoverProfile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, category, query, user?.id]);
+  }, [page, category, query, user?.id, discoverKey]);
 
   const loadMore = () => {
     if (hasMore && !isLoading) {
@@ -105,11 +120,86 @@ export const PostsProvider = ({ children }) => {
     setPosts([]);
     setHasMore(true);
     if (page === 1) {
-      await fetchPosts(1, category, query);
+      await fetchPosts(1, category, query, discoverProfile);
       return;
     }
     setPage(1);
   };
+
+  const clearDiscoverProfile = useCallback(() => {
+    setDiscoverProfile(null);
+  }, []);
+
+  // Initializes Discover-for-You with backend keyword candidates from dynamic_keywords.
+  const fetchDiscoverKeywords = useCallback(async (primaryTopic, secondaryTopics = [], limit = 12) => {
+    const primary = String(primaryTopic || '').trim();
+    const secondary = (secondaryTopics || [])
+      .map((item) => String(item || '').trim())
+      .filter(Boolean);
+
+    try {
+      const data = await apiDiscoverKeywords(primary, secondary, limit);
+      return Array.isArray(data?.items) ? data.items : [];
+    } catch (err) {
+      console.error('PostsContext: discover keywords failed', err);
+      return [];
+    }
+  }, []);
+
+  const fetchDiscoverKeywordExpansion = useCallback(async (
+    primaryTopic,
+    secondaryTopics = [],
+    seedKeywords = [],
+    limit = 10
+  ) => {
+    const primary = String(primaryTopic || '').trim();
+    const secondary = (secondaryTopics || [])
+      .map((item) => String(item || '').trim())
+      .filter(Boolean);
+    const seed = (seedKeywords || [])
+      .map((item) => String(item || '').trim())
+      .filter(Boolean);
+
+    try {
+      const data = await apiDiscoverKeywordExpansion(primary, secondary, seed, limit);
+      return Array.isArray(data?.items) ? data.items : [];
+    } catch (err) {
+      console.error('PostsContext: discover keyword expansion failed', err);
+      return [];
+    }
+  }, []);
+
+  // Initializes Discover-for-You with backend keyword candidates from dynamic_keywords.
+  const startDiscoverForYou = useCallback(async (
+    primaryTopic,
+    secondaryTopics = [],
+    stylePreference = 'practical',
+    preferredKeywords = []
+  ) => {
+    const primary = String(primaryTopic || '').trim();
+    const secondary = (secondaryTopics || [])
+      .map((item) => String(item || '').trim())
+      .filter(Boolean);
+
+    const normalizedPreferred = (preferredKeywords || [])
+      .map((item) => String(item || '').trim())
+      .filter(Boolean)
+      .slice(0, 12);
+
+    const selectedKeywords = normalizedPreferred.length > 0
+      ? normalizedPreferred
+      : await fetchDiscoverKeywords(primary, secondary, 12);
+
+    setCategory('');
+    setQuery('');
+    setDiscoverProfile({
+      enabled: true,
+      primary_topic: primary,
+      secondary_topics: secondary,
+      selected_keywords: selectedKeywords,
+      style_preference: stylePreference,
+    });
+  }, [fetchDiscoverKeywords]);
 
   // ---------- Interactions ----------
 
@@ -201,6 +291,13 @@ export const PostsProvider = ({ children }) => {
     query,
     setQuery,
     categories,
+    discoverProfile,
+    setDiscoverProfile,
+    clearDiscoverProfile,
+    fetchDiscoverKeywords,
+    fetchDiscoverKeywordExpansion,
+    startDiscoverForYou,
+    isDiscoverMode: Boolean(discoverProfile?.enabled && discoverProfile?.primary_topic && !(query || '').trim()),
     // interaction helpers used by PostCard / PostModal
     updateLikeCount,
     updateSaveCount,
