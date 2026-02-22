@@ -326,11 +326,40 @@
   background: #f8fafc;
   color: #64748b;
   font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.ask-msg {
+  max-width: 90%;
+  border-radius: 12px;
+  padding: 8px 10px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ask-msg.user {
+  margin-left: auto;
+  background: rgba(15, 23, 42, 0.95);
+  color: #fff;
+}
+
+.ask-msg.assistant {
+  margin-right: auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.ask-error {
+  margin-top: 8px;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .ask-input {
@@ -362,6 +391,11 @@
   font-weight: 700;
   padding: 0 12px;
   cursor: pointer;
+}
+
+.ask-input button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 @media (max-width: 1080px) {

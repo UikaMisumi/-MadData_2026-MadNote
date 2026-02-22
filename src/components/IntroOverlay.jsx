@@ -5,6 +5,7 @@ import './IntroOverlay.css';
 const FALLBACK_TOPICS = ['Foundation Models', 'Robotics', 'AI for Science', 'HCI', 'NLP & IR'];
 const BUBBLE_SIZE_CLASS = ['size-xl', 'size-lg', 'size-xl', 'size-md', 'size-lg'];
 const KEYWORD_BUBBLE_SIZE = ['size-lg', 'size-md', 'size-md', 'size-sm', 'size-sm', 'size-sm'];
+const INTRO_DONE_KEY = 'mn_intro_done';
 const TOPIC_FALLBACK_KEYWORDS = {
   'foundation models': ['Large Language Model', 'Reasoning', 'Alignment', 'Multimodal', 'Agent', 'Instruction Tuning'],
   robotics: ['Robot Learning', 'Manipulation', 'Embodied AI', 'Navigation', 'Control Policy', 'Vision Language'],
@@ -14,6 +15,30 @@ const TOPIC_FALLBACK_KEYWORDS = {
 };
 const normalizeTopic = (value) => String(value || '').trim().toLowerCase();
 
+const hasCompletedIntro = () => {
+  try {
+    return window.sessionStorage.getItem(INTRO_DONE_KEY) === '1';
+  } catch {
+    return false;
+  }
+};
+
+const markIntroCompleted = () => {
+  try {
+    window.sessionStorage.setItem(INTRO_DONE_KEY, '1');
+  } catch {
+    // Ignore storage failures in private mode.
+  }
+};
+
+const resetIntroCompletion = () => {
+  try {
+    window.sessionStorage.removeItem(INTRO_DONE_KEY);
+  } catch {
+    // Ignore storage failures in private mode.
+  }
+};
+
 function IntroOverlay() {
   const {
     categories,
@@ -21,7 +46,7 @@ function IntroOverlay() {
     fetchDiscoverKeywordExpansion,
     startDiscoverForYou,
   } = usePosts();
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(() => !hasCompletedIntro());
   const [bubblesShown, setBubblesShown] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [stage, setStage] = useState('topic');
@@ -52,12 +77,38 @@ function IntroOverlay() {
   }, [categories]);
 
   useEffect(() => {
-    if (!visible) return undefined;
+    if (!visible) {
+      document.body.classList.remove('intro-lock-scroll');
+      return undefined;
+    }
     document.body.classList.add('intro-lock-scroll');
     return () => {
       document.body.classList.remove('intro-lock-scroll');
     };
   }, [visible]);
+
+  useEffect(() => {
+    const handleReopen = () => {
+      resetIntroCompletion();
+      setVisible(true);
+      setIsExiting(false);
+      setBubblesShown(true);
+      setStage('topic');
+      setSelectedTopic('');
+      setSecondaryTopics([]);
+      setKeywordOptions([]);
+      setSelectedKeywords([]);
+      setExpansionOptions([]);
+      setSelectedExpansion([]);
+      setLoadingKeywords(false);
+      setLoadingExpansion(false);
+    };
+
+    window.addEventListener('mn:open-intro-overlay', handleReopen);
+    return () => {
+      window.removeEventListener('mn:open-intro-overlay', handleReopen);
+    };
+  }, []);
 
   const handleOverlayClick = () => {
     if (!bubblesShown) setBubblesShown(true);
@@ -134,6 +185,7 @@ function IntroOverlay() {
     event.stopPropagation();
     const finalKeywords = [...new Set([...selectedKeywords, ...selectedExpansion])].slice(0, 8);
     await startDiscoverForYou(selectedTopic, secondaryTopics, 'practical', finalKeywords);
+    markIntroCompleted();
     setIsExiting(true);
     window.setTimeout(() => {
       setVisible(false);

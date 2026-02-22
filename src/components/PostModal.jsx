@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePosts } from '../contexts/PostsContext';
 import { useAuth } from '../contexts/AuthContext';
+import { apiPaperChat } from '../api';
 import CommentInput from './CommentInput';
 import CommentItem from './CommentItem';
 import './PostModal.css';
@@ -19,6 +20,10 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
   const [replyTarget, setReplyTarget] = useState(null);
   const [showRecommendations, setShowRecommendations] = useState(false);
   const [askValue, setAskValue] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
+  const [isChatSending, setIsChatSending] = useState(false);
+  const [chatError, setChatError] = useState('');
+  const askLogRef = useRef(null);
 
   const related = useMemo(() => {
     if (!post) return [];
@@ -51,6 +56,10 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
     setReplyTarget(null);
     setShowRecommendations(false);
     setAskValue('');
+    setChatError('');
+    setChatMessages([
+      { role: 'assistant', content: 'Ask anything about this paper.' },
+    ]);
     setIsLiked(post.is_liked ?? false);
     setIsSaved(post.is_saved ?? false);
     setLikesCount(post.likes_count ?? post.likesCount ?? 0);
@@ -69,6 +78,11 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, post?.id]);
+
+  useEffect(() => {
+    if (!askLogRef.current) return;
+    askLogRef.current.scrollTop = askLogRef.current.scrollHeight;
+  }, [chatMessages, isChatSending]);
 
   if (!isOpen || !post) return null;
 
@@ -165,6 +179,29 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
     }
   };
 
+  const handleAskSend = async () => {
+    const text = askValue.trim();
+    if (!text || isChatSending || !post?.id) return;
+
+    const history = chatMessages
+      .filter((item) => item?.role === 'user' || item?.role === 'assistant')
+      .map((item) => ({ role: item.role, content: item.content }));
+
+    setChatError('');
+    setAskValue('');
+    setChatMessages((prev) => [...prev, { role: 'user', content: text }]);
+    setIsChatSending(true);
+    try {
+      const result = await apiPaperChat(post.id, text, history);
+      const reply = String(result?.reply || '').trim() || 'No response generated.';
+      setChatMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
+    } catch (err) {
+      setChatError(err?.message || 'Chat request failed.');
+    } finally {
+      setIsChatSending(false);
+    }
+  };
+
   return (
     <div className={`post-modal ${isOpen ? 'open' : ''}`} ref={modalRef} onClick={handleBackdropClick}>
       <div className="paper-shell">
@@ -181,7 +218,7 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
               <h1 className="paper-title">{post.title}</h1>
               <p className="paper-meta">
                 {authorsText}
-                {' · '}
+                {' ? '}
                 {post.update_date || 'Unknown date'}
               </p>
 
@@ -290,15 +327,31 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
             <section className="ask-card">
               <h4>Ask Paper</h4>
               <p>Edge inference is ready.</p>
-              <div className="ask-log">Ask anything about this paper.</div>
+              <div className="ask-log" ref={askLogRef}>
+                {chatMessages.map((item, idx) => (
+                  <div key={`${item.role}-${idx}`} className={`ask-msg ${item.role}`}>
+                    {item.content}
+                  </div>
+                ))}
+                {isChatSending && <div className="ask-msg assistant">Thinking...</div>}
+              </div>
+              {chatError && <div className="ask-error">{chatError}</div>}
               <div className="ask-input">
                 <input
                   type="text"
                   placeholder="e.g. What datasets were used?"
                   value={askValue}
                   onChange={(e) => setAskValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAskSend();
+                    }
+                  }}
                 />
-                <button type="button">Send</button>
+                <button type="button" onClick={handleAskSend} disabled={!askValue.trim() || isChatSending}>
+                  {isChatSending ? '...' : 'Send'}
+                </button>
               </div>
             </section>
           </aside>
@@ -309,4 +362,5 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
 };
 
 export default PostModal;
+
 

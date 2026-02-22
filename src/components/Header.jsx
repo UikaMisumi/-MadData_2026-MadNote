@@ -26,9 +26,15 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState(query || '');
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const accountRef = useRef(null);
+  const ensureHomeRoute = () => {
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
+    ensureHomeRoute();
     setQuery(searchTerm.trim());
   };
 
@@ -115,11 +121,13 @@ function Header() {
       setSearchTerm('');
       setQuery('');
       setCategory(rawCategory);
+      ensureHomeRoute();
       return;
     }
     setCategory('');
     setQuery(topic);
     setSearchTerm(topic);
+    ensureHomeRoute();
   };
 
   const applyDiscoverForYou = async () => {
@@ -128,6 +136,7 @@ function Header() {
       .filter((item) => normalizeTopic(item) !== normalizeTopic(primary))
       .slice(0, 2);
     setSearchTerm('');
+    ensureHomeRoute();
     await startDiscoverForYou(primary, secondary, 'practical');
   };
 
@@ -157,6 +166,7 @@ function Header() {
             clearDiscoverProfile();
             setCategory('');
             setQuery('');
+            ensureHomeRoute();
           }}
         >
           All Feed

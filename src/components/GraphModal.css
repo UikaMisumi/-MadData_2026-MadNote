@@ -1,9 +1,8 @@
 .graph-modal {
   position: fixed;
   inset: 0;
-  z-index: 72;
-  background: rgba(2, 6, 23, 0.7);
-  backdrop-filter: blur(8px);
+  z-index: 70;
+  background: rgba(17, 24, 39, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,41 +10,46 @@
 }
 
 .graph-panel {
-  width: min(1100px, 100%);
-  height: min(760px, 92vh);
-  border-radius: 18px;
+  width: min(90%, 80rem);
+  max-width: 80rem;
+  height: 85vh;
+  border-radius: 24px;
   overflow: hidden;
   background: #fff;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 30px 90px -34px rgba(2, 6, 23, 0.8);
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
 }
 
 .graph-head {
-  padding: 16px 18px;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 24px;
+  border-bottom: 1px solid #f3f4f6;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #fff;
   gap: 12px;
 }
 
 .graph-head h3 {
   margin: 0;
-  color: #0f172a;
-  font-size: 24px;
+  color: #111827;
+  font-size: 1.5rem;
+  font-weight: 800;
 }
 
 .graph-head p {
   margin: 4px 0 0;
-  color: var(--mn-brand-700);
-  font-size: 12px;
+  color: #4f46e5;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
 }
 
+/* --- Header actions (feature/backend-init style) --- */
 .graph-head-actions {
   display: flex;
   align-items: center;
@@ -62,6 +66,10 @@
   font-weight: 700;
   padding: 8px 10px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
 }
 
 .graph-head .graph-btn-secondary {
@@ -79,30 +87,34 @@
   cursor: not-allowed;
 }
 
-/* graph canvas */
-.graph-canvas {
-  background: #f8fafc;
-  padding: 10px;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
+/* --- Optional close pill button (main style) --- */
+.graph-close-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  color: #9ca3af;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
 }
 
-.graph-fallback-notice {
-  padding: 8px 18px;
-  color: #92400e;
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
-  margin: 8px 18px;
-  border-radius: 8px;
-  font-weight: 600;
+.graph-close-btn:hover {
+  color: #111827;
+  background: #e5e7eb;
 }
 
+/* --- Controls (feature/backend-init) --- */
 .graph-controls {
   padding: 10px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .graph-controls input[type="range"] {
@@ -116,6 +128,81 @@
   border: 1px solid #e2e8f0;
 }
 
+/* --- Canvas wrapper --- */
+.graph-canvas {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  background: #f8fafc;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+#cy {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.graph-loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(15, 23, 42, 0.9);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.graph-fallback-notice {
+  padding: 8px 18px;
+  color: #92400e;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  margin: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* --- Tooltip --- */
+.cy-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: rgba(15, 23, 42, 0.92);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  max-width: 360px;
+  white-space: normal;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.45);
+}
+
+.cy-tooltip .tt-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.cy-tooltip .tt-summary {
+  font-weight: 400;
+  opacity: 0.92;
+  font-size: 12px;
+  line-height: 1.25;
+  max-height: 3.1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Optional legacy svg styles (kept for compatibility) --- */
 .graph-canvas svg {
   width: 100%;
   height: 100%;
@@ -148,58 +235,6 @@
   font-weight: 700;
 }
 
-#cy {
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-}
-
-.graph-loader {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(15, 23, 42, 0.9);
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  z-index: 2;
-}
-
-.cy-tooltip {
-  position: fixed;
-  z-index: 9999;
-  pointer-events: none;
-  background: rgba(15, 23, 42, 0.92);
-  color: white;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  max-width: 360px;
-  white-space: normal;
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.45);
-}
-
-.cy-tooltip .tt-title {
-  font-weight: 700;
-  margin-bottom: 6px;
-  font-size: 13px;
-  line-height: 1.2;
-}
-
-.cy-tooltip .tt-summary {
-  font-weight: 400;
-  opacity: 0.92;
-  font-size: 12px;
-  line-height: 1.25;
-  max-height: 3.1em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .graph-canvas .center-title {
   font-size: 16px;
 }
@@ -208,32 +243,59 @@
   font-size: 13px;
 }
 
+/* --- Legend (main style w/ glow) --- */
 .graph-legend {
-  background: #0f172a;
-  color: #cbd5e1;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 16px;
+  background: #111827;
+  color: #d1d5db;
+  font-size: 0.875rem;
   display: flex;
   justify-content: center;
-  gap: 18px;
-  padding: 10px;
+  gap: 2rem;
   flex-wrap: wrap;
+  border-top: 1px solid #1f2937;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
+.graph-legend .dot {
   display: inline-block;
-  margin-right: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.graph-legend .dot.base {
+  background: #f87171;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.8);
+}
+
+.graph-legend .dot.center {
+  background: #6366f1;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
+}
+
+.graph-legend .dot.next {
+  background: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+}
+
+/* --- Also support old dot classes if legend uses `.dot base/center/next` without `.graph-legend` scope --- */
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .dot.base {
-  background: #fb7185;
+  background: #f87171;
 }
 
 .dot.center {
-  background: var(--mn-brand-600);
+  background: #6366f1;
 }
 
 .dot.next {
