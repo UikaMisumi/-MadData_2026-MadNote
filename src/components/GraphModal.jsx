@@ -49,14 +49,20 @@ function applyRadialLayout(cy, centerId) {
   }
 }
 
-const GraphModal = ({
-  isOpen,
-  onClose,
-  title,
-  nodeId = null,
-  fixedThreshold = null,
-  fixedMaxNodes = null,
-}) => {
+async function fetchGraphCompatible() {
+  // Prefer the endpoint you originally built; fallback to the other branch endpoint
+  try {
+    const res = await axios.get('http://localhost:8000/api/v1/graph/global');
+    return res.data || { nodes: [], edges: [] };
+  } catch (e1) {
+    const res = await axios.get('http://localhost:8000/api/v1/graph/similarity', {
+      params: { threshold: 0.1, max_nodes: 500 },
+    });
+    return res.data || { nodes: [], edges: [] };
+  }
+}
+
+const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = null }) => {
   const containerRef = useRef(null);
   const cyRef = useRef(null);
   const shuffleLayoutRef = useRef(null);
@@ -64,18 +70,14 @@ const GraphModal = ({
   const globalGraphRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
-  const [noDataMessage, setNoDataMessage] = useState('');
   const [tooltip, setTooltip] = useState({ title: '', summary: '', x: 0, y: 0, visible: false });
-
-  const [threshold, setThreshold] = useState(() => (fixedThreshold ?? 0.1));
-  const [maxNodes, setMaxNodes] = useState(() => (fixedMaxNodes ?? 500));
+  const [noDataMessage, setNoDataMessage] = useState('');
 
   useEffect(() => {
     if (!isOpen) return;
-
     let cancelled = false;
 
-    // destroy old instance (prevents binding to unmounted dom)
+    // destroy old instance
     if (cyRef.current) {
       try { cyRef.current.destroy(); } catch (e) {}
       cyRef.current = null;
@@ -85,16 +87,10 @@ const GraphModal = ({
     async function fetchAndRender() {
       setLoading(true);
       try {
-        const effectiveThreshold = (fixedThreshold ?? threshold);
-        const effectiveMaxNodes = (fixedMaxNodes ?? maxNodes);
-
-        // Always fetch a graph snapshot (cached in backend); store in ref for ego extraction
         if (!globalGraphRef.current) {
           try {
-            const res = await axios.get('http://localhost:8000/api/v1/graph/similarity', {
-              params: { threshold: effectiveThreshold, max_nodes: effectiveMaxNodes },
-            });
-            globalGraphRef.current = res.data || { nodes: [], edges: [] };
+            const g = await fetchGraphCompatible();
+            globalGraphRef.current = g;
           } catch (err) {
             setNoDataMessage('Failed to load graph (backend not responding). Please ensure the backend is running.');
             setLoading(false);
@@ -105,8 +101,14 @@ const GraphModal = ({
         if (cancelled) return;
 
         const graph = globalGraphRef.current || { nodes: [], edges: [] };
+
+        // optionally trim nodes (client side)
+        let nodes = graph.nodes || [];
+        const maxN = fixedMaxNodes ?? null;
+        if (maxN && maxN > 0 && nodes.length > maxN) nodes = nodes.slice(0, maxN);
+
         const nodeMap = new Map();
-        (graph.nodes || []).forEach((n) => nodeMap.set(n.id, n));
+        nodes.forEach((n) => nodeMap.set(n.id, n));
 
         const adj = new Map();
         const edgeList = [];
@@ -119,29 +121,22 @@ const GraphModal = ({
           adj.get(e.target).push({ id: e.source, score: e.score });
         });
 
-        // Determine center node (prefer nodeId; fallback by exact title match)
+        // find center
         let centerId = nodeId;
         if (!centerId && title) {
-          for (const n of (graph.nodes || [])) {
+          for (const n of nodes) {
             if (n.title && n.title === title) { centerId = n.id; break; }
           }
         }
 
-        // Build elements (either ego graph around center, or global graph)
-        const elements = [];
-        let hasCenter = false;
+        const EGO_DEPTH = 2;
+        const MAX_NEIGHBORS_PER_NODE = 50;
+        let filteredNodeIds = new Set();
+        const edgeKeySet = new Set();
+        let filteredEdges = [];
+        const centerDepthMap = {};
 
         if (centerId && nodeMap.has(centerId)) {
-          hasCenter = true;
-
-          const EGO_DEPTH = 2;
-          const MAX_NEIGHBORS_PER_NODE = 50;
-
-          const filteredNodeIds = new Set();
-          const edgeKeySet = new Set();
-          const filteredEdges = [];
-          const centerDepthMap = {};
-
           const visited = new Set();
           const q = [{ id: centerId, depth: 0 }];
           visited.add(centerId);
@@ -177,46 +172,87 @@ const GraphModal = ({
               }
             }
           }
-
-          const filteredNodes = (graph.nodes || []).filter((n) => filteredNodeIds.has(n.id));
-          if (filteredNodes.length === 0 && filteredEdges.length === 0) {
-            setNoDataMessage('No graph data found for this paper.');
-          } else {
-            setNoDataMessage('');
-          }
-
-          filteredNodes.forEach((n) => {
-            const data = {
-              id: n.id,
-              label: n.title,
-              summary: n.summary || n.abstract || '',
-              depth: centerDepthMap[n.id] ?? 2,
-            };
-            elements.push({ data });
-          });
-
-          filteredEdges.forEach((e, idx) => {
-            elements.push({ data: { ...e.data, id: `${e.data.source}-${e.data.target}-${idx}` } });
-          });
         } else {
-          // Global graph view (no center)
-          const nodes = (graph.nodes || []);
-          const edges = (graph.edges || []);
-          if (nodes.length === 0) {
-            setNoDataMessage('No graph data available.');
-          } else {
-            setNoDataMessage('');
+          // fallback: show largest connected component
+          const connected = new Set();
+          edgeList.forEach((e) => { connected.add(e.data.source); connected.add(e.data.target); });
+
+          if (connected.size === 0) {
+            const elements = [];
+            if (nodes.length > 0) {
+              const rep = nodes[0];
+              elements.push({ data: { id: rep.id, label: rep.title } });
+            }
+
+            cyRef.current = cytoscape({
+              container: containerRef.current,
+              elements,
+              style: [
+                { selector: 'node', style: { label: '', 'background-color': '#2b6cb0', 'border-color': '#ffffff', 'border-width': 2, width: 12, height: 12 } },
+                { selector: 'edge', style: { 'line-color': '#cbd5e1', width: 2, opacity: 0.9 } },
+              ],
+              layout: { name: 'cose', animate: true, animationDuration: 400 },
+            });
+
+            try { cyRef.current.resize(); cyRef.current.fit(); cyRef.current.center(); } catch (e) {}
+            return;
           }
 
-          nodes.forEach((n) => {
-            elements.push({ data: { id: n.id, label: n.title, summary: n.summary || n.abstract || '' } });
+          const adjSimple = new Map();
+          edgeList.forEach((e) => {
+            const s = e.data.source;
+            const t = e.data.target;
+            if (!adjSimple.has(s)) adjSimple.set(s, new Set());
+            if (!adjSimple.has(t)) adjSimple.set(t, new Set());
+            adjSimple.get(s).add(t);
+            adjSimple.get(t).add(s);
           });
-          edges.forEach((e, idx) => {
-            if (nodeMap.has(e.source) && nodeMap.has(e.target)) {
-              elements.push({ data: { id: `${e.source}-${e.target}-${idx}`, source: e.source, target: e.target, score: e.score } });
+
+          const visited = new Set();
+          const comps = [];
+          for (const nid of connected) {
+            if (visited.has(nid)) continue;
+            const comp = new Set();
+            const q2 = [nid];
+            visited.add(nid);
+            while (q2.length) {
+              const c = q2.shift();
+              comp.add(c);
+              for (const nb of (adjSimple.get(c) || [])) {
+                if (!visited.has(nb)) { visited.add(nb); q2.push(nb); }
+              }
             }
-          });
+            comps.push(comp);
+          }
+
+          comps.sort((a, b) => b.size - a.size);
+          const largest = comps[0] || new Set();
+          filteredNodeIds = new Set(Array.from(largest));
+          filteredEdges = edgeList.filter((e) => filteredNodeIds.has(e.data.source) && filteredNodeIds.has(e.data.target));
         }
+
+        const filteredNodes = nodes.filter((n) => filteredNodeIds.has(n.id));
+        if (filteredNodes.length === 0 && filteredEdges.length === 0) {
+          setNoDataMessage('No graph data found for this paper.');
+        } else {
+          setNoDataMessage('');
+        }
+
+        const hasCenter = centerId && nodeMap.has(centerId);
+
+        const elements = [];
+        filteredNodes.forEach((n) => {
+          const data = { id: n.id, label: n.title, summary: n.summary || n.abstract || '' };
+          if (hasCenter && centerDepthMap[n.id] !== undefined) data.depth = centerDepthMap[n.id];
+          elements.push({ data });
+        });
+        filteredEdges.forEach((e, idx) => {
+          elements.push({ data: { id: `${e.data.source}-${e.data.target}-${idx}`, source: e.data.source, target: e.data.target, score: e.data.score } });
+        });
+
+        const layoutOpts = hasCenter
+          ? null
+          : { name: 'cose', nodeRepulsion: 8000, idealEdgeLength: 80, animate: true, animationDuration: 400 };
 
         const nodeStyles = [
           { selector: 'node', style: { label: '', 'background-color': '#7dd3fc', 'border-color': '#0ea5e9', 'border-width': 2, width: 12, height: 12 } },
@@ -229,11 +265,7 @@ const GraphModal = ({
         ];
 
         if (!cyRef.current) {
-          cyRef.current = cytoscape({
-            container: containerRef.current,
-            elements,
-            style: nodeStyles,
-          });
+          cyRef.current = cytoscape({ container: containerRef.current, elements, style: nodeStyles });
 
           cyRef.current.on('mouseover', 'node', (evt) => {
             const n = evt.target;
@@ -247,7 +279,7 @@ const GraphModal = ({
             const y = rect.top + pos.y + 8;
 
             const t = (n.data('label') || '').toString().replace(/\s+/g, ' ').slice(0, 170);
-            const summaryRaw = n.data('summary') || '';
+            const summaryRaw = n.data('summary') || n.data('abstract') || '';
             const s = summaryRaw.toString().replace(/\s+/g, ' ').slice(0, 240);
 
             hoverTimerRef.current = setTimeout(() => {
@@ -291,13 +323,14 @@ const GraphModal = ({
           shuffleLayoutRef.current = () => applyRadialLayout(cyRef.current, centerId);
         } else {
           shuffleLayoutRef.current = null;
-          cy.layout({ name: 'cose', nodeRepulsion: 8000, idealEdgeLength: 80, animate: true, animationDuration: 600 })
-            .run();
-          try {
-            cy.resize();
-            cy.fit(50);
-            cy.center();
-          } catch (e) {}
+          cy.layout(layoutOpts).run().then(() => {
+            if (cancelled) return;
+            try {
+              cy.resize();
+              cy.fit(50);
+              cy.center();
+            } catch (e) {}
+          }).catch(() => {});
         }
       } catch (err) {
         // ignore
@@ -306,7 +339,7 @@ const GraphModal = ({
       }
     }
 
-    fetchAndRender();
+    fetchAndRender().catch(() => {});
 
     return () => {
       cancelled = true;
@@ -315,7 +348,7 @@ const GraphModal = ({
         hoverTimerRef.current = null;
       }
     };
-  }, [isOpen, nodeId, title, threshold, maxNodes, fixedThreshold, fixedMaxNodes]);
+  }, [isOpen, nodeId, title, fixedMaxNodes]);
 
   useEffect(() => {
     return () => {
@@ -336,7 +369,6 @@ const GraphModal = ({
             <h3>{title || 'Knowledge Graph'}</h3>
             <p>Similarity graph (click node to open paper) · Drag to pan, scroll to zoom</p>
           </div>
-
           <div className="graph-head-actions">
             <button
               type="button"
@@ -350,40 +382,9 @@ const GraphModal = ({
           </div>
         </header>
 
-        <div className="graph-controls">
-          {fixedThreshold != null ? (
-            <label>Threshold: {fixedThreshold.toFixed(2)} (fixed)</label>
-          ) : (
-            <>
-              <label>Threshold: {threshold.toFixed(2)}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={threshold}
-                onChange={(e) => setThreshold(parseFloat(e.target.value))}
-              />
-            </>
-          )}
-
-          <label>Max nodes: {fixedMaxNodes != null ? fixedMaxNodes : maxNodes}</label>
-          {fixedMaxNodes != null ? null : (
-            <input
-              type="number"
-              min="10"
-              max="2000"
-              step="10"
-              value={maxNodes}
-              onChange={(e) => setMaxNodes(parseInt(e.target.value || '100', 10))}
-            />
-          )}
-        </div>
-
         <div className="graph-canvas">
           {loading ? <div className="graph-loader">Loading graph…</div> : null}
           <div ref={containerRef} id="cy" style={{ width: '100%', height: '100%', minHeight: 320 }} aria-label="Knowledge graph" />
-
           {tooltip.visible ? (
             <div
               className="cy-tooltip"
@@ -395,12 +396,6 @@ const GraphModal = ({
               {tooltip.summary ? <div className="tt-summary">{tooltip.summary}</div> : null}
             </div>
           ) : null}
-        </div>
-
-        <div className="graph-legend">
-          <span><i className="dot base" /> Fundamental Research</span>
-          <span><i className="dot center" /> Current Focus</span>
-          <span><i className="dot next" /> Derived Applications</span>
         </div>
 
         {noDataMessage ? (

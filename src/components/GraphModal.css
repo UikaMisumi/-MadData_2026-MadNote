@@ -73,6 +73,13 @@
   background: #f1f5f9;
 }
 
+.graph-head button:disabled,
+.graph-head .graph-btn-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* graph canvas */
 .graph-canvas {
   background: #f8fafc;
   padding: 10px;
