@@ -13,6 +13,9 @@ const MasonryGrid = ({
   selectedIds = new Set(),
   onToggleSelect,
   onOpenGraph,
+  layout = 'masonry',
+  onLikeToggle,
+  onSaveToggle,
 }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +44,7 @@ const MasonryGrid = ({
   return (
     <>
       <div 
-        className={`masonry ${className}`} 
+        className={`masonry ${layout} ${className}`} 
         ref={gridRef}
       >
         {posts.map((post) => (
@@ -56,6 +59,8 @@ const MasonryGrid = ({
             isSelected={selectedIds.has(post.id)}
             onToggleSelect={onToggleSelect}
             onOpenGraph={onOpenGraph}
+            onLikeToggle={onLikeToggle}
+            onSaveToggle={onSaveToggle}
           />
         ))}
       </div>

@@ -212,3 +212,33 @@
   z-index: 1000;
   pointer-events: none;
 }
+
+/* Row-by-row grid layout mode (used in profile liked/saved collections). */
+.masonry.rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gutter);
+  column-width: auto;
+  column-count: initial;
+  column-gap: 0;
+  padding: 0 calc(var(--gutter) / 2);
+}
+
+.masonry.rows .xh-post {
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  break-inside: auto;
+}
+
+@media (max-width: 900px) {
+  .masonry.rows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .masonry.rows {
+    grid-template-columns: 1fr;
+  }
+}

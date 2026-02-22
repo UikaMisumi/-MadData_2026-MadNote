@@ -63,13 +63,13 @@ function SignupPage() {
     setSignupError('');
 
     try {
-      // POST /api/v1/auth/signup  â€” backend generates username if not provided
+      // POST /api/v1/auth/signup  â€?backend generates username if not provided
       const data = await apiSignup(email.trim(), password, '');
       login(data.user, data.token);
       navigate('/');
     } catch (err) {
       if (err.status === 0) {
-        setSignupError('Backend is not running on http://127.0.0.1:8000.');
+        setSignupError('Backend is not running on http://localhost:8000.');
       } else if (err.status === 400) {
         setErrors((prev) => ({ ...prev, email: 'Email already exists. Please use a different email.' }));
       } else {
