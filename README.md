@@ -21,7 +21,11 @@ To ensure maximum scalability and a lightning-fast user experience, we intention
 * **Lightweight Online Serving**: Our live backend environment completely excludes bulky deep-learning frameworks. The `FastAPI` server boots instantly, dynamically serving the pre-processed JSON data, running lightweight `scikit-learn` recommendation algorithms, and routing user chat queries to the highly-optimized DeepSeek API. 
 
 ###  Tech Stack
-* **Automated Data Pipeline (The Secret Sauce)**: We sourced data from HuggingFace (`arxiv-metadata-snapshot`). To create the "social media" vibe, we deployed `Mistral-7B-Instruct` (4-bit quantized) to rewrite abstracts into engaging JSON outputs. We built a highly robust 3-tier fallback web scraper (Semantic Scholar API → ArXiv API → Google Scholar) with `difflib` similarity validation to fetch original PDF URLs.
+* **Automated Data Pipeline (The Secret Sauce)**: We orchestrated a fully automated offline data pipeline using **Jupyter Notebooks**. 
+  1. We sourced and dynamically sampled papers from HuggingFace (`arxiv-metadata-snapshot`) across 5 core tech domains. 
+  2. To create the "social media" vibe, we deployed **`Mistral-7B-Instruct-v0.3`** (4-bit quantized on an A100 GPU) to rewrite dry abstracts into engaging, emoji-rich JSON formats. 
+  3. We utilized **`KeyBERT`** for precise n-gram keyword extraction to power our graph and search engine. 
+  4. Finally, we engineered a robust **3-tier fallback URL fetcher** (Semantic Scholar API → ArXiv API → Google Scholar Direct Link) equipped with `difflib` similarity validation (≥85% threshold) to reliably guarantee accurate Open Access PDF links for every paper.
 * **Frontend**: Built as a responsive Single Page Application using **React** and **Vite**. We utilized **Cytoscape** and **ECharts** to render the complex paper similarity graphs smoothly in the browser.
 * **Backend & AI**: The core RESTful API is powered by **Python and FastAPI** with secure JWT authentication. For the LLM capabilities, we integrated the **DeepSeek API** using OpenAI-compatible endpoints to handle complex academic reasoning and multi-turn conversation memory.
 * **Recommendation Engine**: We utilized `scikit-learn` (`TfidfVectorizer` & `NearestNeighbors`) on the backend to dynamically compute paper similarities based on their textual content. Our ranking algorithm assigns dynamic weights to user preferences to serve the most relevant content.
