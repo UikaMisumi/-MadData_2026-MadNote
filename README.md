@@ -11,7 +11,7 @@ MadNote is an intelligent, personalized academic recommendation platform designe
 * **Global Knowledge Graph**: We visualize the connections between different research papers using a TF-IDF and cosine similarity graph, allowing users to visually explore related works.
 * **Community Interactions**: Users can like, save, and leave nested comments or replies on papers, building an active academic discussion community.
 
-## 💻 How we built it
+## How we built it
 We architected MadNote with a robust, modern tech stack:
 
 * **Frontend**: Built as a responsive Single Page Application using **React** and **Vite**. We utilized **Cytoscape** and **ECharts** to render the complex paper similarity graphs smoothly in the browser.
