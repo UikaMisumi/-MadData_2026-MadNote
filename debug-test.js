@@ -16,14 +16,14 @@ setTimeout(() => {
     const firstCard = postCards[0];
     const likeBtn = firstCard.querySelector('.like-btn');
     const saveBtn = firstCard.querySelector('.save-btn');
-    
-    console.log('第一个卡片的按钮:', {
+
+    console.log('First card buttons:', {
       likeBtn: likeBtn ? '✅' : '❌',
       saveBtn: saveBtn ? '✅' : '❌'
     });
-    
+
     if (likeBtn) {
-      console.log('点击测试点赞按钮...');
+      console.log('Clicking like button...');
       likeBtn.click();
       
       setTimeout(() => {

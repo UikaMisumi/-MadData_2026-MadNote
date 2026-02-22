@@ -8,7 +8,7 @@ function ImageCarousel({ images, alt = "Post image" }) {
     return null;
   }
 
-  // 如果只有一张图片，不显示箭头
+  // Hide arrows when there is only one image
   const isSingleImage = images.length === 1;
 
   const goToPrevious = () => {

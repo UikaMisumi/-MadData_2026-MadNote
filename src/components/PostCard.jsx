@@ -200,7 +200,7 @@ const PostCard = ({
         type="button"
         onClick={(e) => {
           e.stopPropagation();
-          onOpenGraph && onOpenGraph(post.title);
+          onOpenGraph && onOpenGraph(post.id, post.title);
         }}
       >
         Explore Semantic Lineage

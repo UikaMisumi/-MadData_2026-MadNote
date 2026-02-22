@@ -6,7 +6,7 @@ function SearchBar() {
   const handleSearch = (event) => {
     event.preventDefault();
     console.log('Searching for:', searchQuery);
-    // 搜索图片的逻辑
+    // Search image logic
   };
 
   return (

@@ -23,6 +23,7 @@ function HomePage() {
   const [showInsightModal, setShowInsightModal] = useState(false);
   const [showGraphModal, setShowGraphModal] = useState(false);
   const [graphTitle, setGraphTitle] = useState('');
+  const [graphNodeId, setGraphNodeId] = useState(null);
   const discoverPosts = isDiscoverMode ? (posts || []).slice(0, 5) : posts;
   const discoverTopic = discoverProfile?.primary_topic || 'your interests';
   const discoverKeywords = Array.isArray(discoverProfile?.selected_keywords)
@@ -61,7 +62,8 @@ function HomePage() {
     });
   };
 
-  const handleOpenGraph = (title) => {
+  const handleOpenGraph = (nodeId, title) => {
+    setGraphNodeId(nodeId || null);
     setGraphTitle(title || 'Current paper');
     setShowGraphModal(true);
   };
@@ -147,6 +149,7 @@ function HomePage() {
         isOpen={showGraphModal}
         onClose={() => setShowGraphModal(false)}
         title={graphTitle}
+        nodeId={graphNodeId}
       />
     </div>
   );
