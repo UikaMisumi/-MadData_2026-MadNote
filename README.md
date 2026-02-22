@@ -1,5 +1,5 @@
 # MadData26 - MadNote: The Personalized Academic Discovery Platform
-![MadNote](./assets/madnote.png)
+![MadNote](madnote.png)
 ##  Inspiration
 Navigating the endless sea of academic papers can be overwhelming for researchers and students. We realized there was a lack of modern, engaging tools to discover and digest academic literature. We wanted to build a platform that feels as intuitive and addictive as a social media feed (like TikTok or Xiaohongshu), but is strictly tailored for academic research—helping users discover, explore, and interact with complex knowledge seamlessly.
 
