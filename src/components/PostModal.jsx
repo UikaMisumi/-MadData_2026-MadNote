@@ -34,6 +34,17 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
     return [];
   }, [post]);
 
+  const authorsText = useMemo(() => {
+    if (!post) return 'Anonymous';
+    if (Array.isArray(post.authors)) {
+      return post.authors.filter(Boolean).join(', ') || post.author?.name || 'Anonymous';
+    }
+    if (typeof post.authors === 'string') {
+      return post.authors || post.author?.name || 'Anonymous';
+    }
+    return post.author?.name || 'Anonymous';
+  }, [post]);
+
   useEffect(() => {
     if (!isOpen || !post) return;
 
@@ -52,8 +63,12 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
-      if (e.key === 'ArrowRight') setCurrentSlide((prev) => (prev + 1) % mediaItems.length);
+      if (mediaItems.length > 0 && e.key === 'ArrowLeft') {
+        setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
+      }
+      if (mediaItems.length > 0 && e.key === 'ArrowRight') {
+        setCurrentSlide((prev) => (prev + 1) % mediaItems.length);
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -173,7 +188,7 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
             <section className="paper-hero">
               <h1 className="paper-title">{post.title}</h1>
               <p className="paper-meta">
-                {(post.authors && post.authors.join(', ')) || post.author?.name || 'Anonymous'}
+                {authorsText}
                 {' · '}
                 {post.update_date || 'Unknown date'}
               </p>
@@ -315,3 +330,4 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
 };
 
 export default PostModal;
+
