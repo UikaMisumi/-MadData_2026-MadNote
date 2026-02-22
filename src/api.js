@@ -4,7 +4,16 @@
  * Base URL: http://localhost:8000/api/v1  (spec: BACKEND_API_SPEC.md)
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+const rawBaseUrl = import.meta.env.VITE_API_URL || '';
+const BASE_URL = (rawBaseUrl || 'http://localhost:8000/api/v1').replace(/\/+$/, '');
+const isDev = Boolean(import.meta.env.DEV);
+
+if (!rawBaseUrl && !isDev) {
+  // In production, missing VITE_API_URL usually points requests to localhost and causes silent deploy failures.
+  // Keep fallback for compatibility but make the issue visible in browser console.
+  // eslint-disable-next-line no-console
+  console.warn('VITE_API_URL is missing in production build; API calls will use localhost fallback.');
+}
 let authToken = null;
 
 // ---------- helpers ----------
@@ -46,7 +55,7 @@ async function request(method, path, body, requireAuth = false) {
   try {
     res = await fetch(`${BASE_URL}${path}`, options);
   } catch (networkError) {
-    const error = new Error('Backend is unreachable. Please start API server on http://localhost:8000.');
+    const error = new Error(`Backend is unreachable at ${BASE_URL}.`);
     error.status = 0;
     throw error;
   }

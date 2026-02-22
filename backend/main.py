@@ -1,5 +1,6 @@
 from datetime import datetime
 import math
+import os
 import uuid
 
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Query, Response
@@ -19,14 +20,28 @@ except ImportError:
 
 app = FastAPI(title="MadNote API", version="v1")
 AUTH_COOKIE_NAME = "madnote_token"
+COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "lax").strip().lower()
+COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").strip().lower() == "true"
+
+if COOKIE_SAMESITE == "none":
+    # Browsers require Secure when SameSite=None.
+    COOKIE_SECURE = True
+
+cors_origins_env = os.getenv("CORS_ORIGINS", "").strip()
+allowed_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://mad-data-2026-mad-note.vercel.app",
+    "https://maddata-2026-madnote.onrender.com",
+]
+if cors_origins_env:
+    allowed_origins.extend([o.strip() for o in cors_origins_env.split(",") if o.strip()])
+allowed_origins = sorted(set(allowed_origins))
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://mad-data-2026-mad-note-dcwy7y137-uikamisumis-projects.vercel.app", 
-        "http://localhost:5173", 
-        "http://127.0.0.1:5173"
-    ],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -341,7 +356,8 @@ async def signup(user_info: dict, response: Response):
         key=AUTH_COOKIE_NAME,
         value=token,
         httponly=True,
-        samesite="lax",
+        samesite=COOKIE_SAMESITE,
+        secure=COOKIE_SECURE,
         max_age=7 * 24 * 3600,
         path="/",
     )
@@ -363,7 +379,8 @@ async def login(credentials: dict, response: Response):
         key=AUTH_COOKIE_NAME,
         value=token,
         httponly=True,
-        samesite="lax",
+        samesite=COOKIE_SAMESITE,
+        secure=COOKIE_SECURE,
         max_age=7 * 24 * 3600,
         path="/",
     )
@@ -378,7 +395,12 @@ async def auth_me(user=Depends(get_current_user)):
 
 @app.post("/api/v1/auth/logout")
 async def logout(response: Response, _: dict = Depends(get_current_user)):
-    response.delete_cookie(key=AUTH_COOKIE_NAME, path="/")
+    response.delete_cookie(
+        key=AUTH_COOKIE_NAME,
+        path="/",
+        samesite=COOKIE_SAMESITE,
+        secure=COOKIE_SECURE,
+    )
     return {"success": True}
 
 
