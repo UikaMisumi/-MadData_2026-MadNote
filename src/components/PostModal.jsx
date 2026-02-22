@@ -45,6 +45,12 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
     return post.author?.name || 'Anonymous';
   }, [post]);
 
+  const pdfUrl = useMemo(() => {
+    if (!post) return '';
+    const url = post.paper_url || post.pdf_url || '';
+    return typeof url === 'string' ? url.trim() : '';
+  }, [post]);
+
   useEffect(() => {
     if (!isOpen || !post) return;
 
@@ -298,7 +304,16 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
             </section>
 
             <div className="side-actions">
-              <button type="button">Read PDF</button>
+              <button
+                type="button"
+                disabled={!pdfUrl}
+                onClick={() => {
+                  if (!pdfUrl) return;
+                  window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+                }}
+              >
+                Read PDF
+              </button>
               <button type="button">GitHub</button>
             </div>
 

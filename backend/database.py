@@ -147,7 +147,7 @@ class DataManager:
                     csv_df = csv_df.drop_duplicates(subset=["title_clean"]).reset_index(drop=True)
 
                     cols_to_merge = ["title_clean"]
-                    target_cols = ["authors", "category", "update_date", "citations"]
+                    target_cols = ["authors", "category", "update_date", "citations", "paper_url"]
                     
                     for col in target_cols:
                         if col in csv_df.columns:
@@ -172,7 +172,7 @@ class DataManager:
                             if col not in df.columns:
                                 df[col] = pd.NA
 
-                            if col in ["authors", "category", "update_date"]:
+                            if col in ["authors", "category", "update_date", "paper_url"]:
                                 missing_mask = df[col].isna() | df[col].astype(str).str.strip().eq("")
                             else:
                                 missing_mask = df[col].isna()
@@ -181,6 +181,40 @@ class DataManager:
                             df.loc[missing_mask, col] = fallback_series[missing_mask]
             except Exception as e:
                 print(f"Warning: Failed to merge CSV data: {e}")
+
+        # 5. Merge paper URLs from papers_with_urls_v2.csv
+        urls_csv_path = self._resolve_existing("papers_with_urls_v2.csv")
+        if urls_csv_path:
+            try:
+                urls_df = pd.read_csv(urls_csv_path)
+                if "paper_url" in urls_df.columns:
+                    # Title-based merge first.
+                    if "title" in urls_df.columns:
+                        urls_df["title_clean"] = urls_df["title"].astype(str).str.strip().str.lower()
+                        urls_df = urls_df.drop_duplicates(subset=["title_clean"]).reset_index(drop=True)
+                        df = df.merge(
+                            urls_df[["title_clean", "paper_url"]],
+                            on="title_clean",
+                            how="left",
+                            suffixes=("", "_url"),
+                        )
+                        if "paper_url_url" in df.columns:
+                            missing_mask = df.get("paper_url").isna() | df.get("paper_url").astype(str).str.strip().eq("")
+                            df.loc[missing_mask, "paper_url"] = df.loc[missing_mask, "paper_url_url"]
+                            df = df.drop(columns=["paper_url_url"])
+
+                    # Fallback by id-index mapping (paper-<n> -> urls_df row n)
+                    id_index = pd.to_numeric(
+                        df["id"].astype(str).str.extract(r"(\d+)$")[0],
+                        errors="coerce",
+                    )
+                    if "paper_url" not in df.columns:
+                        df["paper_url"] = pd.NA
+                    missing_mask = df["paper_url"].isna() | df["paper_url"].astype(str).str.strip().eq("")
+                    fallback_series = id_index.map(urls_df["paper_url"])
+                    df.loc[missing_mask, "paper_url"] = fallback_series[missing_mask]
+            except Exception as e:
+                print(f"Warning: Failed to merge paper URLs: {e}")
 
         # --- Rename Mappings ---
         
@@ -227,6 +261,11 @@ class DataManager:
 
         if "image_url" not in df.columns:
             df["image_url"] = None
+
+        if "paper_url" not in df.columns:
+            df["paper_url"] = None
+        df["paper_url"] = df["paper_url"].fillna("").astype(str).str.strip()
+        df["paper_url"] = df["paper_url"].where(df["paper_url"] != "", None)
 
         if "citations" not in df.columns:
             df["citations"] = 0
