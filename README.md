@@ -22,10 +22,10 @@ To ensure maximum scalability and a lightning-fast user experience, we intention
 
 ###  Tech Stack
 * **Automated Data Pipeline (The Secret Sauce)**: We orchestrated a fully automated offline data pipeline using **Jupyter Notebooks**. 
-  1. We sourced and dynamically sampled papers from HuggingFace (`arxiv-metadata-snapshot`) across 5 core tech domains. 
-  2. To create the "social media" vibe, we deployed **`Mistral-7B-Instruct-v0.3`** (4-bit quantized on an A100 GPU) to rewrite dry abstracts into engaging, emoji-rich JSON formats. 
-  3. We utilized **`KeyBERT`** for precise n-gram keyword extraction to power our graph and search engine. 
-  4. Finally, we engineered a robust **3-tier fallback URL fetcher** (Semantic Scholar API → ArXiv API → Google Scholar Direct Link) equipped with `difflib` similarity validation (≥85% threshold) to reliably guarantee accurate Open Access PDF links for every paper.
+  * ** We sourced and dynamically sampled papers from HuggingFace (`arxiv-metadata-snapshot`) across 5 core tech domains. 
+  * ** To create the "social media" vibe, we deployed **`Mistral-7B-Instruct-v0.3`** (4-bit quantized on an A100 GPU) to rewrite dry abstracts into engaging, emoji-rich JSON formats. 
+  * ** We utilized **`KeyBERT`** for precise n-gram keyword extraction to power our graph and search engine. 
+  * ** Finally, we engineered a robust **3-tier fallback URL fetcher** (Semantic Scholar API → ArXiv API → Google Scholar Direct Link) equipped with `difflib` similarity validation (≥85% threshold) to reliably guarantee accurate Open Access PDF links for every paper.
 * **Frontend (React + Vite & Data Visualization)**: 
   * **Architecture & Performance**: Built as a blazing-fast Single Page Application (SPA) using **React** and **Vite**. We implemented custom React Hooks (e.g., `useInfiniteScroll`) to lazily load our massive paper feed without compromising frame rates, and utilized the **Context API** for seamless global state management (Authentication, Theme, and Post caching).
   * **Interactive Knowledge Graph**: To make academic exploration visual, we integrated **Cytoscape.js** and **ECharts**. These libraries render our pre-calculated similarity matrices into a highly interactive node-graph, allowing users to drag, zoom, and visually discover connected papers based on TF-IDF proximity.
