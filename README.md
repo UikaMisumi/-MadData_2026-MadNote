@@ -79,7 +79,7 @@ In strict compliance with the hackathon rules, we explicitly cite the use of the
 * **Built from Scratch**: The entire architecture, frontend SPA, backend API, and data pipeline were conceptualized and coded originally by our team strictly during the **MadData26 Hackathon** timeframe. 
 * **Team Track**: This project is submitted under the **[General Track / Qualcomm Track]** by our dedicated team of **[Team Size, e.g., 4]** members.
 
-## 📄 License
+## License
 This project is licensed under the **MIT License**.
 
 MIT License
