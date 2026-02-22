@@ -15,7 +15,13 @@ MadNote is an intelligent, personalized academic recommendation platform designe
 ##  How we built it
 We architected MadNote with a robust, modern tech stack and a heavy focus on data engineering:
 
-* **Automated Data Pipeline (The Secret Sauce)**: We sourced data from HuggingFace (`arxiv-metadata-snapshot`). To create the "social media" vibe, we deployed `Mistral-7B-Instruct` (4-bit quantized on an A100 GPU) to rewrite abstracts into engaging JSON outputs. We then used `KeyBERT` for precise n-gram keyword extraction, and built a highly robust 3-tier fallback web scraper (Semantic Scholar API → ArXiv API → Google Scholar) with `difflib` similarity validation to fetch original PDF URLs.
+###  Architecture Design: Offline vs. Online Separation
+To ensure maximum scalability and a lightning-fast user experience, we intentionally separated our heavy data pipeline from our live backend server:
+* **Heavy Offline Processing**: We ran **PyTorch**, **Transformers**, and **KeyBERT** exclusively in an offline Jupyter/A100 GPU environment. This isolated pipeline handled the heavy lifting—running Mistral-7B to rewrite 550+ abstracts and extract N-gram keywords—and exported the clean, finalized data as lightweight JSON artifacts.
+* **Lightweight Online Serving**: Our live backend environment completely excludes bulky deep-learning frameworks. The `FastAPI` server boots instantly, dynamically serving the pre-processed JSON data, running lightweight `scikit-learn` recommendation algorithms, and routing user chat queries to the highly-optimized DeepSeek API. 
+
+###  Tech Stack
+* **Automated Data Pipeline (The Secret Sauce)**: We sourced data from HuggingFace (`arxiv-metadata-snapshot`). To create the "social media" vibe, we deployed `Mistral-7B-Instruct` (4-bit quantized) to rewrite abstracts into engaging JSON outputs. We built a highly robust 3-tier fallback web scraper (Semantic Scholar API → ArXiv API → Google Scholar) with `difflib` similarity validation to fetch original PDF URLs.
 * **Frontend**: Built as a responsive Single Page Application using **React** and **Vite**. We utilized **Cytoscape** and **ECharts** to render the complex paper similarity graphs smoothly in the browser.
 * **Backend & AI**: The core RESTful API is powered by **Python and FastAPI** with secure JWT authentication. For the LLM capabilities, we integrated the **DeepSeek API** using OpenAI-compatible endpoints to handle complex academic reasoning and multi-turn conversation memory.
 * **Recommendation Engine**: We utilized `scikit-learn` (`TfidfVectorizer` & `NearestNeighbors`) on the backend to dynamically compute paper similarities based on their textual content. Our ranking algorithm assigns dynamic weights to user preferences to serve the most relevant content.
@@ -27,8 +33,8 @@ We architected MadNote with a robust, modern tech stack and a heavy focus on dat
 
 ##  Accomplishments that we're proud of
 * Engineering a complete, end-to-end AI data pipeline: from raw ArXiv dumps to parsed keywords, Mistral-rewritten social content, and validated PDF links.
+* Designing a production-ready "Offline Pipeline + Online API" architecture that guarantees server stability and low response latency.
 * Successfully deploying a hybrid recommendation algorithm that balances content similarity with user engagement metrics (likes, saves, citations).
-* Building a completely interactive "Chat with Paper" feature with memory that truly lowers the barrier to understanding scientific concepts.
 
 ##  What we learned
 * Deepened our understanding of integrating Large Language Models seamlessly into traditional web applications (both for offline pre-processing and real-time inference).
@@ -48,22 +54,38 @@ We architected MadNote with a robust, modern tech stack and a heavy focus on dat
   * To power our recommendation and visualization engine, we applied advanced NLP and machine learning techniques, specifically using **`scikit-learn`** to build a **TF-IDF Vectorizer** and compute **Cosine Similarity** matrices.
   * We utilized **TruncatedSVD** for dimensionality reduction to efficiently render the global knowledge graph in the frontend.
 
-## AI Usage & Citations
+## 🤖 AI Usage & Citations
 In strict compliance with the hackathon rules, we explicitly cite the use of the following Artificial Intelligence models and tools within our project:
 * **Mistral-7B-Instruct-v0.3**: Deployed locally via HuggingFace for offline data pre-processing (reframing academic abstracts into JSON social media posts).
 * **DeepSeek API (deepseek-chat)**: Integrated into our backend to power the real-time "Chat with Paper" multi-turn conversational assistant.
-* **KeyBERT**: Used in our ipynb Python data pipeline for precise n-gram keyword extraction from raw text.
-* **GitHub Copilot / AI Assistants**: Used strictly as pair-programming assistants to help format boilerplate code and debug frontend CSS during the hackathon.
+* **KeyBERT**: Used in our Python data pipeline for precise n-gram keyword extraction from raw text.
+* **Claude (Anthropic)**: Used strictly as a pair-programming and ideation assistant to help format boilerplate code, debug frontend CSS, and refine project documentation during the hackathon.
 
-## Originality & Hackathon Compliance
+## 🛠️ Originality & Hackathon Compliance
 * **Built from Scratch**: The entire architecture, frontend SPA, backend API, and data pipeline were conceptualized and coded originally by our team strictly during the **MadData26 Hackathon** timeframe. 
 * **Team Track**: This project is submitted under the **[General Track / Qualcomm Track]** by our dedicated team of **[Team Size, e.g., 4]** members.
 
-##  License
+## 📄 License
 This project is licensed under the **MIT License**.
 
 MIT License
-Copyright (c) 2026 [Your Team Name]
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Copyright (c) 2026 [SiPeng Chen：Githubid: UikaMisumi, Yuxin Feng: Githubid: dariafung, Lingfang Yuan: Githubid: lyuan57-web, Hao Wu: haowu0916edisonwu]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
