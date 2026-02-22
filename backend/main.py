@@ -9,10 +9,12 @@ from fastapi.middleware.cors import CORSMiddleware
 try:
     # Package import path: `python -m uvicorn backend.main:app`
     from . import auth
+    from . import chatbox
     from .database import db_manager
 except ImportError:
     # Script import path fallback
     import auth
+    import chatbox
     from database import db_manager
 
 app = FastAPI(title="MadNote API", version="v1")
@@ -440,6 +442,44 @@ async def get_paper(paper_id: str, user=Depends(get_current_user)):
 
     item = rows.iloc[0].to_dict()
     return inject_interaction_status(item, user)
+
+
+@app.post("/api/v1/papers/{paper_id}/chat")
+async def chat_about_paper(paper_id: str, payload: dict, user=Depends(get_current_user)):
+    message = str(payload.get("message", "")).strip()
+    if not message:
+        raise HTTPException(status_code=422, detail="message is required")
+
+    history = payload.get("history", [])
+    if not isinstance(history, list):
+        history = []
+
+    df = db_manager.df
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Paper not found")
+
+    rows = df[df["id"] == str(paper_id)]
+    if rows.empty:
+        raise HTTPException(status_code=404, detail="Paper not found")
+
+    paper = rows.iloc[0].to_dict()
+    try:
+        result = chatbox.chat_with_paper(
+            paper=paper,
+            user_message=message,
+            history=history,
+        )
+    except RuntimeError as err:
+        raise HTTPException(status_code=503, detail=str(err)) from err
+    except Exception as err:
+        raise HTTPException(status_code=502, detail=f"Chat service failed: {err}") from err
+
+    return {
+        "reply": result.get("reply", ""),
+        "history": result.get("history", []),
+        "model": result.get("model", chatbox.DEFAULT_MODEL),
+        "paper_id": paper_id,
+    }
 
 
 @app.get("/api/v1/recommendations")

@@ -128,6 +128,14 @@ export async function apiGetPaper(paperId) {
 }
 
 /**
+ * POST /papers/:paperId/chat
+ * @returns {{ reply: string, history: {role: string, content: string}[], model: string, paper_id: string }}
+ */
+export async function apiPaperChat(paperId, message, history = []) {
+  return request('POST', `/papers/${paperId}/chat`, { message, history });
+}
+
+/**
  * GET /categories
  * @returns {string[]}
  */
