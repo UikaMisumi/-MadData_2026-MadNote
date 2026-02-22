@@ -15,9 +15,6 @@ try:
 except Exception:
     import database as db_module  # type: ignore
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-
 # Internal Modules
 try:
     # Package import path: `python -m uvicorn backend.main:app`
@@ -915,6 +912,12 @@ async def get_recommend_keywords_expand(
 # graph (TF-IDF similarity)
 # -------------------------
 def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = None, top_k: int | None = None):
+    try:
+        from sklearn.feature_extraction.text import TfidfVectorizer
+    except Exception:
+        # Keep backend boot independent from optional graph dependencies.
+        return {"nodes": [], "edges": []}
+
     df = db_manager.df
     if df.empty:
         return {"nodes": [], "edges": []}
@@ -957,7 +960,11 @@ def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = No
                 if score >= float(threshold):
                     edges.append({"source": ids[i_], "target": ids[j], "score": score})
     except Exception:
-        sim_matrix = cosine_similarity(X)
+        try:
+            from sklearn.metrics.pairwise import cosine_similarity
+            sim_matrix = cosine_similarity(X)
+        except Exception:
+            return {"nodes": nodes, "edges": []}
         for i in range(n):
             for j in range(i + 1, n):
                 score = float(sim_matrix[i, j])

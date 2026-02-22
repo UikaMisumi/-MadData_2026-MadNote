@@ -1,7 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './GraphModal.css';
-import axios from 'axios';
 import cytoscape from 'cytoscape';
+
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1').replace(/\/+$/, '');
+const DEFAULT_INITIAL_MAX_ZOOM = 0.78;
+
+function applyDefaultViewport(cy, padding = 80) {
+  if (!cy) return;
+  try {
+    cy.resize();
+    cy.fit(padding);
+    const clampedZoom = Math.min(cy.zoom(), DEFAULT_INITIAL_MAX_ZOOM);
+    cy.zoom({
+      level: clampedZoom,
+      renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 },
+    });
+    cy.center();
+  } catch (e) {
+    // Ignore viewport errors from transient layout state.
+  }
+}
 
 function applyRadialLayout(cy, centerId) {
   if (!cy || !centerId) return;
@@ -42,23 +60,30 @@ function applyRadialLayout(cy, centerId) {
   const centerNode = cy.getElementById(centerId);
   if (centerNode.length) {
     cy.fit(centerNode, 80);
+    const clampedZoom = Math.min(cy.zoom(), DEFAULT_INITIAL_MAX_ZOOM);
+    cy.zoom({
+      level: clampedZoom,
+      renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 },
+    });
     cy.center(centerNode);
   } else {
-    cy.fit(80);
-    cy.center();
+    applyDefaultViewport(cy, 80);
   }
 }
 
 async function fetchGraphCompatible() {
   // Prefer the endpoint you originally built; fallback to the other branch endpoint
   try {
-    const res = await axios.get('http://localhost:8000/api/v1/graph/global');
-    return res.data || { nodes: [], edges: [] };
+    const res = await fetch(`${API_BASE}/graph/global`, { credentials: 'include' });
+    if (!res.ok) throw new Error(`graph/global failed: ${res.status}`);
+    const data = await res.json();
+    return data || { nodes: [], edges: [] };
   } catch (e1) {
-    const res = await axios.get('http://localhost:8000/api/v1/graph/similarity', {
-      params: { threshold: 0.1, max_nodes: 500 },
-    });
-    return res.data || { nodes: [], edges: [] };
+    const url = `${API_BASE}/graph/similarity?threshold=0.1&max_nodes=500`;
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) throw new Error(`graph/similarity failed: ${res.status}`);
+    const data = await res.json();
+    return data || { nodes: [], edges: [] };
   }
 }
 
@@ -187,6 +212,8 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
             cyRef.current = cytoscape({
               container: containerRef.current,
               elements,
+              minZoom: 0.08,
+              maxZoom: 3.0,
               style: [
                 { selector: 'node', style: { label: '', 'background-color': '#2b6cb0', 'border-color': '#ffffff', 'border-width': 2, width: 12, height: 12 } },
                 { selector: 'edge', style: { 'line-color': '#cbd5e1', width: 2, opacity: 0.9 } },
@@ -194,7 +221,7 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
               layout: { name: 'cose', animate: true, animationDuration: 400 },
             });
 
-            try { cyRef.current.resize(); cyRef.current.fit(); cyRef.current.center(); } catch (e) {}
+            applyDefaultViewport(cyRef.current, 80);
             return;
           }
 
@@ -265,7 +292,13 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
         ];
 
         if (!cyRef.current) {
-          cyRef.current = cytoscape({ container: containerRef.current, elements, style: nodeStyles });
+          cyRef.current = cytoscape({
+            container: containerRef.current,
+            elements,
+            style: nodeStyles,
+            minZoom: 0.08,
+            maxZoom: 3.0,
+          });
 
           cyRef.current.on('mouseover', 'node', (evt) => {
             const n = evt.target;
@@ -325,11 +358,7 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
           shuffleLayoutRef.current = null;
           cy.layout(layoutOpts).run().then(() => {
             if (cancelled) return;
-            try {
-              cy.resize();
-              cy.fit(50);
-              cy.center();
-            } catch (e) {}
+            applyDefaultViewport(cy, 80);
           }).catch(() => {});
         }
       } catch (err) {
@@ -367,7 +396,7 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
         <header className="graph-head">
           <div>
             <h3>{title || 'Knowledge Graph'}</h3>
-            <p>Similarity graph (click node to open paper) · Drag to pan, scroll to zoom</p>
+            <p>Similarity graph (click node to open paper) - drag to pan, scroll to zoom</p>
           </div>
           <div className="graph-head-actions">
             <button
@@ -383,7 +412,7 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
         </header>
 
         <div className="graph-canvas">
-          {loading ? <div className="graph-loader">Loading graph…</div> : null}
+          {loading ? <div className="graph-loader">Loading graph...</div> : null}
           <div ref={containerRef} id="cy" style={{ width: '100%', height: '100%', minHeight: 320 }} aria-label="Knowledge graph" />
           {tooltip.visible ? (
             <div
@@ -407,3 +436,4 @@ const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = nul
 };
 
 export default GraphModal;
+
