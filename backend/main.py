@@ -836,7 +836,11 @@ async def get_recommend_keywords_expand(
     }
 
 
-def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = None, top_k: int | None = None):
+def _compute_similarity_graph(
+    threshold: float = 0.5,
+    max_nodes: int | None = None,
+    top_k: int | None = None,
+):
     df = db_manager.df
     if df.empty:
         return {"nodes": [], "edges": []}
@@ -848,7 +852,7 @@ def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = No
     ids = df["id"].astype(str).tolist()
     titles = df["title"].astype(str).tolist()
 
-    # Use safer TF-IDF defaults: include bigrams, filter very rare/common terms
+    # Safer TF-IDF defaults: include bigrams, filter very rare/common terms
     vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=2, max_df=0.9)
     try:
         X = vectorizer.fit_transform(abstracts)
@@ -862,7 +866,7 @@ def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = No
     try:
         # For larger corpora, reduce dimensionality before neighbor search to speed up
         X_search = X
-        if n > 2000 and X.shape[1] > 100:
+        if n > 2000 and getattr(X, "shape", (0, 0))[1] > 100:
             from sklearn.decomposition import TruncatedSVD
 
             svd = TruncatedSVD(n_components=100)
@@ -896,7 +900,9 @@ def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = No
     if top_k is not None and top_k > 0:
         neigh_map: dict[str, list[tuple[str, float]]] = {nid: [] for nid in ids}
         for e in edges:
-            s = e["source"]; t = e["target"]; sc = float(e.get("score", 0.0))
+            s = e["source"]
+            t = e["target"]
+            sc = float(e.get("score", 0.0))
             neigh_map.setdefault(s, []).append((t, sc))
             neigh_map.setdefault(t, []).append((s, sc))
 
@@ -917,18 +923,21 @@ def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = No
     return {"nodes": nodes, "edges": edges}
 
 
-@app.get("/api/v1/graph/global")
-async def graph_global(threshold: float = Query(0.1, ge=0.0, le=1.0)):
+@app.get("/api/v1/graph/similarity")
+async def graph_similarity(
+    threshold: float = Query(0.1, ge=0.0, le=1.0),
+    max_nodes: int | None = Query(None, ge=1),
+    top_k: int | None = Query(None, ge=1),
+):
     """
-    Compute and return a global TF-IDF + Cosine similarity graph from all paper abstracts.
-    All papers as nodes, all edges with similarity >= threshold (no top_k trimming).
-    Results are cached in the `backend/database` folder to avoid recomputation.
+    Compute a TF-IDF + Cosine similarity graph from paper abstracts.
+    Returns nodes and edges where edge.score >= threshold.
+    Results are cached per-threshold in the `backend/database` folder to avoid recomputation.
     """
     cache_dir = db_module.DATA_DIR
     cache_dir.mkdir(exist_ok=True)
     cache_file = cache_dir / f"graph_global_{float(threshold):.2f}.json"
 
-    # Try to load from cache
     if cache_file.exists():
         try:
             with cache_file.open("r", encoding="utf-8") as f:
@@ -936,10 +945,8 @@ async def graph_global(threshold: float = Query(0.1, ge=0.0, le=1.0)):
         except Exception:
             pass
 
-    # Compute graph: all articles, all edges above threshold (no max_nodes, no top_k)
-    graph = _compute_similarity_graph(threshold=threshold, max_nodes=None, top_k=None)
+    graph = _compute_similarity_graph(threshold=threshold, max_nodes=max_nodes, top_k=top_k)
 
-    # Cache the result
     try:
         with cache_file.open("w", encoding="utf-8") as f:
             json.dump(graph, f, indent=2, ensure_ascii=False)

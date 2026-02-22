@@ -165,7 +165,7 @@
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  background: rgba(15,23,42,0.92);
+  background: rgba(15, 23, 42, 0.92);
   color: white;
   padding: 8px 10px;
   border-radius: 8px;
@@ -173,7 +173,7 @@
   max-width: 360px;
   white-space: normal;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(2,6,23,0.45);
+  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.45);
 }
 
 .cy-tooltip .tt-title {
@@ -182,6 +182,7 @@
   font-size: 13px;
   line-height: 1.2;
 }
+
 .cy-tooltip .tt-summary {
   font-weight: 400;
   opacity: 0.92;
@@ -220,6 +221,14 @@
   margin-right: 6px;
 }
 
-.dot.base { background: #fb7185; }
-.dot.center { background: var(--mn-brand-600); }
-.dot.next { background: #34d399; }
+.dot.base {
+  background: #fb7185;
+}
+
+.dot.center {
+  background: var(--mn-brand-600);
+}
+
+.dot.next {
+  background: #34d399;
+}
