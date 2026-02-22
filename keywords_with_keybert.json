@@ -1,0 +1,4952 @@
+[
+  {
+    "id": "paper-0",
+    "title": "Cross-lingual Offensive Language Detection: A Systematic Review of Datasets, Transfer Approaches and Challenges",
+    "dynamic_keywords": [
+      "Offensive Language",
+      "Multilingual Datasets",
+      "Cross Lingual"
+    ]
+  },
+  {
+    "id": "paper-1",
+    "title": "Learning A Physical-aware Diffusion Model Based on Transformer for Underwater Image Enhancement",
+    "dynamic_keywords": [
+      "Underwater Visuals",
+      "Underwater Image",
+      "Underwater Imaging"
+    ]
+  },
+  {
+    "id": "paper-2",
+    "title": "Work-in-Progress: An empirical study to understand how students use ChatGPT for writing essays and how it affects their ownership",
+    "dynamic_keywords": [
+      "Essay Writing",
+      "Writing Tasks",
+      "Writing Education"
+    ]
+  },
+  {
+    "id": "paper-3",
+    "title": "Extended mean-field control problems with Poissonian common noise: Stochastic maximum principle and Hamiltonian-Jacobi-Bellman equation",
+    "dynamic_keywords": [
+      "Stochastic Maximum",
+      "Control Formulations",
+      "Control Formulation"
+    ]
+  },
+  {
+    "id": "paper-4",
+    "title": "Accelerating Large Language Model Inference with Self-Supervised Early Exits",
+    "dynamic_keywords": [
+      "Speculative Decoding",
+      "Accelerate Inference",
+      "Language Models"
+    ]
+  },
+  {
+    "id": "paper-5",
+    "title": "Prevailing Research Areas for Music AI in the Era of Foundation Models",
+    "dynamic_keywords": [
+      "Generative Music",
+      "Music Ai",
+      "Music Editing"
+    ]
+  },
+  {
+    "id": "paper-6",
+    "title": "SeqRisk: Transformer-augmented latent variable model for robust survival prediction with longitudinal data",
+    "dynamic_keywords": [
+      "Leveraging Longitudinal",
+      "Variational Autoencoder",
+      "Longitudinal Data"
+    ]
+  },
+  {
+    "id": "paper-7",
+    "title": "LabSafety Bench: Benchmarking LLMs on Safety Issues in Scientific Labs",
+    "dynamic_keywords": [
+      "Safe Laboratory",
+      "Lab Scenarios",
+      "Safety Evaluation"
+    ]
+  },
+  {
+    "id": "paper-8",
+    "title": "NewsInterview: a Dataset and a Playground to Evaluate LLMs' Ground Gap via Informational Interviews",
+    "dynamic_keywords": [
+      "Dialogue Capabilities",
+      "Strategic Dialogue",
+      "Informational Interviews"
+    ]
+  },
+  {
+    "id": "paper-9",
+    "title": "Indications for new scalar resonances at the LHC and a possible interpretation",
+    "dynamic_keywords": [
+      "Major Lhc",
+      "Lhc Collaborations",
+      "Collider Lhc"
+    ]
+  },
+  {
+    "id": "paper-10",
+    "title": "Modified Axelrod Model Showing Opinion Convergence And Polarization In Realistic Scale-Free Networks",
+    "dynamic_keywords": [
+      "Opinion Dynamics",
+      "Opinion Convergence",
+      "Opinion Polarization"
+    ]
+  },
+  {
+    "id": "paper-11",
+    "title": "Compositional Generalization from Learned Skills via CoT Training: A Theoretical and Structural Analysis for Reasoning",
+    "dynamic_keywords": [
+      "Compositional Generalization",
+      "Compositional Reasoning",
+      "Generalization Composing"
+    ]
+  },
+  {
+    "id": "paper-12",
+    "title": "Teaching LLMs According to Their Aptitude: Adaptive Reasoning for Mathematical Problem Solving",
+    "dynamic_keywords": [
+      "Adaptive Reasoning",
+      "Reasoning Benchmarks",
+      "Personalize Reasoning"
+    ]
+  },
+  {
+    "id": "paper-13",
+    "title": "Translate Policy to Language: Flow Matching Generated Rewards for LLM Explanations",
+    "dynamic_keywords": [
+      "Explanations Trained",
+      "Ai Feedback",
+      "Explanations Generating"
+    ]
+  },
+  {
+    "id": "paper-14",
+    "title": "PASER: Post-Training Data Selection for Efficient Pruned Large Language Model Recovery",
+    "dynamic_keywords": [
+      "Language Models",
+      "Model Pruning",
+      "Language Model"
+    ]
+  },
+  {
+    "id": "paper-15",
+    "title": "The Canary's Echo: Auditing Privacy Risks of LLM-Generated Synthetic Text",
+    "dynamic_keywords": [
+      "Auditing Synthetic",
+      "Inference Attacks",
+      "Leak Information"
+    ]
+  },
+  {
+    "id": "paper-16",
+    "title": "Quantifying and Improving the Robustness of Retrieval-Augmented Language Models Against Spurious Features in Grounding Data",
+    "dynamic_keywords": [
+      "Improve Robustness",
+      "Robustness Ralms",
+      "Spurious Features"
+    ]
+  },
+  {
+    "id": "paper-17",
+    "title": "BYOS: Knowledge-driven Large Language Models Bring Your Own Operating System More Excellent",
+    "dynamic_keywords": [
+      "Automated Kernel",
+      "Kernel Tuning",
+      "Os Kernel"
+    ]
+  },
+  {
+    "id": "paper-18",
+    "title": "Retrospective: A CORDIC Based Configurable Activation Function for NN Applications",
+    "dynamic_keywords": [
+      "Ai Accelerators",
+      "Ai Processors",
+      "Adjustable Activation"
+    ]
+  },
+  {
+    "id": "paper-19",
+    "title": "Can Complexity and Uncomputability Explain Intelligence? SuperARC: A Test for Artificial Super Intelligence Based on Recursive Compression",
+    "dynamic_keywords": [
+      "Specialised Prediction",
+      "Abstraction Prediction",
+      "Frontier Ai"
+    ]
+  },
+  {
+    "id": "paper-20",
+    "title": "Remote Sensing Retrieval-Augmented Generation: Bridging Remote Sensing Imagery and Comprehensive Knowledge with a Multi-Modal Dataset and Retrieval-Augmented Generation Model",
+    "dynamic_keywords": [
+      "Modal Knowledge",
+      "Captioning Visual",
+      "Knowledge Retrieval"
+    ]
+  },
+  {
+    "id": "paper-21",
+    "title": "Can LLMs Handle WebShell Detection? Overcoming Detection Challenges with Behavioral Function-Aware Framework",
+    "dynamic_keywords": [
+      "Webshell Detection",
+      "Webshell Attacks",
+      "Malicious Scripts"
+    ]
+  },
+  {
+    "id": "paper-22",
+    "title": "Bidirectional Mamba for Single-Cell Data: Efficient Context Learning with Biological Fidelity",
+    "dynamic_keywords": [
+      "Cell Transcriptomics",
+      "Transcriptomics Built",
+      "Transcriptomics"
+    ]
+  },
+  {
+    "id": "paper-23",
+    "title": "Can LLM-based Financial Investing Strategies Outperform the Market in Long Run?",
+    "dynamic_keywords": [
+      "Investing Strategies",
+      "Investing",
+      "Stock Trading"
+    ]
+  },
+  {
+    "id": "paper-24",
+    "title": "EvoGPT: Leveraging LLM-Driven Seed Diversity to Improve Search-Based Test Suite Generation",
+    "dynamic_keywords": [
+      "Test Generation",
+      "Generated Tests",
+      "Software Testing"
+    ]
+  },
+  {
+    "id": "paper-25",
+    "title": "Fine-tuning Quantized Neural Networks with Zeroth-order Optimization",
+    "dynamic_keywords": [
+      "Training Quantization",
+      "Optimization Quantized",
+      "Minimizing Memory"
+    ]
+  },
+  {
+    "id": "paper-26",
+    "title": "AMAQA: A Metadata-based QA Dataset for RAG Systems",
+    "dynamic_keywords": [
+      "Text Metadata",
+      "Metadata Especially",
+      "Reviews Metadata"
+    ]
+  },
+  {
+    "id": "paper-27",
+    "title": "Embodied Agents Meet Personalization: Investigating Challenges and Solutions Through the Lens of Memory Utilization",
+    "dynamic_keywords": [
+      "Explore Memory",
+      "Memory Tasks",
+      "Agents Memory"
+    ]
+  },
+  {
+    "id": "paper-28",
+    "title": "Maximum Principle of Optimal Probability Density Control",
+    "dynamic_keywords": [
+      "Density Control",
+      "Distributions Control",
+      "Agent Control"
+    ]
+  },
+  {
+    "id": "paper-29",
+    "title": "One Demo Is All It Takes: Planning Domain Derivation with LLMs from A Single Demonstration",
+    "dynamic_keywords": [
+      "Planning Automation",
+      "Planning Domains",
+      "Descriptions Planning"
+    ]
+  },
+  {
+    "id": "paper-30",
+    "title": "On Fairness of Task Arithmetic: The Role of Task Vectors",
+    "dynamic_keywords": [
+      "Fairness Task",
+      "Fairness Metrics",
+      "Scaling Fairness"
+    ]
+  },
+  {
+    "id": "paper-31",
+    "title": "Prompt Engineer: Analyzing Hard and Soft Skill Requirements in the AI Job Market",
+    "dynamic_keywords": [
+      "Prompt Engineering",
+      "Prompt Engineer",
+      "Prompt Engineers"
+    ]
+  },
+  {
+    "id": "paper-32",
+    "title": "Truth in the Few: High-Value Data Selection for Efficient Multi-Modal Reasoning",
+    "dynamic_keywords": [
+      "Reasoning Activation",
+      "Reasoning Tasks",
+      "Reasoning Ability"
+    ]
+  },
+  {
+    "id": "paper-33",
+    "title": "Bootstrapping Action-Grounded Visual Dynamics in Unified Vision-Language Models",
+    "dynamic_keywords": [
+      "Captioning Action",
+      "Learning Synthetic",
+      "Vision Language"
+    ]
+  },
+  {
+    "id": "paper-34",
+    "title": "BrainSymphony: A parameter-efficient multimodal foundation model for brain dynamics with limited data",
+    "dynamic_keywords": [
+      "Neuroimaging Dataset",
+      "Dataset Brainsymphony",
+      "Transforming Neuroscience"
+    ]
+  },
+  {
+    "id": "paper-35",
+    "title": "Poly-Guard: Massive Multi-Domain Safety Policy-Grounded Guardrail Dataset",
+    "dynamic_keywords": [
+      "Guardrail Dataset",
+      "Safety Policies",
+      "Domain Safety"
+    ]
+  },
+  {
+    "id": "paper-36",
+    "title": "When Domains Collide: An Activity Theory Exploration of Cross-Disciplinary Collaboration",
+    "dynamic_keywords": [
+      "Software Development",
+      "Software Developers",
+      "Developers"
+    ]
+  },
+  {
+    "id": "paper-37",
+    "title": "EEG-to-Gait Decoding via Phase-Aware Representation Learning",
+    "dynamic_keywords": [
+      "Motion Eeg",
+      "Eeg Motion",
+      "Eeg Gait"
+    ]
+  },
+  {
+    "id": "paper-38",
+    "title": "AutoDiscovery: Open-ended Scientific Discovery via Bayesian Surprise",
+    "dynamic_keywords": [
+      "Driven Discovery",
+      "Scientific Exploration",
+      "Hypothesis Generation"
+    ]
+  },
+  {
+    "id": "paper-39",
+    "title": "Empowering Healthcare Practitioners with Language Models: Structuring Speech Transcripts in Two Real-World Clinical Applications",
+    "dynamic_keywords": [
+      "Clinical Datasets",
+      "Nurse Dictations",
+      "Datasets Nurse"
+    ]
+  },
+  {
+    "id": "paper-40",
+    "title": "Parallelism Meets Adaptiveness: Scalable Documents Understanding in Multi-Agent LLM Systems",
+    "dynamic_keywords": [
+      "Collaborative Task",
+      "Task Completion",
+      "Agent Evaluation"
+    ]
+  },
+  {
+    "id": "paper-41",
+    "title": "Do language models accommodate their users? A study of linguistic convergence",
+    "dynamic_keywords": [
+      "Language Models",
+      "Models Dialogue",
+      "Human Language"
+    ]
+  },
+  {
+    "id": "paper-42",
+    "title": "Trustworthiness of Legal Considerations for the Use of LLMs in Education",
+    "dynamic_keywords": [
+      "Ai Governance",
+      "Legislation Ai",
+      "Responsible Ai"
+    ]
+  },
+  {
+    "id": "paper-43",
+    "title": "LLMEval-Fair: A Large-Scale Longitudinal Study on Robust and Fair Evaluation of Large Language Models",
+    "dynamic_keywords": [
+      "Trustworthy Evaluation",
+      "Robustness Ranking",
+      "Ranking Fair"
+    ]
+  },
+  {
+    "id": "paper-44",
+    "title": "SKATE, a Scalable Tournament Eval: Weaker LLMs differentiate between stronger ones using verifiable challenges",
+    "dynamic_keywords": [
+      "Scalable Evaluation",
+      "Verifiable Tasks",
+      "Challenges Verifiable"
+    ]
+  },
+  {
+    "id": "paper-45",
+    "title": "Leveraging Generative AI for Human Understanding: Meta-Requirements and Design Principles for Explanatory AI as a new Paradigm",
+    "dynamic_keywords": [
+      "Explanatory Ai",
+      "Explainable Ai",
+      "Ai Explanation"
+    ]
+  },
+  {
+    "id": "paper-46",
+    "title": "MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols",
+    "dynamic_keywords": [
+      "Attack Scripts",
+      "Attack Surfaces",
+      "Formalization Secure"
+    ]
+  },
+  {
+    "id": "paper-47",
+    "title": "LLM-Assisted Semantic Alignment and Integration in Collaborative Model-Based Systems Engineering Using SysML v2",
+    "dynamic_keywords": [
+      "Alignment Sysml",
+      "Interoperable Modeling",
+      "Semantic Alignment"
+    ]
+  },
+  {
+    "id": "paper-48",
+    "title": "A Large-Scale Benchmark for Evaluating Large Language Models on Medical Question Answering in Romanian",
+    "dynamic_keywords": [
+      "Language Models",
+      "Clinical Qa",
+      "Qa Benchmark"
+    ]
+  },
+  {
+    "id": "paper-49",
+    "title": "AI Agentic Vulnerability Injection And Transformation with Optimized Reasoning",
+    "dynamic_keywords": [
+      "Automated Vulnerability",
+      "Vulnerability Injection",
+      "Reflect Vulnerabilities"
+    ]
+  },
+  {
+    "id": "paper-50",
+    "title": "From CVE Entries to Verifiable Exploits: An Automated Multi-Agent Framework for Reproducing CVEs",
+    "dynamic_keywords": [
+      "Vulnerability Datasets",
+      "Verifiable Exploits",
+      "Vulnerability Patching"
+    ]
+  },
+  {
+    "id": "paper-51",
+    "title": "Beyond ATE: Multi-Criteria Design for A/B Testing",
+    "dynamic_keywords": [
+      "Differential Privacy",
+      "Dual Objective",
+      "Adaptive Experimentation"
+    ]
+  },
+  {
+    "id": "paper-52",
+    "title": "Steering MoE LLMs via Expert (De)Activation",
+    "dynamic_keywords": [
+      "Steermoe Framework",
+      "Unsafe Steering",
+      "Vulnerabilities Moe"
+    ]
+  },
+  {
+    "id": "paper-53",
+    "title": "Orthosymplectic Chern-Simons Matter Theories: Global Forms, Dualities, and Vacua",
+    "dynamic_keywords": [
+      "Magnetic Quivers",
+      "Magnetic Quiver",
+      "Brane Configurations"
+    ]
+  },
+  {
+    "id": "paper-54",
+    "title": "Roundtable Policy: Confidence-Weighted-Consensus Aggregation Improves Multi-Agent-System Reasoning",
+    "dynamic_keywords": [
+      "Reasoning Collaboration",
+      "Multi Agent",
+      "Consensus Multiple"
+    ]
+  },
+  {
+    "id": "paper-55",
+    "title": "Binary Autoencoder for Mechanistic Interpretability of Large Language Models",
+    "dynamic_keywords": [
+      "Autoencoders",
+      "Autoencoders Constrained",
+      "Binary Autoencoder"
+    ]
+  },
+  {
+    "id": "paper-56",
+    "title": "TyphoonMLA: A Mixed Naive-Absorb MLA Kernel For Shared Prefix",
+    "dynamic_keywords": [
+      "Throughput Attention",
+      "Attention Calculations",
+      "Latent Attention"
+    ]
+  },
+  {
+    "id": "paper-57",
+    "title": "TABLET: A Large-Scale Dataset for Robust Visual Table Understanding",
+    "dynamic_keywords": [
+      "Visualtableqa Benchmark",
+      "Visual Table",
+      "Introduce Visualtableqa"
+    ]
+  },
+  {
+    "id": "paper-58",
+    "title": "CoSpaDi: Compressing LLMs via Calibration-Guided Sparse Dictionary Learning",
+    "dynamic_keywords": [
+      "Sparse Dictionary",
+      "Sparse Decomposition",
+      "Compression Sparse"
+    ]
+  },
+  {
+    "id": "paper-59",
+    "title": "Multi-Agent Guided Policy Search for Non-Cooperative Dynamic Games",
+    "dynamic_keywords": [
+      "Nonlinear Games",
+      "Policy Gradients",
+      "Agent Reinforcement"
+    ]
+  },
+  {
+    "id": "paper-60",
+    "title": "Logical Structure as Knowledge: Enhancing LLM Reasoning via Structured Logical Knowledge Density Estimation",
+    "dynamic_keywords": [
+      "Sparse Logical",
+      "Reasoning Capabilities",
+      "Logical Knowledge"
+    ]
+  },
+  {
+    "id": "paper-61",
+    "title": "Stylos: Multi-View 3D Stylization with Single-Forward Gaussian Splatting",
+    "dynamic_keywords": [
+      "Shot Stylization",
+      "3D Style",
+      "Style Transfer"
+    ]
+  },
+  {
+    "id": "paper-62",
+    "title": "VibeCodeHPC: An Agent-Based Iterative Prompting Auto-Tuner for HPC Code Generation Using LLMs",
+    "dynamic_keywords": [
+      "Supercomputers Vibecodehpc",
+      "Environments Supercomputers",
+      "Programs Supercomputers"
+    ]
+  },
+  {
+    "id": "paper-63",
+    "title": "Learning to Route: A Rule-Driven Agent Framework for Hybrid-Source Retrieval-Augmented Generation",
+    "dynamic_keywords": [
+      "Question Answering",
+      "Efficiently Queryable",
+      "Similar Queries"
+    ]
+  },
+  {
+    "id": "paper-64",
+    "title": "OpenTSLM: Time-Series Language Models for Reasoning over Multivariate Medical Text- and Time-Series Data",
+    "dynamic_keywords": [
+      "Attention Benchmark",
+      "Actionable Insights",
+      "Reasoning Tasks"
+    ]
+  },
+  {
+    "id": "paper-65",
+    "title": "KVComm: Enabling Efficient LLM Communication through Selective KV Sharing",
+    "dynamic_keywords": [
+      "Efficient Communication",
+      "Communication Crucial",
+      "Informative Kv"
+    ]
+  },
+  {
+    "id": "paper-66",
+    "title": "Alignment Tipping Process: How Self-Evolution Pushes LLM Agents Off the Rails",
+    "dynamic_keywords": [
+      "Agents Increasingly",
+      "Evolving Llm",
+      "Reinforcement"
+    ]
+  },
+  {
+    "id": "paper-67",
+    "title": "Human Behavior Atlas: Benchmarking Unified Psychological and Social Behavior Understanding",
+    "dynamic_keywords": [
+      "Human_Behavior_Atlas",
+      "Behavior Atlas",
+      "Mi Human_Behavior_Atlas"
+    ]
+  },
+  {
+    "id": "paper-68",
+    "title": "Provably Convergent Primal-Dual DPO for Constrained LLM Alignment",
+    "dynamic_keywords": [
+      "Language Models",
+      "Knowledge Optimal",
+      "Preference Optimization"
+    ]
+  },
+  {
+    "id": "paper-69",
+    "title": "Simulation of Muon-induced Backgrounds for the Colorado Underground Research Institute (CURIE)",
+    "dynamic_keywords": [
+      "Simulation Muon",
+      "Muon Energy",
+      "Neutron Fluxes"
+    ]
+  },
+  {
+    "id": "paper-70",
+    "title": "Designing and Evaluating an AI-enhanced Immersive Multidisciplinary Simulation (AIMS) for Interprofessional Education",
+    "dynamic_keywords": [
+      "Virtual Patient",
+      "Collaborative Clinical",
+      "Conversations Participants"
+    ]
+  },
+  {
+    "id": "paper-71",
+    "title": "GOLD PANNING: Strategic Context Shuffling for Needle-in-Haystack Reasoning",
+    "dynamic_keywords": [
+      "Learning Prioritizes",
+      "Haystack Retrieval",
+      "Document Relevance"
+    ]
+  },
+  {
+    "id": "paper-72",
+    "title": "Improving Speech Emotion Recognition with Mutual Information Regularized Generative Model",
+    "dynamic_keywords": [
+      "Multimodal Emotion",
+      "Speech Emotion",
+      "Emotional Speech"
+    ]
+  },
+  {
+    "id": "paper-73",
+    "title": "ContextGen: Contextual Layout Anchoring for Identity-Consistent Multi-Instance Generation",
+    "dynamic_keywords": [
+      "Instance Image",
+      "Contextual Layout",
+      "Instance Generation"
+    ]
+  },
+  {
+    "id": "paper-74",
+    "title": "Mamba Can Learn Low-Dimensional Targets In-Context via Test-Time Feature Learning",
+    "dynamic_keywords": [
+      "Context Learning",
+      "Feature Learning",
+      "Learning"
+    ]
+  },
+  {
+    "id": "paper-75",
+    "title": "MARSHAL: Incentivizing Multi-Agent Reasoning via Self-Play with Strategic LLMs",
+    "dynamic_keywords": [
+      "Agent Reasoning",
+      "Agent Training",
+      "Games Marshal"
+    ]
+  },
+  {
+    "id": "paper-76",
+    "title": "Segmenting infant brains across magnetic fields: Domain randomization and annotation curation in ultra-low field MRI",
+    "dynamic_keywords": [
+      "Segmentation Ulf",
+      "Segmentation Lisa",
+      "Segmentation Brain"
+    ]
+  },
+  {
+    "id": "paper-77",
+    "title": "SMaRT: Select, Mix, and ReinvenT -- A Strategy Fusion Framework for LLM-Driven Reasoning and Planning",
+    "dynamic_keywords": [
+      "Reasoning Planning",
+      "Task Automation",
+      "Diverse Reasoning"
+    ]
+  },
+  {
+    "id": "paper-78",
+    "title": "Evaluating LLM Reasoning Beyond Correctness and CoT",
+    "dynamic_keywords": [
+      "Reasoning Capabilities",
+      "Reasoning Surface",
+      "Assesses Reasoning"
+    ]
+  },
+  {
+    "id": "paper-79",
+    "title": "EasyUUV: An LLM-Enhanced Universal and Lightweight Sim-to-Real Reinforcement Learning Framework for UUV Attitude Control",
+    "dynamic_keywords": [
+      "Adaptive Uuv",
+      "Unmanned Underwater",
+      "Attitude Control"
+    ]
+  },
+  {
+    "id": "paper-80",
+    "title": "Self-Concordant Perturbations for Linear Bandits",
+    "dynamic_keywords": [
+      "Linear Bandits",
+      "Stochastic Exploration",
+      "Bandits Setting"
+    ]
+  },
+  {
+    "id": "paper-81",
+    "title": "Test-Time Alignment of LLMs via Sampling-Based Optimal Control in pre-logit space",
+    "dynamic_keywords": [
+      "Importance Sampling",
+      "Adaptive Importance",
+      "Sampling Pre"
+    ]
+  },
+  {
+    "id": "paper-82",
+    "title": "Reliable Curation of EHR Dataset via Large Language Models under Environmental Constraints",
+    "dynamic_keywords": [
+      "Ehr Databases",
+      "Automated Ehr",
+      "Ehr Data"
+    ]
+  },
+  {
+    "id": "paper-83",
+    "title": "Hilbert-Guided Sparse Local Attention",
+    "dynamic_keywords": [
+      "Attention Hilbert",
+      "Local Attention",
+      "Attention Block"
+    ]
+  },
+  {
+    "id": "paper-84",
+    "title": "EGG-SR: Embedding Symbolic Equivalence into Symbolic Regression via Equality Graph",
+    "dynamic_keywords": [
+      "Symbolic Regression",
+      "Accelerating Learning",
+      "Discovery Exponential"
+    ]
+  },
+  {
+    "id": "paper-85",
+    "title": "Simulated Operational Testing of the Prototype Implementation of the SOFIE Model: The 2025 Space Weather Prediction Testbed Exercise",
+    "dynamic_keywords": [
+      "Solar Energetic",
+      "Model Solar",
+      "Solar Wind"
+    ]
+  },
+  {
+    "id": "paper-86",
+    "title": "Evaluating Modern Large Language Models on Low-Resource and Morphologically Rich Languages:A Cross-Lingual Benchmark Across Cantonese, Japanese, and Turkish",
+    "dynamic_keywords": [
+      "Lingual Benchmark",
+      "Multilingual Performance",
+      "Language Models"
+    ]
+  },
+  {
+    "id": "paper-87",
+    "title": "Can World Simulators Reason? Gen-ViRe: A Generative Visual Reasoning Benchmark",
+    "dynamic_keywords": [
+      "Visual Reasoning",
+      "Reasoning Cognitive",
+      "Reasoning Depth"
+    ]
+  },
+  {
+    "id": "paper-88",
+    "title": "MapReduce LoRA: Advancing the Pareto Front in Multi-Preference Optimization for Generative Models",
+    "dynamic_keywords": [
+      "Learns Reward",
+      "Reward Models",
+      "Reward Aware"
+    ]
+  },
+  {
+    "id": "paper-89",
+    "title": "When Scaffolding Breaks: Investigating Student Interaction with LLM-Based Writing Support in Real-Time K-12 EFL Classrooms",
+    "dynamic_keywords": [
+      "Students English",
+      "Classrooms",
+      "Writing Skills"
+    ]
+  },
+  {
+    "id": "paper-90",
+    "title": "DSO: Direct Steering Optimization for Bias Mitigation",
+    "dynamic_keywords": [
+      "Controllable Bias",
+      "Mitigate Bias",
+      "Bias Intervention"
+    ]
+  },
+  {
+    "id": "paper-91",
+    "title": "Demystifying LLM-as-a-Judge: Analytically Tractable Model for Inference-Time Scaling",
+    "dynamic_keywords": [
+      "Optimizes Inference",
+      "Inference Time",
+      "Regression Reward"
+    ]
+  },
+  {
+    "id": "paper-92",
+    "title": "Block-Recurrent Dynamics in Vision Transformers",
+    "dynamic_keywords": [
+      "Recurrent Depth",
+      "Recurrent Structure",
+      "Vision Transformers"
+    ]
+  },
+  {
+    "id": "paper-93",
+    "title": "LightTact: A Visual-Tactile Fingertip Sensor for Deformation-Independent Contact Sensing",
+    "dynamic_keywords": [
+      "Light Contact",
+      "Contacting Surface",
+      "Contact Pixels"
+    ]
+  },
+  {
+    "id": "paper-94",
+    "title": "Racka: Efficient Hungarian LLM Adaptation on Academic Infrastructure",
+    "dynamic_keywords": [
+      "Language Adaptation",
+      "Large Language",
+      "Resource Languages"
+    ]
+  },
+  {
+    "id": "paper-95",
+    "title": "ChaosBench-Logic: A Benchmark for Logical and Symbolic Reasoning on Chaotic Dynamical Systems",
+    "dynamic_keywords": [
+      "Logic Benchmark",
+      "Chaosbench Logic",
+      "Language Models"
+    ]
+  },
+  {
+    "id": "paper-96",
+    "title": "IBISAgent: Reinforcing Pixel-Level Visual Reasoning in MLLMs for Universal Biomedical Object Referring and Segmentation",
+    "dynamic_keywords": [
+      "Agentic Mllm",
+      "Reformulates Segmentation",
+      "Reasoning Segmentation"
+    ]
+  },
+  {
+    "id": "paper-97",
+    "title": "MemRL: Self-Evolving Agents via Runtime Reinforcement Learning on Episodic Memory",
+    "dynamic_keywords": [
+      "Catastrophic Forgetting",
+      "Memory Memrl",
+      "Lifelong Agent"
+    ]
+  },
+  {
+    "id": "paper-98",
+    "title": "Succeeding at Scale: Automated Dataset Construction and Query-Side Adaptation for Multi-Tenant Search",
+    "dynamic_keywords": [
+      "Retrieval Benchmark",
+      "Curated Relevance",
+      "Search Adaptation"
+    ]
+  },
+  {
+    "id": "paper-99",
+    "title": "Controlled Self-Evolution for Algorithmic Code Optimization",
+    "dynamic_keywords": [
+      "Evolution Memory",
+      "Evolution Cse",
+      "Generation Iterative"
+    ]
+  },
+  {
+    "id": "paper-100",
+    "title": "DriveSafe: A Hierarchical Risk Taxonomy for Safety-Critical LLM-Based Driving Assistants",
+    "dynamic_keywords": [
+      "Characterize Safety",
+      "Safety Relevance",
+      "Validate Safety"
+    ]
+  },
+  {
+    "id": "paper-101",
+    "title": "TLSQL: Table Learning Structured Query Language",
+    "dynamic_keywords": [
+      "Learning Database",
+      "Database Engine",
+      "Table Learning"
+    ]
+  },
+  {
+    "id": "paper-102",
+    "title": "Numerical Aspects of Gradient Reconstruction Schemes Applied to Complex Geometries",
+    "dynamic_keywords": [
+      "Calculation Viscous",
+      "Interface Viscous",
+      "Integrated Aerodynamic"
+    ]
+  },
+  {
+    "id": "paper-103",
+    "title": "LLM-in-Sandbox Elicits General Agentic Intelligence",
+    "dynamic_keywords": [
+      "Sandbox Exploration",
+      "Sandbox Training",
+      "Sandbox Reinforcement"
+    ]
+  },
+  {
+    "id": "paper-104",
+    "title": "A Study of Improved Limiter Formulations for Second-Order Finite Volume Schemes Applied to Unstructured Grids",
+    "dynamic_keywords": [
+      "Meshes Limiter",
+      "Limiter Formulations",
+      "Turbulent Flows"
+    ]
+  },
+  {
+    "id": "paper-105",
+    "title": "Phase Transition for Budgeted Multi-Agent Synergy",
+    "dynamic_keywords": [
+      "Agent Scaling",
+      "Agent Communication",
+      "Failure Tasks"
+    ]
+  },
+  {
+    "id": "paper-106",
+    "title": "Real-Time Prediction of Lower Limb Joint Kinematics, Kinetics, and Ground Reaction Force using Wearable Sensors and Machine Learning",
+    "dynamic_keywords": [
+      "Limb Motion",
+      "Movement Biomechanics",
+      "Motion Capture"
+    ]
+  },
+  {
+    "id": "paper-107",
+    "title": "Hyperparameter Transfer with Mixture-of-Expert Layers",
+    "dynamic_keywords": [
+      "Trainable Parameters",
+      "Parameterization Transformer",
+      "Transformer Models"
+    ]
+  },
+  {
+    "id": "paper-108",
+    "title": "CausalEmbed: Auto-Regressive Multi-Vector Generation in Latent Space for Visual Document Embedding",
+    "dynamic_keywords": [
+      "Embedding Generation",
+      "Encourages Embedding",
+      "Visual Tokens"
+    ]
+  },
+  {
+    "id": "paper-109",
+    "title": "Symmetry Breaking in Transformers for Efficient and Interpretable Training",
+    "dynamic_keywords": [
+      "Attention Heads",
+      "Attention",
+      "Simple Memory"
+    ]
+  },
+  {
+    "id": "paper-110",
+    "title": "Accelerating nuclear-norm regularized low-rank matrix optimization through Burer-Monteiro decomposition",
+    "dynamic_keywords": [
+      "Matrix Optimization",
+      "Optimal Rank",
+      "Matrix Factorization"
+    ]
+  },
+  {
+    "id": "paper-111",
+    "title": "Scaling Laws for Function Diversity and Specialization Across Socioeconomic and Biological Complex Systems",
+    "dynamic_keywords": [
+      "Function Diversity",
+      "Function Abundances",
+      "Abundances Fundamental"
+    ]
+  },
+  {
+    "id": "paper-112",
+    "title": "Statistical properties of approximate geometric quantiles in infinite-dimensional Banach spaces",
+    "dynamic_keywords": [
+      "Quantiles Normed",
+      "Quantiles Estimation",
+      "Geometric Quantiles"
+    ]
+  },
+  {
+    "id": "paper-113",
+    "title": "Some Unpublished Letters by G\\\"odel and von Neumann in the Fraenkel Archive",
+    "dynamic_keywords": [
+      "Odel Johann",
+      "Von Neumann",
+      "Adolf Fraenkel"
+    ]
+  },
+  {
+    "id": "paper-114",
+    "title": "Scientific productivity as a random walk",
+    "dynamic_keywords": [
+      "Scientific Productivity",
+      "Productivity Trajectories",
+      "Productivity Random"
+    ]
+  },
+  {
+    "id": "paper-115",
+    "title": "Inequalities and asymptotics for hook numbers in restricted partitions",
+    "dynamic_keywords": [
+      "Equal Partitions",
+      "Partitions Distinct",
+      "Partitions Restricted"
+    ]
+  },
+  {
+    "id": "paper-116",
+    "title": "Compiling High-Level Neural Network Specifications into VNN-LIB Queries",
+    "dynamic_keywords": [
+      "Optimised Vnn",
+      "Algorithm Vehicle",
+      "Targeting Vnn"
+    ]
+  },
+  {
+    "id": "paper-117",
+    "title": "Instrumented Difference-in-Differences with Heterogeneous Treatment Effects",
+    "dynamic_keywords": [
+      "Instrumental Variable",
+      "Policy Adoption",
+      "Returns Schooling"
+    ]
+  },
+  {
+    "id": "paper-118",
+    "title": "Emergent Peer-to-Peer Multi-Hub Topology",
+    "dynamic_keywords": [
+      "Peer Network",
+      "Star Network",
+      "Hubs Emerge"
+    ]
+  },
+  {
+    "id": "paper-119",
+    "title": "Staging Blocked Evaluation over Structured Sparse Matrices",
+    "dynamic_keywords": [
+      "Sparse Matrices",
+      "Sparse Matrix",
+      "Specialized Sparse"
+    ]
+  },
+  {
+    "id": "paper-120",
+    "title": "Asymptotic windings, surface helicity and their applications in plasma physics",
+    "dynamic_keywords": [
+      "Surface Helicity",
+      "Toroidal Surfaces",
+      "Helicity Toroidal"
+    ]
+  },
+  {
+    "id": "paper-121",
+    "title": "SWAP-less Implementation of Quantum Algorithms",
+    "dynamic_keywords": [
+      "Qubits Improves",
+      "Qubit Overhead",
+      "Qubits Using"
+    ]
+  },
+  {
+    "id": "paper-122",
+    "title": "DiSPo: Diffusion-SSM based Policy Learning for Coarse-to-Fine Action Discretization",
+    "dynamic_keywords": [
+      "Learning Demonstrations",
+      "Grained Demonstrations",
+      "Learns"
+    ]
+  },
+  {
+    "id": "paper-123",
+    "title": "An Anatomy-Aware Shared Control Approach for Assisted Teleoperation of Lung Ultrasound Examinations",
+    "dynamic_keywords": [
+      "Teleoperation Baseline",
+      "Teleoperation Results",
+      "Standard Teleoperation"
+    ]
+  },
+  {
+    "id": "paper-124",
+    "title": "The Trudinger type inequality in fractional boundary Hardy inequality",
+    "dynamic_keywords": [
+      "Type Inequality",
+      "Fractional Boundary",
+      "Boundary Hardy"
+    ]
+  },
+  {
+    "id": "paper-125",
+    "title": "Shallow Diffuse: Robust and Invisible Watermarking through Low-Dimensional Subspaces in Diffusion Models",
+    "dynamic_keywords": [
+      "Watermarking",
+      "Existing Watermarking",
+      "Watermarking Methods"
+    ]
+  },
+  {
+    "id": "paper-126",
+    "title": "Normative Feeling: Socially Patterned Affective Mechanisms",
+    "dynamic_keywords": [
+      "Mood Evolved",
+      "Mood Mechanisms",
+      "Punishment Creates"
+    ]
+  },
+  {
+    "id": "paper-127",
+    "title": "PBP: Post-training Backdoor Purification for Malware Classifiers",
+    "dynamic_keywords": [
+      "Malware Classifiers",
+      "Backdoor Embeddings",
+      "Ml Malware"
+    ]
+  },
+  {
+    "id": "paper-128",
+    "title": "Controlling Dynamical Systems into Unseen Target States Using Machine Learning",
+    "dynamic_keywords": [
+      "Reservoir Computing",
+      "Generation Reservoir",
+      "Reservoir"
+    ]
+  },
+  {
+    "id": "paper-129",
+    "title": "Beyond CVaR: Leveraging Static Spectral Risk Measures for Enhanced Decision-Making in Distributional Reinforcement Learning",
+    "dynamic_keywords": [
+      "Learns Policies",
+      "Risk Measures",
+      "Risk Measure"
+    ]
+  },
+  {
+    "id": "paper-130",
+    "title": "A sub-Riemannian model of neural states in the primary motor cortex",
+    "dynamic_keywords": [
+      "Motor Cortex",
+      "Model Cortical",
+      "Cortical Activity"
+    ]
+  },
+  {
+    "id": "paper-131",
+    "title": "A Survey on Dynamic Neural Networks: from Computer Vision to Multi-modal Sensor Fusion",
+    "dynamic_keywords": [
+      "Dynamic Neural",
+      "Computations Dynamic",
+      "Vision Models"
+    ]
+  },
+  {
+    "id": "paper-132",
+    "title": "Nonlocal Electrical Detection of Reciprocal Orbital Edelstein Effect",
+    "dynamic_keywords": [
+      "Spin Orbital",
+      "Spin Transport",
+      "Spin Orbitronics"
+    ]
+  },
+  {
+    "id": "paper-133",
+    "title": "Bounding the Effect of Persuasion with Monotonicity Assumptions: Reassessing the Impact of TV Debates",
+    "dynamic_keywords": [
+      "Tv Debates",
+      "Televised Debates",
+      "Persuasive Communication"
+    ]
+  },
+  {
+    "id": "paper-134",
+    "title": "Right Reward Right Time for Federated Learning",
+    "dynamic_keywords": [
+      "Aware Incentive",
+      "Incentive Framework",
+      "Incentive Mechanisms"
+    ]
+  },
+  {
+    "id": "paper-135",
+    "title": "Automatic quality control in multi-centric fetal brain MRI super-resolution reconstruction",
+    "dynamic_keywords": [
+      "Image Quality",
+      "Brain Mri",
+      "Reliability Neuroimaging"
+    ]
+  },
+  {
+    "id": "paper-136",
+    "title": "Evaluating and improving wave and non-wave stress parametrisations for oceanic flows",
+    "dynamic_keywords": [
+      "Ocean Models",
+      "Stresses Ocean",
+      "Ocean Stress"
+    ]
+  },
+  {
+    "id": "paper-137",
+    "title": "biniLasso: Automated cut-point detection via sparse cumulative binarization",
+    "dynamic_keywords": [
+      "Cancer Datasets",
+      "Binilasso Sparse",
+      "Sparse Binilasso"
+    ]
+  },
+  {
+    "id": "paper-138",
+    "title": "Verified Program Extraction in Number Theory: The Fundamental Theorem of Arithmetic and Relatives",
+    "dynamic_keywords": [
+      "Minlog Formalisation",
+      "Haskell Code",
+      "Haskell"
+    ]
+  },
+  {
+    "id": "paper-139",
+    "title": "Learning in Structured Stackelberg Games",
+    "dynamic_keywords": [
+      "Stackelberg Games",
+      "Optimal Online",
+      "Optimal Regret"
+    ]
+  },
+  {
+    "id": "paper-140",
+    "title": "Analysis of Asynchronous Federated Learning: Unraveling the Interactions between Gradient Compression, Delay, and Data Heterogeneity",
+    "dynamic_keywords": [
+      "Federated Learning",
+      "Challenges Asynchronous",
+      "Asynflc"
+    ]
+  },
+  {
+    "id": "paper-141",
+    "title": "Asteroseismically Inferred Ages of 132,000 Red Giants with TESS",
+    "dynamic_keywords": [
+      "Galactic Archaeology",
+      "Stellar Evolution",
+      "Nasa Tess"
+    ]
+  },
+  {
+    "id": "paper-142",
+    "title": "Modern Causal Inference Approaches to Improve Power for Subgroup Analysis in Randomized Controlled Trials",
+    "dynamic_keywords": [
+      "Controlled Trials",
+      "Baseline Predictors",
+      "Leveraging Predictors"
+    ]
+  },
+  {
+    "id": "paper-143",
+    "title": "Defending the Edge: Representative-Attention Defense against Backdoor Attacks in Federated Learning",
+    "dynamic_keywords": [
+      "Adaptive Backdoor",
+      "Backdoor Attacks",
+      "Identifying Malicious"
+    ]
+  },
+  {
+    "id": "paper-144",
+    "title": "Backward Conformal Prediction",
+    "dynamic_keywords": [
+      "Conformal Prediction",
+      "Conformal Coverage",
+      "Guarantees Conformal"
+    ]
+  },
+  {
+    "id": "paper-145",
+    "title": "Ergotropic characterization of continuous variable entanglement",
+    "dynamic_keywords": [
+      "Entanglement Energy",
+      "Entangled States",
+      "Correlations Entanglement"
+    ]
+  },
+  {
+    "id": "paper-146",
+    "title": "LieAugmenter: Equivariant Learning by Discovering Symmetries with Learnable Augmentations",
+    "dynamic_keywords": [
+      "Symmetry Training",
+      "Symmetries Learnable",
+      "Learnable Augmentations"
+    ]
+  },
+  {
+    "id": "paper-147",
+    "title": "Constant Modulus Waveforms for IoT-Centric Integrated Sensing and Communications",
+    "dynamic_keywords": [
+      "Iot Communications",
+      "Carrier Waveforms",
+      "Radar Sensing"
+    ]
+  },
+  {
+    "id": "paper-148",
+    "title": "Foundational Correction of Z-Transform Theory: Restoring Mathematical Completeness in Sampled-Data Systems",
+    "dynamic_keywords": [
+      "Inverse Laplace",
+      "Laplace Transform",
+      "Dtft Aliasing"
+    ]
+  },
+  {
+    "id": "paper-149",
+    "title": "Robust Short-Term OEE Forecasting in Industry 4.0 via Topological Data Analysis",
+    "dynamic_keywords": [
+      "Environments Forecasting",
+      "Forecasting",
+      "Predictive Maintenance"
+    ]
+  },
+  {
+    "id": "paper-150",
+    "title": "Memory- and compute-optimized geometric multigrid GMGPolar for curvilinear coordinate representations -- Applications to fusion plasma",
+    "dynamic_keywords": [
+      "Multigrid Solver",
+      "Tokamak Fusion",
+      "Solver Gmgpolar"
+    ]
+  },
+  {
+    "id": "paper-151",
+    "title": "Large-scale distributed synchronization systems, using a cancel-on-completion redundancy mechanism",
+    "dynamic_keywords": [
+      "Server Queueing",
+      "Distributed Synchronization",
+      "Queueing"
+    ]
+  },
+  {
+    "id": "paper-152",
+    "title": "Thought Purity: A Defense Framework For Chain-of-Thought Attack",
+    "dynamic_keywords": [
+      "Malicious Logic",
+      "Thought Attacks",
+      "Vulnerability Adversarial"
+    ]
+  },
+  {
+    "id": "paper-153",
+    "title": "Beyond Model Base Retrieval: Weaving Knowledge to Master Fine-grained Neural Network Design",
+    "dynamic_keywords": [
+      "Architectural Search",
+      "Task Planners",
+      "Neural Architectural"
+    ]
+  },
+  {
+    "id": "paper-154",
+    "title": "Uncertainty-driven Embedding Convolution",
+    "dynamic_keywords": [
+      "Embedding Uncertainty",
+      "Text Embeddings",
+      "Embeddings Probabilistic"
+    ]
+  },
+  {
+    "id": "paper-155",
+    "title": "Risk-inclusive Contextual Bandits for Early Phase Clinical Trials",
+    "dynamic_keywords": [
+      "Contextual Bandit",
+      "Bandit Algorithm",
+      "Contextual Bandits"
+    ]
+  },
+  {
+    "id": "paper-156",
+    "title": "Conformal Unlearning: A New Paradigm for Unlearning in Conformal Predictors",
+    "dynamic_keywords": [
+      "Guarantees Unlearning",
+      "Machine Unlearning",
+      "Unlearning Effectiveness"
+    ]
+  },
+  {
+    "id": "paper-157",
+    "title": "Constraining Super-Heavy Dark Matter with the KM3-230213A Neutrino Event",
+    "dynamic_keywords": [
+      "Extragalactic Neutrino",
+      "Galactic Neutrino",
+      "Astrophysical Neutrinos"
+    ]
+  },
+  {
+    "id": "paper-158",
+    "title": "Impact of a Reflecting Material on a Search for Neutron--Antineutron Oscillations using Ultracold Neutrons",
+    "dynamic_keywords": [
+      "Neutron Antineutron",
+      "Antineutron Pseudopotential",
+      "Ultracold Neutrons"
+    ]
+  },
+  {
+    "id": "paper-159",
+    "title": "Iterative HOMER with uncertainties",
+    "dynamic_keywords": [
+      "Learned Fragmentation",
+      "Fragmentation Functions",
+      "Lund Fragmentation"
+    ]
+  },
+  {
+    "id": "paper-160",
+    "title": "Variable Matrix-Weighted Besov Spaces",
+    "dynamic_keywords": [
+      "Besov Space",
+      "Variable Besov",
+      "Convexification Eta"
+    ]
+  },
+  {
+    "id": "paper-161",
+    "title": "Nuclear state and level densities of actinides with the shell-model Monte Carlo",
+    "dynamic_keywords": [
+      "Mass Actinides",
+      "Fission Microscopic",
+      "Neutrons Total"
+    ]
+  },
+  {
+    "id": "paper-162",
+    "title": "Quasinormal Ringing and Unruh-Verlinde Temperature of the Frolov Black Hole",
+    "dynamic_keywords": [
+      "Black Hole",
+      "Quantum Gravity",
+      "Dirac Perturbations"
+    ]
+  },
+  {
+    "id": "paper-163",
+    "title": "Fostering Collective Discourse: A Distributed Role-Based Approach to Online News Commenting",
+    "dynamic_keywords": [
+      "Commenting Systems",
+      "Comments Building",
+      "Commenting Design"
+    ]
+  },
+  {
+    "id": "paper-164",
+    "title": "The average determinant of the reduced density matrices for each qubit as a global entanglement measure",
+    "dynamic_keywords": [
+      "Entanglement Measure",
+      "Qubit Tangle",
+      "Global Entanglement"
+    ]
+  },
+  {
+    "id": "paper-165",
+    "title": "Sextupole reduction via chaos suppression at the National Synchrotron Light Source II",
+    "dynamic_keywords": [
+      "Synchrotron Light",
+      "Minimizing Resonance",
+      "Sextupole Configurations"
+    ]
+  },
+  {
+    "id": "paper-166",
+    "title": "A Control Allocation Algorithm for Hypersonic Glide Vehicles with Input Limitations",
+    "dynamic_keywords": [
+      "Hypersonic Glide",
+      "Constrained Flight",
+      "Glide Vehicles"
+    ]
+  },
+  {
+    "id": "paper-167",
+    "title": "Towards Dynamic Quadrupedal Gaits: A Symmetry-Guided RL Hierarchy Enables Free Gait Transitions at Varying Speeds",
+    "dynamic_keywords": [
+      "Locomotion Strategies",
+      "Dynamic Legged",
+      "Quadrupedal Gaits"
+    ]
+  },
+  {
+    "id": "paper-168",
+    "title": "The collision and merger products of stars do not look alike: A magnetohydrodynamics comparison",
+    "dynamic_keywords": [
+      "Magnetohydrodynamics",
+      "Utilizes Magnetohydrodynamics",
+      "Magnetohydrodynamics Code"
+    ]
+  },
+  {
+    "id": "paper-169",
+    "title": "RM-RL: Role-Model Reinforcement Learning for Precise Robot Manipulation",
+    "dynamic_keywords": [
+      "Imitation Learning",
+      "Offline Reinforcement",
+      "Policy Learning"
+    ]
+  },
+  {
+    "id": "paper-170",
+    "title": "Why Prototypes Collapse: Diagnosing and Preventing Partial Collapse in Prototypical Self-Supervised Learning",
+    "dynamic_keywords": [
+      "Learns Prototypes",
+      "Prototypes Encoders",
+      "Encoders Prototypes"
+    ]
+  },
+  {
+    "id": "paper-171",
+    "title": "The effect of role-based resource allocation on epidemic dynamics",
+    "dynamic_keywords": [
+      "Allocation Epidemic",
+      "Epidemic Spread",
+      "Allocation Infection"
+    ]
+  },
+  {
+    "id": "paper-172",
+    "title": "A Cocktail-Party Benchmark: Multi-Modal dataset and Comparative Evaluation Results",
+    "dynamic_keywords": [
+      "Conversations Audio",
+      "Conversations Recordings",
+      "Overlapping Conversations"
+    ]
+  },
+  {
+    "id": "paper-173",
+    "title": "A Zero Added Loss Multiplexing (ZALM) Source Simulation",
+    "dynamic_keywords": [
+      "Loss Multiplexing",
+      "Multiplexing Dwdm",
+      "Multiplexing Zalm"
+    ]
+  },
+  {
+    "id": "paper-174",
+    "title": "ETHOS: A Robotic Encountered-Type Haptic Display for Social Interaction in Virtual Reality",
+    "dynamic_keywords": [
+      "Haptics Vr",
+      "Meaningful Haptics",
+      "Haptic Display"
+    ]
+  },
+  {
+    "id": "paper-175",
+    "title": "Autonomous and Distributed Synchronization and Restoration of an Islanded Network of Microgrids",
+    "dynamic_keywords": [
+      "Microgrids Mgs",
+      "Microgrids",
+      "Formation Microgrids"
+    ]
+  },
+  {
+    "id": "paper-176",
+    "title": "Self-Adaptive Graph Mixture of Models",
+    "dynamic_keywords": [
+      "Graph Neural",
+      "Networks Gnns",
+      "Gnn Models"
+    ]
+  },
+  {
+    "id": "paper-177",
+    "title": "H-LDM: Hierarchical Latent Diffusion Models for Controllable and Interpretable PCG Synthesis from Clinical Metadata",
+    "dynamic_keywords": [
+      "Phonocardiogram",
+      "Phonocardiogram Pcg",
+      "Cardiac Diagnostics"
+    ]
+  },
+  {
+    "id": "paper-178",
+    "title": "Revisiting model-independent constraints on spatial curvature and cosmic ladders calibration: updated and forecast analyses",
+    "dynamic_keywords": [
+      "Cosmological Observations",
+      "Validity Cosmological",
+      "Cosmic Chronometers"
+    ]
+  },
+  {
+    "id": "paper-179",
+    "title": "Leveraging Unlabeled Scans for NCCT Image Segmentation in Early Stroke Diagnosis: A Semi-Supervised GAN Approach",
+    "dynamic_keywords": [
+      "Stroke Dataset",
+      "Networks Gans",
+      "Gans Accurately"
+    ]
+  },
+  {
+    "id": "paper-180",
+    "title": "Sequential Fragmentation of C/2025 K1 (ATLAS) After Its Near-Sun Passage",
+    "dynamic_keywords": [
+      "Fragmented Comet",
+      "Given Comet",
+      "Comet Near"
+    ]
+  },
+  {
+    "id": "paper-181",
+    "title": "Learnability Window in Gated Recurrent Neural Networks",
+    "dynamic_keywords": [
+      "Backpropagation Time",
+      "Gradient Information",
+      "Learnability Governed"
+    ]
+  },
+  {
+    "id": "paper-182",
+    "title": "Breaking the Curse of Dimensionality: On the Stability of Modern Vector Retrieval",
+    "dynamic_keywords": [
+      "Efficient Retrieval",
+      "Vector Search",
+      "Search Retrieval"
+    ]
+  },
+  {
+    "id": "paper-183",
+    "title": "Harmonizing Generalization and Specialization: Uncertainty-Informed Collaborative Learning for Semi-supervised Medical Image Segmentation",
+    "dynamic_keywords": [
+      "Semi Supervised",
+      "Segmentation Leveraging",
+      "Fully Supervised"
+    ]
+  },
+  {
+    "id": "paper-184",
+    "title": "Certified-Everlasting Quantum NIZK Proofs",
+    "dynamic_keywords": [
+      "Knowledge Proofs",
+      "Zero Knowledge",
+      "Computational Zero"
+    ]
+  },
+  {
+    "id": "paper-185",
+    "title": "Translating Flow to Policy via Hindsight Online Imitation",
+    "dynamic_keywords": [
+      "Manipulation Tasks",
+      "Robot Actions",
+      "Imitation Policy"
+    ]
+  },
+  {
+    "id": "paper-186",
+    "title": "PINNs for Electromagnetic Wave Propagation",
+    "dynamic_keywords": [
+      "Training Electromagnetism",
+      "Pinn Training",
+      "Fdtd Fem"
+    ]
+  },
+  {
+    "id": "paper-187",
+    "title": "CONSENT: A Negotiation Framework for Leveraging User Flexibility in Vehicle-to-Building Charging under Uncertainty",
+    "dynamic_keywords": [
+      "Ev Charging",
+      "Building Ev",
+      "Charging Policy"
+    ]
+  },
+  {
+    "id": "paper-188",
+    "title": "Unveiling Fiber Networks and Core Formation in the DR21 South Filament",
+    "dynamic_keywords": [
+      "Star Forming",
+      "Continuum Peaks",
+      "13 Emission"
+    ]
+  },
+  {
+    "id": "paper-189",
+    "title": "Local Models for Special K\\\"ahler Metric Singularities Along the Discriminant Locus of the $\\mathrm{SL}_2(\\mathbb{C})$ Hitchin Base",
+    "dynamic_keywords": [
+      "Ahler Structures",
+      "Ahler Metric",
+      "Nodal Singularities"
+    ]
+  },
+  {
+    "id": "paper-190",
+    "title": "Measurement of the LCLS-II dark current using the LDMX Trigger Scintillator Prototype",
+    "dynamic_keywords": [
+      "Dark Matter",
+      "Dark Current",
+      "Electron Target"
+    ]
+  },
+  {
+    "id": "paper-191",
+    "title": "An open-source computational framework for immersed fluid-structure interaction modeling using FEBio and MFEM",
+    "dynamic_keywords": [
+      "Biomechanics Modeling",
+      "Fluid Solver",
+      "Mechanics Modeling"
+    ]
+  },
+  {
+    "id": "paper-192",
+    "title": "Stable Differentiable Modal Synthesis for Learning Nonlinear Dynamics",
+    "dynamic_keywords": [
+      "Learning Nonlinear",
+      "Modelling Nonlinear",
+      "Gradient Networks"
+    ]
+  },
+  {
+    "id": "paper-193",
+    "title": "Deep Submillimeter and Radio Observations in the SSA22 Field. III. Multiwavelength Identifications and Properties of the 850 $\\mu$m-selected Submillimeter Galaxies",
+    "dynamic_keywords": [
+      "186 Scuba",
+      "Scuba Observations",
+      "Infrared Luminosity"
+    ]
+  },
+  {
+    "id": "paper-194",
+    "title": "Fully 3D Unrolled Magnetic Resonance Fingerprinting Reconstruction via Staged Pretraining and Implicit Gridding",
+    "dynamic_keywords": [
+      "3D Deep",
+      "Learned 3D",
+      "3D Priors"
+    ]
+  },
+  {
+    "id": "paper-195",
+    "title": "Quantum Takes Flight: Two-Stage Resilient Topology Optimization for UAV Networks",
+    "dynamic_keywords": [
+      "Optimization Qubo",
+      "Uav Networks",
+      "Dynamic Uav"
+    ]
+  },
+  {
+    "id": "paper-196",
+    "title": "Empirical Likelihood-Based Fairness Auditing: Distribution-Free Certification and Flagging",
+    "dynamic_keywords": [
+      "Disparities Sensitive",
+      "Bias Fairness",
+      "Performance Disparities"
+    ]
+  },
+  {
+    "id": "paper-197",
+    "title": "From Implicit Ambiguity to Explicit Solidity: Diagnosing Interior Geometric Degradation in Neural Radiance Fields for Dense 3D Scene Understanding",
+    "dynamic_keywords": [
+      "Occluding 3D",
+      "View Reconstruction",
+      "Occluding Scenes"
+    ]
+  },
+  {
+    "id": "paper-198",
+    "title": "Forecasting Constraints on Cosmology and Modified Gravitational-wave Propagation by Strongly Lensed Gravitational Waves Associating with Galaxy Surveys",
+    "dynamic_keywords": [
+      "Gravitational Lensing",
+      "Lensing Gravitational",
+      "Delay Cosmography"
+    ]
+  },
+  {
+    "id": "paper-199",
+    "title": "Decoupled Diffusion Sampling for Inverse Problems on Function Spaces",
+    "dynamic_keywords": [
+      "Diffusion Learns",
+      "Diffusion Inverse",
+      "Inverse Pde"
+    ]
+  },
+  {
+    "id": "paper-200",
+    "title": "Minerva: Reinforcement Learning with Verifiable Rewards for Cyber Threat Intelligence LLMs",
+    "dynamic_keywords": [
+      "Threat Intelligence",
+      "Identifier Predictions",
+      "Intelligence Cti"
+    ]
+  },
+  {
+    "id": "paper-201",
+    "title": "Surrogate to Poincar\\'e inequalities on manifolds for structured dimension reduction in nonlinear feature spaces",
+    "dynamic_keywords": [
+      "Nonlinear Feature",
+      "Feature Maps",
+      "Functions Feature"
+    ]
+  },
+  {
+    "id": "paper-202",
+    "title": "Evaluating Metalinguistic Knowledge in Large Language Models across the World's Languages",
+    "dynamic_keywords": [
+      "Linguistic Benchmarks",
+      "Metalinguistic Knowledge",
+      "Global Linguistic"
+    ]
+  },
+  {
+    "id": "paper-203",
+    "title": "Pursuing Best Industrial Practices for Retrieval-Augmented Generation in the Medical Domain",
+    "dynamic_keywords": [
+      "Retrieval Augmented",
+      "Augmented Generation",
+      "Retrieval"
+    ]
+  },
+  {
+    "id": "paper-204",
+    "title": "FaithRL: Learning to Reason Faithfully through Step-Level Faithfulness Maximization",
+    "dynamic_keywords": [
+      "Verifiable Rewards",
+      "Reinforcement",
+      "Learning Verifiable"
+    ]
+  },
+  {
+    "id": "paper-205",
+    "title": "AutoFigure: Generating and Refining Publication-Ready Scientific Illustrations",
+    "dynamic_keywords": [
+      "Figurebench",
+      "Figurebench Large",
+      "Propose Autofigure"
+    ]
+  },
+  {
+    "id": "paper-206",
+    "title": "DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search",
+    "dynamic_keywords": [
+      "Deepread Structure",
+      "Deepread Autonomously",
+      "Deepread Constructs"
+    ]
+  },
+  {
+    "id": "paper-207",
+    "title": "From Sequential to Parallel: Reformulating Dynamic Programming as GPU Kernels for Large-Scale Stochastic Combinatorial Optimization",
+    "dynamic_keywords": [
+      "Batched Gpu",
+      "Stochastic Programming",
+      "Scenario Batched"
+    ]
+  },
+  {
+    "id": "paper-208",
+    "title": "Unveiling Implicit Advantage Symmetry: Why GRPO Struggles with Exploration and Difficulty Adaptation",
+    "dynamic_keywords": [
+      "Exploration Difficulty",
+      "Exploration Incentives",
+      "Difficulty Adaptation"
+    ]
+  },
+  {
+    "id": "paper-209",
+    "title": "LoGoSeg: Integrating Local and Global Features for Open-Vocabulary Semantic Segmentation",
+    "dynamic_keywords": [
+      "Mask Proposals",
+      "Segmentation Ovss",
+      "Vision Language"
+    ]
+  },
+  {
+    "id": "paper-210",
+    "title": "Current precision in interacting hybrid Normal-Superconducting systems",
+    "dynamic_keywords": [
+      "Superconducting Quantum",
+      "Superconducting Coherence",
+      "Normal Superconducting"
+    ]
+  },
+  {
+    "id": "paper-211",
+    "title": "MAU-GPT: Enhancing Multi-type Industrial Anomaly Understanding via Anomaly-aware and Generalist Experts Adaptation",
+    "dynamic_keywords": [
+      "Anomaly Aware",
+      "Industrial Anomaly",
+      "Automated Industrial"
+    ]
+  },
+  {
+    "id": "paper-212",
+    "title": "Landscaper: Understanding Loss Landscapes Through Multi-Dimensional Topological Analysis",
+    "dynamic_keywords": [
+      "Loss Landscapes",
+      "Loss Landscape",
+      "Analysis Landscaper"
+    ]
+  },
+  {
+    "id": "paper-213",
+    "title": "Fin-RATE: A Real-world Financial Analytics and Tracking Evaluation Benchmark for LLMs on SEC Filings",
+    "dynamic_keywords": [
+      "Regulatory Disclosures",
+      "Sec Filings",
+      "Firm Reporting"
+    ]
+  },
+  {
+    "id": "paper-214",
+    "title": "Charge Transfer with a Spin. I: A Generalized CASSCF Framework for Investigating Charge Transfer in the Presence of Spin-Orbit Coupling",
+    "dynamic_keywords": [
+      "Orbit Coupling",
+      "Spinor Orbitals",
+      "Electrons Approach"
+    ]
+  },
+  {
+    "id": "paper-215",
+    "title": "Charge Transfer with a Spin. II: A Framework for Diabatization which Localizes Charge and Spin",
+    "dynamic_keywords": [
+      "Charge Spin",
+      "Localizes Spins",
+      "Spin Orbit"
+    ]
+  },
+  {
+    "id": "paper-216",
+    "title": "MambaFusion: Adaptive State-Space Fusion for Multimodal 3D Object Detection",
+    "dynamic_keywords": [
+      "Cameras Lidar",
+      "Camera Lidar",
+      "Multimodal Fusion"
+    ]
+  },
+  {
+    "id": "paper-217",
+    "title": "When Evaluation Becomes a Side Channel: Regime Leakage and Structural Mitigations for Alignment Assessment",
+    "dynamic_keywords": [
+      "Regime Decodability",
+      "Regime Leakage",
+      "Regime Awareness"
+    ]
+  },
+  {
+    "id": "paper-218",
+    "title": "TreeTensor: Boost AI System on Nested Data with Constrained Tree-Like Tensor",
+    "dynamic_keywords": [
+      "Tensor Especially",
+      "Tensor",
+      "Benchmarks Treetensor"
+    ]
+  },
+  {
+    "id": "paper-219",
+    "title": "Reinforcement Inference: Leveraging Uncertainty for Self-Correcting Language Model Reasoning",
+    "dynamic_keywords": [
+      "Inference Improves",
+      "Reinforcement Inference",
+      "Aware Inference"
+    ]
+  },
+  {
+    "id": "paper-220",
+    "title": "Scale Contrastive Learning with Selective Attentions for Blind Image Quality Assessment",
+    "dynamic_keywords": [
+      "Perceptual Quality",
+      "Visual Attention",
+      "Quality Perception"
+    ]
+  },
+  {
+    "id": "paper-221",
+    "title": "Notation-level confounding: When inconsistent molecular notations mislead chemical language models",
+    "dynamic_keywords": [
+      "Chemical Language",
+      "Molecular Translation",
+      "Encodings Molecules"
+    ]
+  },
+  {
+    "id": "paper-222",
+    "title": "Magnetic dipole-dipole transition for scintillation quenching",
+    "dynamic_keywords": [
+      "Liquid Scintillators",
+      "Liquid Scintillator",
+      "Scintillation Quenching"
+    ]
+  },
+  {
+    "id": "paper-223",
+    "title": "Rapid prediction of cardiac activation in the left ventricle with geometric deep learning: a step towards cardiac resynchronization therapy planning",
+    "dynamic_keywords": [
+      "Shapes Pacing",
+      "Optimal Pacing",
+      "Cardiac Resynchronization"
+    ]
+  },
+  {
+    "id": "paper-224",
+    "title": "Learning Collective Variables from BioEmu with Time-Lagged Generation",
+    "dynamic_keywords": [
+      "Protein Folding",
+      "Folding Proteins",
+      "Molecular Dynamics"
+    ]
+  },
+  {
+    "id": "paper-225",
+    "title": "How the cosmic voids contribute to stalling and quenching the giant galaxies on their surfaces",
+    "dynamic_keywords": [
+      "Galaxies Void",
+      "Surface Galaxies",
+      "Galaxies Stellar"
+    ]
+  },
+  {
+    "id": "paper-226",
+    "title": "Performance Improvement of Deorbitalized Exchange-Correlation Functionals",
+    "dynamic_keywords": [
+      "Gradient Exchange",
+      "Deorbitalization Solids",
+      "Rpp Deorbitalization"
+    ]
+  },
+  {
+    "id": "paper-227",
+    "title": "TF-DWGNet: A Directed Weighted Graph Neural Network with Tensor Fusion for Multi-Omics Cancer Subtype Classification",
+    "dynamic_keywords": [
+      "Graph Neural",
+      "Cancer Datasets",
+      "Similarity Networks"
+    ]
+  },
+  {
+    "id": "paper-228",
+    "title": "Mixture of Inverse Gaussians for Hemodynamic Transport (MIGHT) in Multiple-Input Multiple-Output Vascular Networks",
+    "dynamic_keywords": [
+      "Transport Signaling",
+      "Molecule Transport",
+      "Hemodynamic Transport"
+    ]
+  },
+  {
+    "id": "paper-229",
+    "title": "Dual quantum locking: Dynamic coupling of hydrogen and water sublattices in hydrogen filled ice",
+    "dynamic_keywords": [
+      "Hydrogen Hydrates",
+      "Hydrogen Dynamics",
+      "Molecules Hydrogen"
+    ]
+  },
+  {
+    "id": "paper-230",
+    "title": "Exploring Immersive Social-Physical Interaction with Virtual Characters through Coordinated Robotic Encountered-Type Contact",
+    "dynamic_keywords": [
+      "Interaction Vr",
+      "Physical Interaction",
+      "Robotic Contact"
+    ]
+  },
+  {
+    "id": "paper-231",
+    "title": "The Determinism of Randomness: Latent Space Degeneracy in Diffusion Model",
+    "dynamic_keywords": [
+      "Isotropic Prior",
+      "Preserving Semantic",
+      "Prior Semantics"
+    ]
+  },
+  {
+    "id": "paper-232",
+    "title": "GPR: Towards a Generative Pre-trained One-Model Paradigm for Large-Scale Advertising Recommendation",
+    "dynamic_keywords": [
+      "Generative Recommendation",
+      "Advertising Recommendation",
+      "Trained Recommender"
+    ]
+  },
+  {
+    "id": "paper-233",
+    "title": "Zooming into the water snowline: high resolution water observations of the HL Tau disk",
+    "dynamic_keywords": [
+      "Protoplanetary Disks",
+      "Alma Observations",
+      "Protoplanetary"
+    ]
+  },
+  {
+    "id": "paper-234",
+    "title": "Photoluminescence Quenching in WSe$_2$ via p-Doping Induced by Functionalized Rylene Dyes",
+    "dynamic_keywords": [
+      "Metal Dichalcogenides",
+      "Hybrid Heterostructures",
+      "Dichalcogenides Tmds"
+    ]
+  },
+  {
+    "id": "paper-235",
+    "title": "Rotational Spectra and Search for Aromatic Imines: 9-Iminofluorene and Benzophenone imine",
+    "dynamic_keywords": [
+      "Aromatic Hydrocarbons",
+      "Molecular Cloud",
+      "Polycyclic Aromatic"
+    ]
+  },
+  {
+    "id": "paper-236",
+    "title": "Semantic Fusion: Verifiable Alignment in Decentralized Multi-Agent Systems",
+    "dynamic_keywords": [
+      "Semantic Coordination",
+      "Decentralized Semantic",
+      "Ensuring Semantic"
+    ]
+  },
+  {
+    "id": "paper-237",
+    "title": "Deep learning Based Correction Algorithms for 3D Medical Reconstruction in Computed Tomography and Macroscopic Imaging",
+    "dynamic_keywords": [
+      "3D Kidney",
+      "Organs Reconstructed",
+      "Decomposition Registration"
+    ]
+  },
+  {
+    "id": "paper-238",
+    "title": "Alternating Reinforcement Learning for Rubric-Based Reward Modeling in Non-Verifiable LLM Post-Training",
+    "dynamic_keywords": [
+      "Online Reinforcement",
+      "Reward Models",
+      "Optimizes Rubric"
+    ]
+  },
+  {
+    "id": "paper-239",
+    "title": "Cardinality-Preserving Attention Channels for Graph Transformers in Molecular Property Prediction",
+    "dynamic_keywords": [
+      "Drug Discovery",
+      "Molecules Code",
+      "Graph Views"
+    ]
+  },
+  {
+    "id": "paper-240",
+    "title": "NarraScore: Bridging Visual Narrative and Musical Dynamics via Hierarchical Affective Control",
+    "dynamic_keywords": [
+      "Compression Narrative",
+      "Narrascore Achieves",
+      "Narrative Aware"
+    ]
+  },
+  {
+    "id": "paper-241",
+    "title": "Timing and Memory Telemetry on GPUs for AI Governance",
+    "dynamic_keywords": [
+      "Compute Infrastructure",
+      "Accelerated Computing",
+      "Gpu Governance"
+    ]
+  },
+  {
+    "id": "paper-242",
+    "title": "Field-Dependent Qubit Flux Noise Simulated from Materials-Specific Disordered Exchange Interactions Between Paramagnetic Adsorbates",
+    "dynamic_keywords": [
+      "Spin Simulation",
+      "Spin Lattice",
+      "Spin Interaction"
+    ]
+  },
+  {
+    "id": "paper-243",
+    "title": "Macroscopic Spin-Orbit Interaction through Strong-Field Pumping of Inhomogeneously Aligned Molecular Ensemble",
+    "dynamic_keywords": [
+      "Macroscopic Spin",
+      "Molecular Ensemble",
+      "Aligned Molecular"
+    ]
+  },
+  {
+    "id": "paper-244",
+    "title": "DiffuReason: Bridging Latent Reasoning and Generative Refinement for Sequential Recommendation",
+    "dynamic_keywords": [
+      "Sequential Recommendation",
+      "Reasoning Diffusion",
+      "Latent Reasoning"
+    ]
+  },
+  {
+    "id": "paper-245",
+    "title": "TokaMark: A Comprehensive Benchmark for MAST Tokamak Plasma Models",
+    "dynamic_keywords": [
+      "Benchmark Fusion",
+      "Tokamak",
+      "Tokamaks"
+    ]
+  },
+  {
+    "id": "paper-246",
+    "title": "End-to-End Semantic ID Generation for Generative Advertisement Recommendation",
+    "dynamic_keywords": [
+      "Generative Advertisement",
+      "Generative Recommendation",
+      "Advertising Contexts"
+    ]
+  },
+  {
+    "id": "paper-247",
+    "title": "A Cognitive Distribution and Behavior-Consistent Framework for Black-Box Attacks on Recommender Systems",
+    "dynamic_keywords": [
+      "Subsequent Adversarial",
+      "Secure Recommender",
+      "Adversarial Manipulation"
+    ]
+  },
+  {
+    "id": "paper-248",
+    "title": "SnapMLA: Efficient Long-Context MLA Decoding via Hardware-Aware FP8 Quantized Pipelining",
+    "dynamic_keywords": [
+      "Fp8 Attention",
+      "Fp8 Pv",
+      "Pv Computation"
+    ]
+  },
+  {
+    "id": "paper-249",
+    "title": "Blind Gods and Broken Screens: Architecting a Secure, Intent-Centric Mobile Agent Operating System",
+    "dynamic_keywords": [
+      "App Agents",
+      "Secure Agent",
+      "Agent Os"
+    ]
+  },
+  {
+    "id": "paper-250",
+    "title": "Chatting with Images for Introspective Visual Thinking",
+    "dynamic_keywords": [
+      "Vision Language",
+      "Visual Reasoning",
+      "Visual Semantics"
+    ]
+  },
+  {
+    "id": "paper-251",
+    "title": "Response-Based Knowledge Distillation for Multilingual Jailbreak Prevention Unwittingly Compromises Safety",
+    "dynamic_keywords": [
+      "Multilingual Jailbreak",
+      "Jailbreak Prevention",
+      "Languages Distillation"
+    ]
+  },
+  {
+    "id": "paper-252",
+    "title": "Assessing LLM Reliability on Temporally Recent Open-Domain Questions",
+    "dynamic_keywords": [
+      "Semantic Alignment",
+      "Semantic Similarity",
+      "Question Answering"
+    ]
+  },
+  {
+    "id": "paper-253",
+    "title": "Evaluating Few-Shot Temporal Reasoning of LLMs for Human Activity Prediction in Smart Environments",
+    "dynamic_keywords": [
+      "Activity Predictions",
+      "Anticipating Human",
+      "Activity Prediction"
+    ]
+  },
+  {
+    "id": "paper-254",
+    "title": "Mechanistic Interpretability for Large Language Model Alignment: Progress, Challenges, and Future Directions",
+    "dynamic_keywords": [
+      "Mechanistic Interpretability",
+      "Interpretability Driven",
+      "Automated Interpretability"
+    ]
+  },
+  {
+    "id": "paper-255",
+    "title": "Mitigating Error Accumulation in Continuous Navigation via Memory-Augmented Kalman Filtering",
+    "dynamic_keywords": [
+      "Continuous Navigation",
+      "Sequential Prediction",
+      "State Estimation"
+    ]
+  },
+  {
+    "id": "paper-256",
+    "title": "DDL2PropBank Agent: Benchmarking Multi-Agent Frameworks' Developer Experience Through a Novel Relational Schema Mapping Task",
+    "dynamic_keywords": [
+      "Agent Frameworks",
+      "Agent Tool",
+      "Code Complexity"
+    ]
+  },
+  {
+    "id": "paper-257",
+    "title": "TRACE: Timely Retrieval and Alignment for Cybersecurity Knowledge Graph Construction and Expansion",
+    "dynamic_keywords": [
+      "Entity Extraction",
+      "Cybersecurity Data",
+      "Unstructured Cybersecurity"
+    ]
+  },
+  {
+    "id": "paper-258",
+    "title": "Protein Language Model Embeddings Improve Generalization of Implicit Transfer Operators",
+    "dynamic_keywords": [
+      "Molecular Dynamics",
+      "Efficient Boltzmann",
+      "Boltzmann Emulators"
+    ]
+  },
+  {
+    "id": "paper-259",
+    "title": "The Magic Correlations: Understanding Knowledge Transfer from Pretraining to Supervised Fine-Tuning",
+    "dynamic_keywords": [
+      "Pretraining Supervised",
+      "Transfer Pretraining",
+      "Benchmarks Scales"
+    ]
+  },
+  {
+    "id": "paper-260",
+    "title": "Credal Concept Bottleneck Models: Structural Separation of Epistemic and Aleatoric Uncertainty",
+    "dynamic_keywords": [
+      "Predictive Uncertainty",
+      "Uncertainty Prediction",
+      "Epistemic Uncertainty"
+    ]
+  },
+  {
+    "id": "paper-261",
+    "title": "Patch the Distribution Mismatch: RL Rewriting Agent for Stable Off-Policy SFT",
+    "dynamic_keywords": [
+      "Policy Learning",
+      "Learn Rewriting",
+      "Catastrophic Forgetting"
+    ]
+  },
+  {
+    "id": "paper-262",
+    "title": "Magnetic resonance in quantum computing and in accurate measurements of the nuclear moments of atoms and molecules",
+    "dynamic_keywords": [
+      "Nmr Electron",
+      "Precise Nmr",
+      "Nuclear Moments"
+    ]
+  },
+  {
+    "id": "paper-263",
+    "title": "MTFM: A Scalable and Alignment-free Foundation Model for Industrial Recommendation in Meituan",
+    "dynamic_keywords": [
+      "Query Attention",
+      "Recommendation Transformer",
+      "Training Inference"
+    ]
+  },
+  {
+    "id": "paper-264",
+    "title": "SurveyLens: A Research Discipline-Aware Benchmark for Automatic Survey Generation",
+    "dynamic_keywords": [
+      "Surveylens Discipline",
+      "Survey Generation",
+      "Introduce Surveylens"
+    ]
+  },
+  {
+    "id": "paper-265",
+    "title": "3D insights into SN 1987A: ALMA observations compared to hydrodynamical explosion simulations",
+    "dynamic_keywords": [
+      "Supernova Explosion",
+      "Hydrodynamical Supernova",
+      "Supernova"
+    ]
+  },
+  {
+    "id": "paper-266",
+    "title": "Voxtral Realtime",
+    "dynamic_keywords": [
+      "Voxtral Realtime",
+      "Offline Transcription",
+      "Realtime Trained"
+    ]
+  },
+  {
+    "id": "paper-267",
+    "title": "The PBSAI Governance Ecosystem: A Multi-Agent AI Reference Architecture for Securing Enterprise AI Estates",
+    "dynamic_keywords": [
+      "Secure Ai",
+      "Agent Ai",
+      "Enterprise Security"
+    ]
+  },
+  {
+    "id": "paper-268",
+    "title": "Are Aligned Large Language Models Still Misaligned?",
+    "dynamic_keywords": [
+      "Language Models",
+      "Misalignment Benchmarks",
+      "Large Language"
+    ]
+  },
+  {
+    "id": "paper-269",
+    "title": "Dissecting Subjectivity and the \"Ground Truth\" Illusion in Data Annotation",
+    "dynamic_keywords": [
+      "Human Disagreement",
+      "Reclaiming Disagreement",
+      "Truth Paradigm"
+    ]
+  },
+  {
+    "id": "paper-270",
+    "title": "Evaluating Alignment of Behavioral Dispositions in LLMs",
+    "dynamic_keywords": [
+      "Behavioral Dispositions",
+      "Responses Social",
+      "Behavior Eliciting"
+    ]
+  },
+  {
+    "id": "paper-271",
+    "title": "Initialization with a Fock State Cavity Mode in Real-Time Nuclear--Electronic Orbital Polariton Dynamics",
+    "dynamic_keywords": [
+      "Polaritonic Dynamics",
+      "Molecular Polaritons",
+      "Quantum Fq"
+    ]
+  },
+  {
+    "id": "paper-272",
+    "title": "Mathematical modeling of 1,2-propanediol utilization bacterial microcompartments in vivo activity",
+    "dynamic_keywords": [
+      "Enzymes Mcps",
+      "Metabolic Enzymes",
+      "Encapsulate Metabolic"
+    ]
+  },
+  {
+    "id": "paper-273",
+    "title": "Bi-Level Prompt Optimization for Multimodal LLM-as-a-Judge",
+    "dynamic_keywords": [
+      "Optimization Multimodal",
+      "Multimodal Models",
+      "Bottleneck Multimodal"
+    ]
+  },
+  {
+    "id": "paper-274",
+    "title": "Using astrochemical models to simulate reactivity experiments on cold surfaces",
+    "dynamic_keywords": [
+      "Astrochemical Models",
+      "Use Astrochemical",
+      "Astrochemical"
+    ]
+  },
+  {
+    "id": "paper-275",
+    "title": "General and Efficient Steering of Unconditional Diffusion",
+    "dynamic_keywords": [
+      "Gradient Guidance",
+      "Semantic Steering",
+      "Gradients Transferable"
+    ]
+  },
+  {
+    "id": "paper-276",
+    "title": "Vibrational Quantum-State-Controlled Reactivity in the O2+ + C3H4 Reaction",
+    "dynamic_keywords": [
+      "Molecule Reaction",
+      "Ion Molecule",
+      "Vibrational States"
+    ]
+  },
+  {
+    "id": "paper-277",
+    "title": "Out-of-equilibrium selection pressure enhances inference from protein sequence data",
+    "dynamic_keywords": [
+      "Inference Protein",
+      "Protein Sequences",
+      "Coevolution Driven"
+    ]
+  },
+  {
+    "id": "paper-278",
+    "title": "EasyMimic: A Low-Cost Framework for Robot Imitation Learning from Human Videos",
+    "dynamic_keywords": [
+      "Robot Imitation",
+      "Imitation Learning",
+      "Video Demonstrations"
+    ]
+  },
+  {
+    "id": "paper-279",
+    "title": "What if Agents Could Imagine? Reinforcing Open-Vocabulary HOI Comprehension through Generation",
+    "dynamic_keywords": [
+      "Imagination Robust",
+      "Generative Imagination",
+      "Reasoning Generative"
+    ]
+  },
+  {
+    "id": "paper-280",
+    "title": "Calibrating an Imperfect Auxiliary Predictor for Unobserved No-Purchase Choice",
+    "dynamic_keywords": [
+      "Purchase Estimates",
+      "Purchase Estimation",
+      "Preference Estimation"
+    ]
+  },
+  {
+    "id": "paper-281",
+    "title": "AgentLeak: A Full-Stack Benchmark for Privacy Leakage in Multi-Agent LLM Systems",
+    "dynamic_keywords": [
+      "Agent Messages",
+      "Privacy Leakage",
+      "Introduce Agentleak"
+    ]
+  },
+  {
+    "id": "paper-282",
+    "title": "Unifying Stable Optimization and Reference Regularization in RLHF",
+    "dynamic_keywords": [
+      "Reward Hacking",
+      "Regularization Strategies",
+      "Regularizing"
+    ]
+  },
+  {
+    "id": "paper-283",
+    "title": "Finite-time flocking of an infinite set of Cucker-Smale particles with sublinear velocity couplings",
+    "dynamic_keywords": [
+      "Flocking Infinite",
+      "Flocking Analysis",
+      "Extend Flocking"
+    ]
+  },
+  {
+    "id": "paper-284",
+    "title": "SemaPop: Semantic-Persona Conditioned Population Synthesis",
+    "dynamic_keywords": [
+      "Generative Population",
+      "Generative",
+      "Wasserstein Gan"
+    ]
+  },
+  {
+    "id": "paper-285",
+    "title": "PRIME: A Process-Outcome Alignment Benchmark for Verifiable Reasoning in Mathematics and Engineering",
+    "dynamic_keywords": [
+      "Learning Verifiable",
+      "Outcome Alignment",
+      "Outcome Verification"
+    ]
+  },
+  {
+    "id": "paper-286",
+    "title": "scPilot: Large Language Model Reasoning Toward Automated Single-Cell Analysis and Discovery",
+    "dynamic_keywords": [
+      "Bioinformatics Tools",
+      "Native Reasoning",
+      "Annotation Developmental"
+    ]
+  },
+  {
+    "id": "paper-287",
+    "title": "Differentiable Graph Neural Network Simulator for the Back-Analysis of Post-Liquefaction Residual Strength from Flow Failure Runout",
+    "dynamic_keywords": [
+      "Trained Simulations",
+      "Runout Simulations",
+      "Geotechnical Analysis"
+    ]
+  },
+  {
+    "id": "paper-288",
+    "title": "GP2F: Cross-Domain Graph Prompting with Adaptive Fusion of Pre-trained Graph Neural Networks",
+    "dynamic_keywords": [
+      "Prompt Learning",
+      "Learning Gpl",
+      "Trained Graph"
+    ]
+  },
+  {
+    "id": "paper-289",
+    "title": "First-order phase transition in atom-molecule quantum degenerate mixtures with coherent three-body recombination",
+    "dynamic_keywords": [
+      "Molecule Entanglement",
+      "Molecule Bose",
+      "Atom Molecule"
+    ]
+  },
+  {
+    "id": "paper-290",
+    "title": "ViTaS: Visual Tactile Soft Fusion Contrastive Learning for Visuomotor Learning",
+    "dynamic_keywords": [
+      "Tactile Representations",
+      "Visual Tactile",
+      "Tactile Features"
+    ]
+  },
+  {
+    "id": "paper-291",
+    "title": "EmoSpace: Fine-Grained Emotion Prototype Learning for Immersive Affective Content Generation",
+    "dynamic_keywords": [
+      "Emotion Prototypes",
+      "Emotional Panorama",
+      "Emotional Image"
+    ]
+  },
+  {
+    "id": "paper-292",
+    "title": "Quark Medical Alignment: A Holistic Multi-Dimensional Alignment and Collaborative Optimization Paradigm",
+    "dynamic_keywords": [
+      "Medical Alignment",
+      "Alignment Objectives",
+      "Alignment Paradigm"
+    ]
+  },
+  {
+    "id": "paper-293",
+    "title": "ANML: Attribution-Native Machine Learning with Guaranteed Robustness",
+    "dynamic_keywords": [
+      "Attribution Datasets",
+      "Attribution Native",
+      "Training Pipelines"
+    ]
+  },
+  {
+    "id": "paper-294",
+    "title": "A Hardware-Native Realisation of Semi-Empirical Electronic Structure Theory on Field-Programmable Gate Arrays",
+    "dynamic_keywords": [
+      "Fpga Dftb0",
+      "Diagonalisation Fpga",
+      "Molecular Modelling"
+    ]
+  },
+  {
+    "id": "paper-295",
+    "title": "Uncertainty-aware Generative Recommendation",
+    "dynamic_keywords": [
+      "Generative Recommendation",
+      "Aware Generative",
+      "Aware Optimization"
+    ]
+  },
+  {
+    "id": "paper-296",
+    "title": "Cross-Architecture Model Diffing with Crosscoders: Unsupervised Discovery of Differences Between LLMs",
+    "dynamic_keywords": [
+      "Feature Crosscoders",
+      "Architecture Crosscoder",
+      "Crosscoder Model"
+    ]
+  },
+  {
+    "id": "paper-297",
+    "title": "STVG-R1: Incentivizing Instance-Level Reasoning and Grounding in Videos via Reinforcement Learning",
+    "dynamic_keywords": [
+      "Vision Language",
+      "Visual Prompting",
+      "Visual Textual"
+    ]
+  },
+  {
+    "id": "paper-298",
+    "title": "Text2GQL-Bench: A Text to Graph Query Language Benchmark [Experiment, Analysis & Benchmark]",
+    "dynamic_keywords": [
+      "Text2Gql Bench",
+      "Query Language",
+      "Graph Database"
+    ]
+  },
+  {
+    "id": "paper-299",
+    "title": "AmbiBench: Benchmarking Mobile GUI Agents Beyond One-Shot Instructions in the Wild",
+    "dynamic_keywords": [
+      "Instruction Clarity",
+      "Execution Quality",
+      "Interaction Execution"
+    ]
+  },
+  {
+    "id": "paper-300",
+    "title": "Building Intelligent User Interfaces for Human-AI Alignment",
+    "dynamic_keywords": [
+      "Ai Alignment",
+      "Aligning Ai",
+      "Human Ai"
+    ]
+  },
+  {
+    "id": "paper-301",
+    "title": "RELATE: A Reinforcement Learning-Enhanced LLM Framework for Advertising Text Generation",
+    "dynamic_keywords": [
+      "Advertising Text",
+      "Policy Learning",
+      "Click Conversion"
+    ]
+  },
+  {
+    "id": "paper-302",
+    "title": "Evaluating LLM Safety Under Repeated Inference via Accelerated Prompt Stress Testing",
+    "dynamic_keywords": [
+      "Meaningful Reliability",
+      "Reliability Models",
+      "Safety Reliability"
+    ]
+  },
+  {
+    "id": "paper-303",
+    "title": "Beyond End-to-End Video Models: An LLM-Based Multi-Agent System for Educational Video Generation",
+    "dynamic_keywords": [
+      "Video Generation",
+      "Narration Agent",
+      "Videos Educational"
+    ]
+  },
+  {
+    "id": "paper-304",
+    "title": "Hi-SAM: A Hierarchical Structure-Aware Multi-modal Framework for Large-Scale Recommendation",
+    "dynamic_keywords": [
+      "Modal Semantics",
+      "Semantic Tokenizer",
+      "Modal Recommendation"
+    ]
+  },
+  {
+    "id": "paper-305",
+    "title": "Towards Sustainable Investment Policies Informed by Opponent Shaping",
+    "dynamic_keywords": [
+      "Economic Agents",
+      "Interplay Investors",
+      "Agent Learning"
+    ]
+  },
+  {
+    "id": "paper-306",
+    "title": "ULTRA:Urdu Language Transformer-based Recommendation Architecture",
+    "dynamic_keywords": [
+      "Urdu Content",
+      "Urdu News",
+      "Adaptability Urdu"
+    ]
+  },
+  {
+    "id": "paper-307",
+    "title": "Decision Support System for Technology Opportunity Discovery: An Application of the Schwartz Theory of Basic Values",
+    "dynamic_keywords": [
+      "Technology Readiness",
+      "Technology Opportunity",
+      "Innovation Outcomes"
+    ]
+  },
+  {
+    "id": "paper-308",
+    "title": "A$^{2}$V-SLP: Alignment-Aware Variational Modeling for Disentangled Sign Language Production",
+    "dynamic_keywords": [
+      "Variational Autoencoder",
+      "Sign Pose",
+      "Pose Sequences"
+    ]
+  },
+  {
+    "id": "paper-309",
+    "title": "Phaseless auxiliary-field quantum Monte Carlo method with spin-orbit coupling",
+    "dynamic_keywords": [
+      "Energy Molecule",
+      "Quantum Monte",
+      "Spin Orbit"
+    ]
+  },
+  {
+    "id": "paper-310",
+    "title": "Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems",
+    "dynamic_keywords": [
+      "Language Models",
+      "Answer Generation",
+      "Learnable Dirichlet"
+    ]
+  },
+  {
+    "id": "paper-311",
+    "title": "From Atoms to Trees: Building a Structured Feature Forest with Hierarchical Sparse Autoencoders",
+    "dynamic_keywords": [
+      "Sparse Autoencoders",
+      "Sparse Autoencoder",
+      "Autoencoders"
+    ]
+  },
+  {
+    "id": "paper-312",
+    "title": "Mitigating Mismatch within Reference-based Preference Optimization",
+    "dynamic_keywords": [
+      "Preference Alignment",
+      "Reference Mitigate",
+      "Reference Optimistic"
+    ]
+  },
+  {
+    "id": "paper-313",
+    "title": "MEME: Modeling the Evolutionary Modes of Financial Markets",
+    "dynamic_keywords": [
+      "Investment Narratives",
+      "Financial Markets",
+      "Evolving Logics"
+    ]
+  },
+  {
+    "id": "paper-314",
+    "title": "UPDA: Unsupervised Progressive Domain Adaptation for No-Reference Point Cloud Quality Assessment",
+    "dynamic_keywords": [
+      "Domain Adaptation",
+      "Feature Alignment",
+      "Grained Alignment"
+    ]
+  },
+  {
+    "id": "paper-315",
+    "title": "Calibrated Bayesian Deep Learning for Explainable Decision Support Systems Based on Medical Imaging",
+    "dynamic_keywords": [
+      "Accuracy Deep",
+      "Bayesian Deep",
+      "Predictive Accuracy"
+    ]
+  },
+  {
+    "id": "paper-316",
+    "title": "CSEval: A Framework for Evaluating Clinical Semantics in Text-to-Image Generation",
+    "dynamic_keywords": [
+      "Clinical Semantics",
+      "Clinical Semantic",
+      "Identifies Semantic"
+    ]
+  },
+  {
+    "id": "paper-317",
+    "title": "Protein Circuit Tracing via Cross-layer Transcoders",
+    "dynamic_keywords": [
+      "Predictors Protein",
+      "Protein Circuit",
+      "Protein Language"
+    ]
+  },
+  {
+    "id": "paper-318",
+    "title": "Two-photon-assisted collisions in ultracold gases of polar molecules II : Optical shielding of ultracold polar molecular collisions",
+    "dynamic_keywords": [
+      "Molecular Collisions",
+      "Colliding Laser",
+      "Ultracold Molecular"
+    ]
+  },
+  {
+    "id": "paper-319",
+    "title": "Choose Your Agent: Tradeoffs in Adopting AI Advisors, Coaches, and Delegates in Multi-Party Negotiation",
+    "dynamic_keywords": [
+      "Delegate Agent",
+      "Agent Capabilities",
+      "Online Behavioral"
+    ]
+  },
+  {
+    "id": "paper-320",
+    "title": "DeepSight: An All-in-One LM Safety Toolkit",
+    "dynamic_keywords": [
+      "Toolkit Deepsafe",
+      "Insight Deepsight",
+      "Deepsight"
+    ]
+  },
+  {
+    "id": "paper-321",
+    "title": "Few-Shot Design Optimization by Exploiting Auxiliary Information",
+    "dynamic_keywords": [
+      "Optimization Tasks",
+      "Task Optimization",
+      "Bayesian Optimization"
+    ]
+  },
+  {
+    "id": "paper-322",
+    "title": "P-GenRM: Personalized Generative Reward Model with Test-time User-based Scaling",
+    "dynamic_keywords": [
+      "Personalized Reward",
+      "Reward Models",
+      "Personalized Generative"
+    ]
+  },
+  {
+    "id": "paper-323",
+    "title": "Commencing-Student Enrolment Forecasting Under Data Sparsity with Time Series Foundation Models",
+    "dynamic_keywords": [
+      "Institutional Forecasting",
+      "Enrolment Forecasting",
+      "Forecasting Leakage"
+    ]
+  },
+  {
+    "id": "paper-324",
+    "title": "Capability-Oriented Training Induced Alignment Risk",
+    "dynamic_keywords": [
+      "Reward Tampering",
+      "Learn Exploit",
+      "Ai Safety"
+    ]
+  },
+  {
+    "id": "paper-325",
+    "title": "Towards Personalized Bangla Book Recommendation: A Large-Scale Multi-Entity Book Graph Dataset",
+    "dynamic_keywords": [
+      "Recommendation Models",
+      "Recommendation Dataset",
+      "Recommendation Task"
+    ]
+  },
+  {
+    "id": "paper-326",
+    "title": "Value Alignment Tax: Measuring Value Trade-offs in LLM Alignment",
+    "dynamic_keywords": [
+      "Value Alignment",
+      "Values Alignment",
+      "Characterizes Value"
+    ]
+  },
+  {
+    "id": "paper-327",
+    "title": "SafeNeuron: Neuron-Level Safety Alignment for Large Language Models",
+    "dynamic_keywords": [
+      "Safeneuron Neuron",
+      "Safeneuron",
+      "Safeneuron Significantly"
+    ]
+  },
+  {
+    "id": "paper-328",
+    "title": "Amortized Molecular Optimization via Group Relative Policy Optimization",
+    "dynamic_keywords": [
+      "Optimizes Molecules",
+      "Molecular Design",
+      "Instance Optimizers"
+    ]
+  },
+  {
+    "id": "paper-329",
+    "title": "How Sampling Shapes LLM Alignment: From One-Shot Optima to Iterative Dynamics",
+    "dynamic_keywords": [
+      "Preference Alignment",
+      "Policy Sampling",
+      "Structured Preferences"
+    ]
+  },
+  {
+    "id": "paper-330",
+    "title": "NeRF: Neural Radiance Field in 3D Vision: A Comprehensive Review (Updated Post-Gaussian Splatting)",
+    "dynamic_keywords": [
+      "Nerf Neural",
+      "View Synthesis",
+      "Nerf Models"
+    ]
+  },
+  {
+    "id": "paper-331",
+    "title": "Optimizing Sampling Patterns for Compressed Sensing MRI with Diffusion Generative Models",
+    "dynamic_keywords": [
+      "Mri Reconstruction",
+      "Iterative Reconstruction",
+      "Trained Diffusion"
+    ]
+  },
+  {
+    "id": "paper-332",
+    "title": "Impact Assessment of Cyberattacks in Inverter-Based Microgrids",
+    "dynamic_keywords": [
+      "Remote Attacks",
+      "Microgrid Mg",
+      "Power Grids"
+    ]
+  },
+  {
+    "id": "paper-333",
+    "title": "Modal Logical Neural Networks",
+    "dynamic_keywords": [
+      "Logical Neural",
+      "Modal Logic",
+      "Semantics Modal"
+    ]
+  },
+  {
+    "id": "paper-334",
+    "title": "Towards Autonomous Mathematics Research",
+    "dynamic_keywords": [
+      "Ai Mathematics",
+      "Assisted Mathematics",
+      "Aletheia Math"
+    ]
+  },
+  {
+    "id": "paper-335",
+    "title": "Althea: Human-AI Collaboration for Fact-Checking and Critical Reasoning",
+    "dynamic_keywords": [
+      "Evidence Retrieval",
+      "Guided Reasoning",
+      "Trustworthy Automated"
+    ]
+  },
+  {
+    "id": "paper-336",
+    "title": "AM-FM: A Foundation Model for Ambient Intelligence Through WiFi",
+    "dynamic_keywords": [
+      "Ambient Intelligence",
+      "Sensing Wifi",
+      "Ambient"
+    ]
+  },
+  {
+    "id": "paper-337",
+    "title": "DiSCoKit: An Open-Source Toolkit for Deploying Live LLM Experiences in Survey Research",
+    "dynamic_keywords": [
+      "Survey Platforms",
+      "Online Survey",
+      "Ai Interaction"
+    ]
+  },
+  {
+    "id": "paper-338",
+    "title": "How Many Features Can a Language Model Store Under the Linear Representation Hypothesis?",
+    "dynamic_keywords": [
+      "Compressed Sensing",
+      "Linear Compressed",
+      "Linear Decoding"
+    ]
+  },
+  {
+    "id": "paper-339",
+    "title": "Grok in the Wild: Characterizing the Roles and Uses of Large Language Models on Social Media",
+    "dynamic_keywords": [
+      "Social Media",
+      "Grok Responses",
+      "Large Language"
+    ]
+  },
+  {
+    "id": "paper-340",
+    "title": "Situated, Dynamic, and Subjective: Envisioning the Design of Theory-of-Mind-Enabled Everyday AI with Industry Practitioners",
+    "dynamic_keywords": [
+      "Ai Products",
+      "Ai Design",
+      "Ai Practitioners"
+    ]
+  },
+  {
+    "id": "paper-341",
+    "title": "When Visibility Outpaces Verification: Delayed Verification and Narrative Lock-in in Agentic AI Discourse",
+    "dynamic_keywords": [
+      "Ai Trust",
+      "Discussions Agentic",
+      "Credibility Visibility"
+    ]
+  },
+  {
+    "id": "paper-342",
+    "title": "When Audio-LLMs Don't Listen: A Cross-Linguistic Study of Modality Arbitration",
+    "dynamic_keywords": [
+      "Text Dominance",
+      "Audio Text",
+      "Speech Benchmarks"
+    ]
+  },
+  {
+    "id": "paper-343",
+    "title": "Implications of AI Involvement for Trust in Expert Advisory Workflows Under Epistemic Dependence",
+    "dynamic_keywords": [
+      "Ai Collaboration",
+      "Expertise Trust",
+      "Ai Involvement"
+    ]
+  },
+  {
+    "id": "paper-344",
+    "title": "CausalAgent: A Conversational Multi-Agent System for End-to-End Causal Inference",
+    "dynamic_keywords": [
+      "Causalagent Conversational",
+      "Ai Collaboration",
+      "Leveraging Interactive"
+    ]
+  },
+  {
+    "id": "paper-345",
+    "title": "Human-Like Gaze Behavior in Social Robots: A Deep Learning Approach Integrating Human and Non-Human Stimuli",
+    "dynamic_keywords": [
+      "Gaze Responses",
+      "Gaze Behavior",
+      "Gaze Based"
+    ]
+  },
+  {
+    "id": "paper-346",
+    "title": "RI-Mamba: Rotation-Invariant Mamba for Robust Text-to-Shape Retrieval",
+    "dynamic_keywords": [
+      "Orientational Embeddings",
+      "Canonical Poses",
+      "Pose"
+    ]
+  },
+  {
+    "id": "paper-347",
+    "title": "Mapping the Landscape of Affective Extended Reality: A Scoping Review of Biodata-Driven Systems for Understanding and Sharing Emotions",
+    "dynamic_keywords": [
+      "Emotions Hci",
+      "Emotion Sharing",
+      "Biodata Emotions"
+    ]
+  },
+  {
+    "id": "paper-348",
+    "title": "Efficient Crawling for Scalable Web Data Acquisition (Extended Version)",
+    "dynamic_keywords": [
+      "Web Crawling",
+      "Millions Webpages",
+      "Learns Hyperlinks"
+    ]
+  },
+  {
+    "id": "paper-349",
+    "title": "Who Does What? Archetypes of Roles Assigned to LLMs During Human-AI Decision-Making",
+    "dynamic_keywords": [
+      "Collaborative Decision",
+      "Choices Human",
+      "Human Llm"
+    ]
+  },
+  {
+    "id": "paper-350",
+    "title": "Automated Test Suite Enhancement Using Large Language Models with Few-shot Prompting",
+    "dynamic_keywords": [
+      "Tests Tools",
+      "Test Generation",
+      "Generated Tests"
+    ]
+  },
+  {
+    "id": "paper-351",
+    "title": "An ELIXIR scoping review on domain-specific evaluation metrics for synthetic data in life sciences",
+    "dynamic_keywords": [
+      "Synthetic Datasets",
+      "Synthetic Data",
+      "Assessing Synthetic"
+    ]
+  },
+  {
+    "id": "paper-352",
+    "title": "Tracker Installations Are Not Created Equal: Understanding Tracker Configuration of Form Data Collection",
+    "dynamic_keywords": [
+      "Google Trackers",
+      "Trackers Prevalent",
+      "Meta Trackers"
+    ]
+  },
+  {
+    "id": "paper-353",
+    "title": "evortran: a modern Fortran package for genetic algorithms with applications from LHC data fitting to LISA signal reconstruction",
+    "dynamic_keywords": [
+      "Optimization Evortran",
+      "Genetic Algorithms",
+      "Evolutionary Optimization"
+    ]
+  },
+  {
+    "id": "paper-354",
+    "title": "Invisible Saboteurs: Sycophantic LLMs Mislead Novices in Problem-Solving Tasks",
+    "dynamic_keywords": [
+      "Chatbots Findings",
+      "Perceptions Chatbots",
+      "Chatbots High"
+    ]
+  },
+  {
+    "id": "paper-355",
+    "title": "EvoXplain: When Machine Learning Models Agree on Predictions but Disagree on Why -- Measuring Mechanistic Multiplicity Across Training Runs",
+    "dynamic_keywords": [
+      "Model Explanations",
+      "Trained Model",
+      "Learning Models"
+    ]
+  },
+  {
+    "id": "paper-356",
+    "title": "Polymer-Agent: Large Language Model Agent for Polymer Design",
+    "dynamic_keywords": [
+      "Polymer Discovery",
+      "Polymer Generation",
+      "Novel Polymer"
+    ]
+  },
+  {
+    "id": "paper-357",
+    "title": "Doberman: a modular and distributed slow control system for small- to medium-scale experiments",
+    "dynamic_keywords": [
+      "Instrumentation Distributed",
+      "Underground Gamma",
+      "Observing Monitoring"
+    ]
+  },
+  {
+    "id": "paper-358",
+    "title": "Whispers of the Butterfly: A Research-through-Design Exploration of In-Situ Conversational AI Guidance in Large-Scale Outdoor MR Exhibitions",
+    "dynamic_keywords": [
+      "Tour Ai",
+      "Conversational Agents",
+      "Exploration Scripted"
+    ]
+  },
+  {
+    "id": "paper-359",
+    "title": "A Practical Guide to Agentic AI Transition in Organizations",
+    "dynamic_keywords": [
+      "Ai Workflows",
+      "Agentic Workflows",
+      "Automated Agentic"
+    ]
+  },
+  {
+    "id": "paper-360",
+    "title": "Anonymization-Enhanced Privacy Protection for Mobile GUI Agents: Available but Invisible",
+    "dynamic_keywords": [
+      "Anonymized Interfaces",
+      "Privacy Utility",
+      "Sensitive Ui"
+    ]
+  },
+  {
+    "id": "paper-361",
+    "title": "Understanding the Effects of AI-Assisted Critical Thinking on Human-AI Decision Making",
+    "dynamic_keywords": [
+      "Ai Decision",
+      "Ai",
+      "Critical Thinking"
+    ]
+  },
+  {
+    "id": "paper-362",
+    "title": "Investigating the Effects of Eco-Friendly Service Options on Rebound Behavior in Ride-Hailing",
+    "dynamic_keywords": [
+      "Eco Feedback",
+      "Hailing Trips",
+      "Ride Hailing"
+    ]
+  },
+  {
+    "id": "paper-363",
+    "title": "ECHO: An Open Research Platform for Evaluation of Chat, Human Behavior, and Outcomes",
+    "dynamic_keywords": [
+      "Evaluation Chat",
+      "Conversational Ai",
+      "Ai Evaluations"
+    ]
+  },
+  {
+    "id": "paper-364",
+    "title": "Disability-First AI Dataset Annotation: Co-designing Stuttered Speech Annotation Guidelines with People Who Stutter",
+    "dynamic_keywords": [
+      "Annotating Speech",
+      "Speech Annotation",
+      "Accessibility Datasets"
+    ]
+  },
+  {
+    "id": "paper-365",
+    "title": "Division of Labor and Collaboration Between Parents in Family Education",
+    "dynamic_keywords": [
+      "Homework Labor",
+      "Parental Labor",
+      "Homework Tutoring"
+    ]
+  },
+  {
+    "id": "paper-366",
+    "title": "Labor, Capital, and Machine: Toward a Labor Process Theory for HCI",
+    "dynamic_keywords": [
+      "Work Capitalism",
+      "Labor Theory",
+      "Labor Process"
+    ]
+  },
+  {
+    "id": "paper-367",
+    "title": "Pupillometry and Brain Dynamics for Cognitive Load in Working Memory",
+    "dynamic_keywords": [
+      "Cognitive Load",
+      "Eeg Provides",
+      "Monitoring Brain"
+    ]
+  },
+  {
+    "id": "paper-368",
+    "title": "From Interaction to Demonstration Quality in Virtual Reality: Effects of Interaction Modality and Visual Representation on Everyday Tasks",
+    "dynamic_keywords": [
+      "Usability Workload",
+      "Reality Vr",
+      "Virtual Reality"
+    ]
+  },
+  {
+    "id": "paper-369",
+    "title": "How Do Decoder-Only LLMs Perceive Users? Rethinking Attention Masking for User Representation Learning",
+    "dynamic_keywords": [
+      "Bidirectional Attention",
+      "Attention Optimization",
+      "Attention Masking"
+    ]
+  },
+  {
+    "id": "paper-370",
+    "title": "AMAP-APP: Efficient Segmentation and Morphometry Quantification of Fluorescent Microscopy Images of Podocytes",
+    "dynamic_keywords": [
+      "Automated Podocyte",
+      "Podocyte Morphometry",
+      "Podocyte Foot"
+    ]
+  },
+  {
+    "id": "paper-371",
+    "title": "Don't blame me: How Intelligent Support Affects Moral Responsibility in Human Oversight",
+    "dynamic_keywords": [
+      "Human Oversight",
+      "Oversight Intelligent",
+      "Oversight Experiment"
+    ]
+  },
+  {
+    "id": "paper-372",
+    "title": "RE-LLM: Refining Empathetic Speech-LLM Responses by Integrating Emotion Nuance",
+    "dynamic_keywords": [
+      "Emotion Embeddings",
+      "Speech Emotion",
+      "Empathy Metrics"
+    ]
+  },
+  {
+    "id": "paper-373",
+    "title": "See, Plan, Snap: Evaluating Multimodal GUI Agents in Scratch",
+    "dynamic_keywords": [
+      "Scratch Programs",
+      "Gui Agents",
+      "Multimodal Gui"
+    ]
+  },
+  {
+    "id": "paper-374",
+    "title": "Developing Neural Network-Based Gaze Control Systems for Social Robots",
+    "dynamic_keywords": [
+      "Predicting Gaze",
+      "Predict Gaze",
+      "Interactions Gaze"
+    ]
+  },
+  {
+    "id": "paper-375",
+    "title": "Reality Copilot: Voice-First Human-AI Collaboration in Mixed Reality Using Large Multimodal Models",
+    "dynamic_keywords": [
+      "Mixed Reality",
+      "Interaction Reality",
+      "Ai Assistant"
+    ]
+  },
+  {
+    "id": "paper-376",
+    "title": "Deep Room Impulse Response Completion",
+    "dynamic_keywords": [
+      "Reverberation Approximation",
+      "Reverberation",
+      "Spatial Audio"
+    ]
+  },
+  {
+    "id": "paper-377",
+    "title": "Deep Learning-Based Object Pose Estimation: A Comprehensive Survey",
+    "dynamic_keywords": [
+      "Object Pose",
+      "Poses Object",
+      "Pose Estimation"
+    ]
+  },
+  {
+    "id": "paper-378",
+    "title": "General Binding Affinity Guidance for Diffusion Models in Structure-Based Drug Design",
+    "dynamic_keywords": [
+      "Diffusion Guidance",
+      "Binding Affinity",
+      "Integrates Affinity"
+    ]
+  },
+  {
+    "id": "paper-379",
+    "title": "MAPS: A Multilingual Benchmark for Agent Performance and Security",
+    "dynamic_keywords": [
+      "Multilingual Agentic",
+      "Multilingual Benchmark",
+      "Ai Agents"
+    ]
+  },
+  {
+    "id": "paper-380",
+    "title": "Investigating A Geometrical Solution to the Vergence-Accommodation Conflict for Targeted Movements in Virtual Reality",
+    "dynamic_keywords": [
+      "Presented Vr",
+      "Movement Vr",
+      "Reality Vr"
+    ]
+  },
+  {
+    "id": "paper-381",
+    "title": "HealthProcessAI: A Technical Framework and Proof-of-Concept for LLM-Enhanced Healthcare Process Mining",
+    "dynamic_keywords": [
+      "Process Mining",
+      "Healthcare Workflows",
+      "Introduce Healthprocessai"
+    ]
+  },
+  {
+    "id": "paper-382",
+    "title": "PersonaX: Multimodal Datasets with LLM-Inferred Behavior Traits",
+    "dynamic_keywords": [
+      "Multimodal Trait",
+      "Facial Attributes",
+      "Biographical Attributes"
+    ]
+  },
+  {
+    "id": "paper-383",
+    "title": "Lowering Barriers to CAD Adoption: A Comparative Study of Augmented Reality-Based CAD (AR-CAD) and a Traditional CAD tool",
+    "dynamic_keywords": [
+      "Design Ar",
+      "Experienced Cad",
+      "Cad Interface"
+    ]
+  },
+  {
+    "id": "paper-384",
+    "title": "A large-scale pipeline for automatic corpus annotation using LLMs: variation and change in the English consider construction",
+    "dynamic_keywords": [
+      "Corpus Linguistic",
+      "Grammatical Annotation",
+      "Sophisticated Annotation"
+    ]
+  },
+  {
+    "id": "paper-385",
+    "title": "Space AI: Leveraging Artificial Intelligence for Space to Improve Life on Earth",
+    "dynamic_keywords": [
+      "Space Ai",
+      "Ai Mission",
+      "Ai Earth"
+    ]
+  },
+  {
+    "id": "paper-386",
+    "title": "REFA: Real-time Egocentric Facial Animations for Virtual Reality",
+    "dynamic_keywords": [
+      "Tracking Facial",
+      "Reality Vr",
+      "Custom Vr"
+    ]
+  },
+  {
+    "id": "paper-387",
+    "title": "MeepleLM: A Virtual Playtester Simulating Diverse Subjective Experiences",
+    "dynamic_keywords": [
+      "Agents Creative",
+      "Automating Critique",
+      "Player Archetypes"
+    ]
+  },
+  {
+    "id": "paper-388",
+    "title": "Does the solar oxygen abundance change over the solar cycle? An investigation into activity-induced variations of the O I infrared triplet",
+    "dynamic_keywords": [
+      "Inferred Solar",
+      "Solar Oxygen",
+      "Solar Activity"
+    ]
+  },
+  {
+    "id": "paper-389",
+    "title": "ProAgentBench: Evaluating LLM Agents for Proactive Assistance with Real-World Data",
+    "dynamic_keywords": [
+      "Benchmark Proactive",
+      "Learning Proactive",
+      "Proactive Agents"
+    ]
+  },
+  {
+    "id": "paper-390",
+    "title": "\"Death\" of a Chatbot: Investigating and Designing Toward Psychologically Safe Endings for Human-AI Relationships",
+    "dynamic_keywords": [
+      "Synthesizing Grief",
+      "Grief Users",
+      "Grief Psychology"
+    ]
+  },
+  {
+    "id": "paper-391",
+    "title": "GEBench: Benchmarking Image Generation Models as GUI Environments",
+    "dynamic_keywords": [
+      "Gui Generation",
+      "Generative Gui",
+      "Visual Fidelity"
+    ]
+  },
+  {
+    "id": "paper-392",
+    "title": "Uncertainty-Aware Multimodal Emotion Recognition through Dirichlet Parameterization",
+    "dynamic_keywords": [
+      "Multimodal Emotion",
+      "Emotion2Vec Speech",
+      "Aware Multimodal"
+    ]
+  },
+  {
+    "id": "paper-393",
+    "title": "AIDev: Studying AI Coding Agents on GitHub",
+    "dynamic_keywords": [
+      "Ai Agent",
+      "Coding Agents",
+      "Coding Agent"
+    ]
+  },
+  {
+    "id": "paper-394",
+    "title": "Towards Human-AI Accessibility Mapping in India: VLM-Guided Annotations and POI-Centric Analysis in Chandigarh",
+    "dynamic_keywords": [
+      "Accessibility Sidewalks",
+      "Crowdsourcing Accessibility",
+      "Project Sidewalk"
+    ]
+  },
+  {
+    "id": "paper-395",
+    "title": "Open Mathematical Tasks as a Didactic Response to Generative Artificial Intelligence in Post-AI Contexts",
+    "dynamic_keywords": [
+      "Mathematical Tasks",
+      "Making Mathematical",
+      "Mathematics Education"
+    ]
+  },
+  {
+    "id": "paper-396",
+    "title": "Measuring Inclusion in Interaction: Inclusion Analytics for Human-AI Collaborative Learning",
+    "dynamic_keywords": [
+      "Inclusion Analytics",
+      "Ai Collaborative",
+      "Examining Inclusion"
+    ]
+  },
+  {
+    "id": "paper-397",
+    "title": "PointAloud: An Interaction Suite for AI-Supported Pointer-Centric Think-Aloud Computing",
+    "dynamic_keywords": [
+      "Aloud Computing",
+      "Thoughts Software",
+      "Thinking Aloud"
+    ]
+  },
+  {
+    "id": "paper-398",
+    "title": "A11y-CUA Dataset: Characterizing the Accessibility Gap in Computer Use Agents",
+    "dynamic_keywords": [
+      "Interactions Sighted",
+      "Interactions Blind",
+      "Accessibility"
+    ]
+  },
+  {
+    "id": "paper-399",
+    "title": "Impossible by Degrees: Cohomology & Bistable Visual Paradox",
+    "dynamic_keywords": [
+      "Visual Paradoxes",
+      "Paradox Classes",
+      "Paradoxes"
+    ]
+  },
+  {
+    "id": "paper-400",
+    "title": "Beyond Input-Output: Rethinking Creativity through Design-by-Analogy in Human-AI Collaboration",
+    "dynamic_keywords": [
+      "Advancing Creativity",
+      "Creativity",
+      "Creative Process"
+    ]
+  },
+  {
+    "id": "paper-401",
+    "title": "Jokeasy: Exploring Human-AI Collaboration in Thematic Joke Generation",
+    "dynamic_keywords": [
+      "Interactive Joke",
+      "Humour Writing",
+      "Assisted Humour"
+    ]
+  },
+  {
+    "id": "paper-402",
+    "title": "Hand2World: Autoregressive Egocentric Interaction Generation via Free-Space Hand Gestures",
+    "dynamic_keywords": [
+      "Egocentric Interactive",
+      "3D Hand",
+      "Videos Hands"
+    ]
+  },
+  {
+    "id": "paper-403",
+    "title": "Assessment of jet inflow conditions on the development of supersonic jet flows",
+    "dynamic_keywords": [
+      "Jet Flows",
+      "Jet Flow",
+      "Viscous Inflow"
+    ]
+  },
+  {
+    "id": "paper-404",
+    "title": "Design and Evaluation of an Assisted Programming Interface for Behavior Trees in Robotics",
+    "dynamic_keywords": [
+      "Robot Programs",
+      "Behavior Tree",
+      "Ai Assistant"
+    ]
+  },
+  {
+    "id": "paper-405",
+    "title": "Human-AI Synergy Supports Collective Creative Search",
+    "dynamic_keywords": [
+      "Collective Creativity",
+      "Ai Collaboration",
+      "Creativity Hybrid"
+    ]
+  },
+  {
+    "id": "paper-406",
+    "title": "BERT Learns (and Teaches) Chemistry",
+    "dynamic_keywords": [
+      "Representations Molecules",
+      "Structure Molecules",
+      "Molecular Substructures"
+    ]
+  },
+  {
+    "id": "paper-407",
+    "title": "An Autonomous RL Agent Methodology for Dynamic Web UI Testing in a BDD Framework",
+    "dynamic_keywords": [
+      "Ui Testing",
+      "Testing Efforts",
+      "Testing Leveraging"
+    ]
+  },
+  {
+    "id": "paper-408",
+    "title": "Counting How the Seconds Count: Understanding Algorithm-User Interplay in TikTok via ML-driven Analysis of Video Content",
+    "dynamic_keywords": [
+      "Analysis Videos",
+      "Videos User",
+      "Recommendations Algorithms"
+    ]
+  },
+  {
+    "id": "paper-409",
+    "title": "Scene2Hap: Generating Scene-Wide Haptics for VR from Scene Context with Multimodal LLMs",
+    "dynamic_keywords": [
+      "Vibrotactile Feedback",
+      "Haptic Rendering",
+      "Objects Vr"
+    ]
+  },
+  {
+    "id": "paper-410",
+    "title": "OpticalAging: Real-time Presbyopia Simulation for Inclusive Design via Tunable Lenses",
+    "dynamic_keywords": [
+      "Perspective Presbyopia",
+      "Perceptual Challenges",
+      "Awareness Perceptual"
+    ]
+  },
+  {
+    "id": "paper-411",
+    "title": "Can AR Embedded Visualizations Foster Appropriate Reliance on AI in Spatial Decision-Making? A Comparative Study of AR X-Ray vs. 2D Minimap",
+    "dynamic_keywords": [
+      "Visualizations Augmented",
+      "Embedded Visualization",
+      "Embedded Visualizations"
+    ]
+  },
+  {
+    "id": "paper-412",
+    "title": "Non-Intrusive Automatic Speech Recognition Refinement: A Survey",
+    "dynamic_keywords": [
+      "Automatic Speech",
+      "Asr Refinement",
+      "Recognition Asr"
+    ]
+  },
+  {
+    "id": "paper-413",
+    "title": "Vibe Coding for Product Design: Understanding Product Team Members' Perceptions of AI-Assisted Design and Development",
+    "dynamic_keywords": [
+      "Driven Prototyping",
+      "Product Development",
+      "Creativity"
+    ]
+  },
+  {
+    "id": "paper-414",
+    "title": "RAVEN: Realtime Accessibility in Virtual ENvironments for Blind and Low-Vision People",
+    "dynamic_keywords": [
+      "Accessibility 3D",
+      "Personalized Accessibility",
+      "Runtime Accessibility"
+    ]
+  },
+  {
+    "id": "paper-415",
+    "title": "Storycaster: An AI System for Immersive Room-Based Storytelling",
+    "dynamic_keywords": [
+      "Storytelling Environments",
+      "Immersive Engaging",
+      "Ai Cave"
+    ]
+  },
+  {
+    "id": "paper-416",
+    "title": "Partnering with Generative AI: Experimental Evaluation of Human-Led and Model-Led Interaction in Human-AI Co-Creation",
+    "dynamic_keywords": [
+      "Idea Diversity",
+      "Idea Ownership",
+      "Idea Quality"
+    ]
+  },
+  {
+    "id": "paper-417",
+    "title": "GUI Knowledge Bench: Revealing the Knowledge Gap of VLMs in GUI Tasks",
+    "dynamic_keywords": [
+      "Gui Knowledge",
+      "Gui Tasks",
+      "Gui Task"
+    ]
+  },
+  {
+    "id": "paper-418",
+    "title": "MOTION: ML-Assisted On-Device Low-Latency Motion Recognition",
+    "dynamic_keywords": [
+      "Gesture Recognition",
+      "Sensor Wearable",
+      "Fall Detection"
+    ]
+  },
+  {
+    "id": "paper-419",
+    "title": "Prescriptive Artificial Intelligence: A Formal Paradigm for Auditing Human Decisions Under Uncertainty",
+    "dynamic_keywords": [
+      "Prescriptive Ai",
+      "Decision Imitation",
+      "Ai Decision"
+    ]
+  },
+  {
+    "id": "paper-420",
+    "title": "GTAvatar: Bridging Gaussian Splatting and Texture Mapping for Relightable and Editable Gaussian Avatars",
+    "dynamic_keywords": [
+      "Photorealistic Head",
+      "Head Textures",
+      "Reconstruction Photorealistic"
+    ]
+  },
+  {
+    "id": "paper-421",
+    "title": "umx version 4.5: Extending Twin and Path-Based SEM in R with CLPM, MR-DoC, Definition Variables, $\\Omega$nyx Integration, and Censored Distributions",
+    "dynamic_keywords": [
+      "Twin Models",
+      "Modelling Twin",
+      "Causal Twin"
+    ]
+  },
+  {
+    "id": "paper-422",
+    "title": "Investigating Data Pruning for Pretraining Biological Foundation Models at Scale",
+    "dynamic_keywords": [
+      "Downstream Bioinformatics",
+      "Bioinformatics Tasks",
+      "Rna Framework"
+    ]
+  },
+  {
+    "id": "paper-423",
+    "title": "Bidirectional human-AI collaboration in brain tumour assessments improves both expert human and AI agent performance",
+    "dynamic_keywords": [
+      "Ai Partnerships",
+      "Ai Healthcare",
+      "Ai Clinical"
+    ]
+  },
+  {
+    "id": "paper-424",
+    "title": "HEEGNet: Hyperbolic Embeddings for EEG",
+    "dynamic_keywords": [
+      "Eeg Hyperbolic",
+      "Hyperbolic Encoders",
+      "Hyperbolic Embeddings"
+    ]
+  },
+  {
+    "id": "paper-425",
+    "title": "CitiLink: Enhancing Municipal Transparency and Citizen Engagement through Searchable Meeting Minutes",
+    "dynamic_keywords": [
+      "Municipal Meeting",
+      "Information Minutes",
+      "Unstructured Municipal"
+    ]
+  },
+  {
+    "id": "paper-426",
+    "title": "Bowling with ChatGPT: On the Evolving User Interactions with Conversational AI Systems",
+    "dynamic_keywords": [
+      "Conversations Participants",
+      "Conversational Ai",
+      "Conversations"
+    ]
+  },
+  {
+    "id": "paper-427",
+    "title": "Reimagining Legal Fact Verification with GenAI: Toward Effective Human-AI Collaboration",
+    "dynamic_keywords": [
+      "Legal Accountability",
+      "Legal Workflow",
+      "Litigation Legal"
+    ]
+  },
+  {
+    "id": "paper-428",
+    "title": "What is Safety? Corporate Discourse, Power, and the Politics of Generative AI Safety",
+    "dynamic_keywords": [
+      "Safety Discourses",
+      "Safety Sociotechnical",
+      "Corporate Safety"
+    ]
+  },
+  {
+    "id": "paper-429",
+    "title": "A New Mode of Teaching Chinese as a Foreign Language from the Perspective of Smart System Studied by Using Rongzhixue",
+    "dynamic_keywords": [
+      "Bilingual Thinking",
+      "Method Bilingual",
+      "Teaching Chinese"
+    ]
+  },
+  {
+    "id": "paper-430",
+    "title": "A General Model for Retinal Segmentation and Quantification",
+    "dynamic_keywords": [
+      "Retinal Segmentation",
+      "Segmentation Standardized",
+      "Retinal Imaging"
+    ]
+  },
+  {
+    "id": "paper-431",
+    "title": "RECITYGEN -- Interactive and Generative Participatory Urban Design Tool with Latent Diffusion and Segment Anything",
+    "dynamic_keywords": [
+      "Urban Design",
+      "Participatory Urban",
+      "Images Urban"
+    ]
+  },
+  {
+    "id": "paper-432",
+    "title": "ADCanvas: Accessible and Conversational Audio Description Authoring for Blind and Low Vision Creators",
+    "dynamic_keywords": [
+      "Multimodal Authoring",
+      "Authoring Visual",
+      "Accessible Editor"
+    ]
+  },
+  {
+    "id": "paper-433",
+    "title": "Hybrid Feedback-Guided Optimal Learning for Wireless Interactive Panoramic Scene Delivery",
+    "dynamic_keywords": [
+      "Bandit Feedback",
+      "Feedback Bandit",
+      "Prediction Feedback"
+    ]
+  },
+  {
+    "id": "paper-434",
+    "title": "Scalable Dexterous Robot Learning with AR-based Remote Human-Robot Interactions",
+    "dynamic_keywords": [
+      "Learning Manipulation",
+      "Robot Learning",
+      "Manipulation Tasks"
+    ]
+  },
+  {
+    "id": "paper-435",
+    "title": "Forecasting Developer Environments with GenAI: A Research Perspective",
+    "dynamic_keywords": [
+      "Intelligence Genai",
+      "Genai Ides",
+      "Code Generation"
+    ]
+  },
+  {
+    "id": "paper-436",
+    "title": "GlobalWasteData: A Large-Scale, Integrated Dataset for Robust Waste Classification and Environmental Monitoring",
+    "dynamic_keywords": [
+      "Waste Classification",
+      "Waste Recognition",
+      "Waste Identification"
+    ]
+  },
+  {
+    "id": "paper-437",
+    "title": "HAIF: A Human-AI Integration Framework for Hybrid Team Operations",
+    "dynamic_keywords": [
+      "Teams Framework",
+      "Ai Integration",
+      "Tiered Autonomy"
+    ]
+  },
+  {
+    "id": "paper-438",
+    "title": "ONTrust: A Reference Ontology of Trust",
+    "dynamic_keywords": [
+      "Ontology Trust",
+      "Ontrust Ontology",
+      "Conceptualize Trust"
+    ]
+  },
+  {
+    "id": "paper-439",
+    "title": "Deepfake Synthesis vs. Detection: An Uneven Contest",
+    "dynamic_keywords": [
+      "Deepfake Detection",
+      "Deepfake Generation",
+      "Generation Deepfake"
+    ]
+  },
+  {
+    "id": "paper-440",
+    "title": "Efficient Binary Decision Diagram Manipulation in External Memory",
+    "dynamic_keywords": [
+      "Bdd Operations",
+      "Bdds Iterative",
+      "Diagrams Bdds"
+    ]
+  },
+  {
+    "id": "paper-441",
+    "title": "Warped Time Series Anomaly Detection",
+    "dynamic_keywords": [
+      "Anomaly Detection",
+      "Time Warping",
+      "Computing Anomaly"
+    ]
+  },
+  {
+    "id": "paper-442",
+    "title": "Construction of blow-up solutions for the focusing energy-critical nonlinear wave equation in $\\mathbb{R}^4$ and $\\mathbb{R}^5$",
+    "dynamic_keywords": [
+      "Polynomial Blow",
+      "Blow Precisely",
+      "Blow Rate"
+    ]
+  },
+  {
+    "id": "paper-443",
+    "title": "A Multi-Fidelity Control Variate Approach for Policy Gradient Estimation",
+    "dynamic_keywords": [
+      "Policy Gradients",
+      "Robotics Benchmark",
+      "Fidelity Simulations"
+    ]
+  },
+  {
+    "id": "paper-444",
+    "title": "Social Human Robot Embodied Conversation (SHREC) Dataset: Benchmarking Foundational Models' Social Reasoning",
+    "dynamic_keywords": [
+      "Social Robots",
+      "Robot Social",
+      "Robots Emotion"
+    ]
+  },
+  {
+    "id": "paper-445",
+    "title": "Fitts' List Revisited: An Empirical Study on Function Allocation in a Two-Agent Physical Human-Robot Collaborative Position/Force Task",
+    "dynamic_keywords": [
+      "Robot Participants",
+      "Robot Collaboration",
+      "Robot Compared"
+    ]
+  },
+  {
+    "id": "paper-446",
+    "title": "Distance-based measures and Epsilon-measures for measurement-based quantum resources",
+    "dynamic_keywords": [
+      "Quantum Resource",
+      "Quantum Resources",
+      "Quantifying Quantum"
+    ]
+  },
+  {
+    "id": "paper-447",
+    "title": "Robots that Evolve with Us: Modular Co-Design for Personalization, Adaptability, and Sustainability",
+    "dynamic_keywords": [
+      "Modular Robots",
+      "Modular Robotics",
+      "Modular Robot"
+    ]
+  },
+  {
+    "id": "paper-448",
+    "title": "Vi-TacMan: Articulated Object Manipulation via Vision and Touch",
+    "dynamic_keywords": [
+      "Articulated Manipulation",
+      "Manipulation Articulated",
+      "Articulated Objects"
+    ]
+  },
+  {
+    "id": "paper-449",
+    "title": "Model Predictive Control via Probabilistic Inference: A Tutorial and Survey",
+    "dynamic_keywords": [
+      "Mpc Robotics",
+      "Predictive Control",
+      "Control Inference"
+    ]
+  },
+  {
+    "id": "paper-450",
+    "title": "SKATER: Synthesized Kinematics for Advanced Traversing Efficiency on a Humanoid Robot via Roller Skate Swizzles",
+    "dynamic_keywords": [
+      "Locomotion Gaits",
+      "Gait Reward",
+      "Skating Learned"
+    ]
+  },
+  {
+    "id": "paper-451",
+    "title": "DexterCap: An Affordable and Automated System for Capturing Dexterous Hand-Object Manipulation",
+    "dynamic_keywords": [
+      "Motion Capture",
+      "Hand Manipulation",
+      "Articulated Objects"
+    ]
+  },
+  {
+    "id": "paper-452",
+    "title": "A Feature Extraction Pipeline for Enhancing Lightweight Neural Networks in sEMG-based Joint Torque Estimation",
+    "dynamic_keywords": [
+      "Surface Electromyography",
+      "Predict Elbow",
+      "Shoulder Movements"
+    ]
+  },
+  {
+    "id": "paper-453",
+    "title": "TreeLoc: 6-DoF LiDAR Global Localization in Forests via Inter-Tree Geometric Matching",
+    "dynamic_keywords": [
+      "Treeloc Lidar",
+      "Forests Gps",
+      "Navigation Forests"
+    ]
+  },
+  {
+    "id": "paper-454",
+    "title": "Structured Context Engineering for File-Native Agentic Systems: Evaluating Schema Accuracy, Format Effectiveness, and Multi-File Navigation at Scale",
+    "dynamic_keywords": [
+      "Context Engineering",
+      "Context Agents",
+      "Models Formats"
+    ]
+  },
+  {
+    "id": "paper-455",
+    "title": "Normal mode splitting induced synchronization blockade in coupled quantum van der Pol oscillators",
+    "dynamic_keywords": [
+      "Quantum Synchronization",
+      "Induced Synchronization",
+      "Synchronization Blockade"
+    ]
+  },
+  {
+    "id": "paper-456",
+    "title": "Humanoid Manipulation Interface: Humanoid Whole-Body Manipulation from Robot-Free Demonstrations",
+    "dynamic_keywords": [
+      "Humanoid Manipulation",
+      "Body Manipulation",
+      "Humanoid Skills"
+    ]
+  },
+  {
+    "id": "paper-457",
+    "title": "Distributed Omniscient Observers for Multi-Agent Systems: Design and Applications",
+    "dynamic_keywords": [
+      "Agents Observer",
+      "Artificial Swarms",
+      "Agent Systems"
+    ]
+  },
+  {
+    "id": "paper-458",
+    "title": "RLinf-USER: A Unified and Extensible System for Real-World Online Policy Learning in Embodied AI",
+    "dynamic_keywords": [
+      "Policy Learning",
+      "Edge Cloud",
+      "Cloud Edge"
+    ]
+  },
+  {
+    "id": "paper-459",
+    "title": "Dexterous Manipulation Policies from RGB Human Videos via 3D Hand-Object Trajectory Reconstruction",
+    "dynamic_keywords": [
+      "Manipulation Learning",
+      "Learned Grasping",
+      "Manipulation Training"
+    ]
+  },
+  {
+    "id": "paper-460",
+    "title": "STaR: Scalable Task-Conditioned Retrieval for Long-Horizon Multimodal Robot Memory",
+    "dynamic_keywords": [
+      "Planning Retrieval",
+      "Memories Contextual",
+      "Contextual Reasoning"
+    ]
+  },
+  {
+    "id": "paper-461",
+    "title": "A narrow-linewidth Brillouin laser for a two-photon rubidium frequency standard",
+    "dynamic_keywords": [
+      "Optical Clocks",
+      "Optical Frequency",
+      "Sbs Lasers"
+    ]
+  },
+  {
+    "id": "paper-462",
+    "title": "Scaling World Model for Hierarchical Manipulation Policies",
+    "dynamic_keywords": [
+      "Hierarchical Vision",
+      "Visual Goal",
+      "Manipulation Tasks"
+    ]
+  },
+  {
+    "id": "paper-463",
+    "title": "GAC-KAN: An Ultra-Lightweight GNSS Interference Classifier for GenAI-Powered Consumer Edge Devices",
+    "dynamic_keywords": [
+      "Powered Assistants",
+      "Vehicles Uavs",
+      "Jamming Dataset"
+    ]
+  },
+  {
+    "id": "paper-464",
+    "title": "Task-Oriented Direct-to-Cell Satellite Communications for Closed-Loop Operations",
+    "dynamic_keywords": [
+      "Sensing Collaborative",
+      "Satellite Communications",
+      "Collaborative Sensing"
+    ]
+  },
+  {
+    "id": "paper-465",
+    "title": "DD-MDN: Human Trajectory Forecasting with Diffusion-Based Dual Mixture Density Networks and Uncertainty Self-Calibration",
+    "dynamic_keywords": [
+      "Trajectory Forecasting",
+      "Human Trajectory",
+      "Diverse Trajectory"
+    ]
+  },
+  {
+    "id": "paper-466",
+    "title": "ABot-M0: VLA Foundation Model for Robotic Manipulation with Action Manifold Learning",
+    "dynamic_keywords": [
+      "Action Prediction",
+      "Action Manifold",
+      "Robot Actions"
+    ]
+  },
+  {
+    "id": "paper-467",
+    "title": "ReTracing: An Archaeological Approach Through Body, Machine, and Generative Systems",
+    "dynamic_keywords": [
+      "Agent Embodied",
+      "Ai Human",
+      "Interplay Ai"
+    ]
+  },
+  {
+    "id": "paper-468",
+    "title": "H-WM: Robotic Task and Motion Planning Guided by Hierarchical World Model",
+    "dynamic_keywords": [
+      "Robot Actions",
+      "Robotic Dataset",
+      "Vision Language"
+    ]
+  },
+  {
+    "id": "paper-469",
+    "title": "MolmoSpaces: A Large-Scale Open Ecosystem for Robot Navigation and Manipulation",
+    "dynamic_keywords": [
+      "Robot Benchmarks",
+      "Benchmarking Robot",
+      "Tasks Robots"
+    ]
+  },
+  {
+    "id": "paper-470",
+    "title": "Chemo Hydrodynamic Transceivers for the Internet of Bio-Nano Things, Modeling the Joint Propulsion Transmission trade-off",
+    "dynamic_keywords": [
+      "Nanomachines Navigate",
+      "Control Nanorobotic",
+      "Brownian Mobility"
+    ]
+  },
+  {
+    "id": "paper-471",
+    "title": "Human Preference Modeling Using Visual Motion Prediction Improves Robot Skill Learning from Egocentric Human Video",
+    "dynamic_keywords": [
+      "Robot Learning",
+      "Reward Learning",
+      "Learning Egocentric"
+    ]
+  },
+  {
+    "id": "paper-472",
+    "title": "Nonlinear integrated quantum photonics with AlGaAs",
+    "dynamic_keywords": [
+      "Photonics Algaas",
+      "Quantum Photonics",
+      "Integrated Photonics"
+    ]
+  },
+  {
+    "id": "paper-473",
+    "title": "A Grounded Theory of Debugging in Professional Software Engineering Practice",
+    "dynamic_keywords": [
+      "Professional Debugging",
+      "Debugging Strategies",
+      "Theorize Debugging"
+    ]
+  },
+  {
+    "id": "paper-474",
+    "title": "Ctrl&Shift: High-Quality Geometry-Aware Object Manipulation in Visual Generation",
+    "dynamic_keywords": [
+      "Preserving Scene",
+      "Object Manipulation",
+      "Explicit Camera"
+    ]
+  },
+  {
+    "id": "paper-475",
+    "title": "Target Induced Angle Grid Regularized Estimation for Ghost Identification in Automotive Radar",
+    "dynamic_keywords": [
+      "Radar Estimating",
+      "Ghost Targets",
+      "Automotive Radar"
+    ]
+  },
+  {
+    "id": "paper-476",
+    "title": "Effective Task Planning with Missing Objects using Learning-Informed Object Search",
+    "dynamic_keywords": [
+      "Task Planners",
+      "Planning Treats",
+      "Task Planning"
+    ]
+  },
+  {
+    "id": "paper-477",
+    "title": "Adaptive Milestone Reward for GUI Agents",
+    "dynamic_keywords": [
+      "Adaptive Reward",
+      "Reward Fidelity",
+      "Milestone Reward"
+    ]
+  },
+  {
+    "id": "paper-478",
+    "title": "Behavioral Indicators of Overreliance During Interaction with Conversational Language Models",
+    "dynamic_keywords": [
+      "Hiding Misinformation",
+      "Overreliance Users",
+      "Inherent Hallucinations"
+    ]
+  },
+  {
+    "id": "paper-479",
+    "title": "ReaDy-Go: Real-to-Sim Dynamic 3D Gaussian Splatting Simulation for Environment-Specific Visual Navigation with Moving Obstacles",
+    "dynamic_keywords": [
+      "Photorealistic Navigation",
+      "Navigation Simulation",
+      "Navigation Models"
+    ]
+  },
+  {
+    "id": "paper-480",
+    "title": "The Five Ws of Multi-Agent Communication: Who Talks to Whom, When, What, and Why -- A Survey from MARL to Emergent Language and LLMs",
+    "dynamic_keywords": [
+      "Agent Communication",
+      "Agent Collaboration",
+      "Agent Reinforcement"
+    ]
+  },
+  {
+    "id": "paper-481",
+    "title": "ABot-N0: Technical Report on the VLA Foundation Model for Versatile Embodied Navigation",
+    "dynamic_keywords": [
+      "Embodied Navigation",
+      "Agentic Navigation",
+      "Action Architecture"
+    ]
+  },
+  {
+    "id": "paper-482",
+    "title": "Clutt3R-Seg: Sparse-view 3D Instance Segmentation for Language-grounded Grasping in Cluttered Scenes",
+    "dynamic_keywords": [
+      "Grasping Cluttered",
+      "Grounded Grasping",
+      "Cluttered Scenes"
+    ]
+  },
+  {
+    "id": "paper-483",
+    "title": "WebTestPilot: Agentic End-to-End Web Testing against Natural Language Specification by Inferring Oracles with Symbolized GUI Elements",
+    "dynamic_keywords": [
+      "Bug Detection",
+      "Web Testing",
+      "Visual Language"
+    ]
+  },
+  {
+    "id": "paper-484",
+    "title": "HAIC: Humanoid Agile Object Interaction Control via Dynamics-Aware World Model",
+    "dynamic_keywords": [
+      "Underactuated Objects",
+      "Actuated Objects",
+      "Object Dynamics"
+    ]
+  },
+  {
+    "id": "paper-485",
+    "title": "Optimizing edge weights in the inverse eigenvector centrality problem",
+    "dynamic_keywords": [
+      "Node Centrality",
+      "Weighted Networks",
+      "Eigenvector Centrality"
+    ]
+  },
+  {
+    "id": "paper-486",
+    "title": "JEPA-VLA: Video Predictive Embedding is Needed for VLA Models",
+    "dynamic_keywords": [
+      "Pretrained Visual",
+      "Visual Representations",
+      "Embeddings Pretrained"
+    ]
+  },
+  {
+    "id": "paper-487",
+    "title": "LAMP: Implicit Language Map for Robot Navigation",
+    "dynamic_keywords": [
+      "Shot Navigation",
+      "Vision Language",
+      "Language Driven"
+    ]
+  },
+  {
+    "id": "paper-488",
+    "title": "Learning to Manipulate Anything: Revealing Data Scaling Laws in Bounding-Box Guided Policies",
+    "dynamic_keywords": [
+      "Semantic Motion",
+      "Manipulation Tasks",
+      "Robots Limitation"
+    ]
+  },
+  {
+    "id": "paper-489",
+    "title": "Verifiable Provenance of Software Artifacts with Zero-Knowledge Compilation",
+    "dynamic_keywords": [
+      "Attesting Compilation",
+      "Verifying Compiled",
+      "Compiled Binary"
+    ]
+  },
+  {
+    "id": "paper-490",
+    "title": "AlphaPROBE: Alpha Mining via Principled Retrieval and On-graph biased evolution",
+    "dynamic_keywords": [
+      "Factor Discovery",
+      "Factor Mining",
+      "Factor Evolution"
+    ]
+  },
+  {
+    "id": "paper-491",
+    "title": "General Humanoid Whole-Body Control via Pretraining and Fast Adaptation",
+    "dynamic_keywords": [
+      "Controller Humanoid",
+      "Body Control",
+      "Adaptation Learns"
+    ]
+  },
+  {
+    "id": "paper-492",
+    "title": "Robot-DIFT: Distilling Diffusion Features for Geometrically Consistent Visuomotor Control",
+    "dynamic_keywords": [
+      "Vision Encoders",
+      "Control Generative",
+      "Dataset Robot"
+    ]
+  },
+  {
+    "id": "paper-493",
+    "title": "Temporally Unified Adversarial Perturbations for Time Series Forecasting",
+    "dynamic_keywords": [
+      "Unified Adversarial",
+      "Generating Adversarial",
+      "Adversarial Perturbations"
+    ]
+  },
+  {
+    "id": "paper-494",
+    "title": "Accelerating Robotic Reinforcement Learning with Agent Guidance",
+    "dynamic_keywords": [
+      "Robot Learning",
+      "Agent Guided",
+      "Accelerate Training"
+    ]
+  },
+  {
+    "id": "paper-495",
+    "title": "Decentralized Multi-Robot Obstacle Detection and Tracking in a Maritime Scenario",
+    "dynamic_keywords": [
+      "Vessel Uav",
+      "Tracking Floating",
+      "Maritime Monitoring"
+    ]
+  },
+  {
+    "id": "paper-496",
+    "title": "Adaptive-Horizon Conflict-Based Search for Closed-Loop Multi-Agent Path Finding",
+    "dynamic_keywords": [
+      "Planning Horizon",
+      "Robot Fleets",
+      "Loop Planners"
+    ]
+  },
+  {
+    "id": "paper-497",
+    "title": "When would Vision-Proprioception Policies Fail in Robotic Manipulation?",
+    "dynamic_keywords": [
+      "Proprioception Policies",
+      "Proprioception Gradient",
+      "Proprioception Policy"
+    ]
+  },
+  {
+    "id": "paper-498",
+    "title": "HoloBrain-0 Technical Report",
+    "dynamic_keywords": [
+      "Benchmarks Robotwin",
+      "World Robot",
+      "Robot Embodiment"
+    ]
+  },
+  {
+    "id": "paper-499",
+    "title": "VLAW: Iterative Co-Improvement of Vision-Language-Action Policy and World Model",
+    "dynamic_keywords": [
+      "Learned Simulator",
+      "Real Robot",
+      "Vision Language"
+    ]
+  },
+  {
+    "id": "paper-500",
+    "title": "Affordance-Graphed Task Worlds: Self-Evolving Task Generation for Scalable Embodied Learning",
+    "dynamic_keywords": [
+      "Robotic Policies",
+      "Robot Learning",
+      "Training Robotic"
+    ]
+  },
+  {
+    "id": "paper-501",
+    "title": "RF-Modulated Adaptive Communication Improves Multi-Agent Robotic Exploration",
+    "dynamic_keywords": [
+      "Robotic Exploration",
+      "Faster Exploration",
+      "Exploration Environments"
+    ]
+  },
+  {
+    "id": "paper-502",
+    "title": "Unconditional full vector magnetometry using spin selectivity in Nitrogen Vacancy centers in diamond",
+    "dynamic_keywords": [
+      "Vector Magnetometry",
+      "Magnetic Sensors",
+      "Magnetometry Methods"
+    ]
+  },
+  {
+    "id": "paper-503",
+    "title": "Multi Graph Search for High-Dimensional Robot Motion Planning",
+    "dynamic_keywords": [
+      "Motion Planning",
+      "Planning Algorithms",
+      "Advances Planning"
+    ]
+  },
+  {
+    "id": "paper-504",
+    "title": "GigaBrain-0.5M*: a VLA That Learns From World Model-Based Reinforcement Learning",
+    "dynamic_keywords": [
+      "Task Adaptation",
+      "Manipulation Tasks",
+      "Language Action"
+    ]
+  },
+  {
+    "id": "paper-505",
+    "title": "Liquidation Dynamics in DeFi and the Role of Transaction Fees",
+    "dynamic_keywords": [
+      "Liquidation Collateral",
+      "Liquidations Expose",
+      "Profitable Liquidation"
+    ]
+  },
+  {
+    "id": "paper-506",
+    "title": "Embodied AI Agents for Team Collaboration in Co-located Blue-Collar Work",
+    "dynamic_keywords": [
+      "Collaborative Embodied",
+      "Embodied Ai",
+      "Collaborative Ai"
+    ]
+  },
+  {
+    "id": "paper-507",
+    "title": "Protocols for a many-body phase microscope: From coherences and d-wave superconductivity to Green's functions",
+    "dynamic_keywords": [
+      "Probe Quantum",
+      "Quantum Body",
+      "Phases Coherences"
+    ]
+  },
+  {
+    "id": "paper-508",
+    "title": "3DGSNav: Enhancing Vision-Language Model Reasoning for Object Navigation via Active 3D Gaussian Splatting",
+    "dynamic_keywords": [
+      "Perception 3Dgsnav",
+      "Vision Language",
+      "Object Navigation"
+    ]
+  },
+  {
+    "id": "paper-509",
+    "title": "Sub--Riemannian boundary value problems for Optimal Geometric Locomotion",
+    "dynamic_keywords": [
+      "Locomotion Efficiency",
+      "Locomotion Mechanisms",
+      "Locomotors Snakes"
+    ]
+  },
+  {
+    "id": "paper-510",
+    "title": "Making the complete OpenAIRE citation graph easily accessible through compact data representation",
+    "dynamic_keywords": [
+      "Openaire Graph",
+      "Citation Graph",
+      "Billion Citations"
+    ]
+  },
+  {
+    "id": "paper-511",
+    "title": "LDA-1B: Scaling Latent Dynamics Action Model via Universal Embodied Data Ingestion",
+    "dynamic_keywords": [
+      "Embodied Data",
+      "Embodied Interaction",
+      "Heterogeneous Embodied"
+    ]
+  },
+  {
+    "id": "paper-512",
+    "title": "Federated Gaussian Process Learning via Pseudo-Representations for Large-Scale Multi-Robot Systems",
+    "dynamic_keywords": [
+      "Variational Optimization",
+      "Sparse Variational",
+      "Robot Networks"
+    ]
+  },
+  {
+    "id": "paper-513",
+    "title": "Any House Any Task: Scalable Long-Horizon Planning for Abstract Human Tasks",
+    "dynamic_keywords": [
+      "Planning Learning",
+      "Prompting Planning",
+      "Planning"
+    ]
+  },
+  {
+    "id": "paper-514",
+    "title": "6G Empowering Future Robotics: A Vision for Next-Generation Autonomous Systems",
+    "dynamic_keywords": [
+      "Key Robotics",
+      "Robotics Generation",
+      "Robot Collaboration"
+    ]
+  },
+  {
+    "id": "paper-515",
+    "title": "Is Online Linear Optimization Sufficient for Strategic Robustness?",
+    "dynamic_keywords": [
+      "Bidding Algorithms",
+      "Regret Bidding",
+      "Bidding Algorithm"
+    ]
+  },
+  {
+    "id": "paper-516",
+    "title": "Stroke of Surprise: Progressive Semantic Illusions in Vector Sketching",
+    "dynamic_keywords": [
+      "Semantic Illusions",
+      "Visual",
+      "Visual Anagrams"
+    ]
+  },
+  {
+    "id": "paper-517",
+    "title": "Scaling Verification Can Be More Effective than Scaling Policy Learning for Vision-Language-Action Alignment",
+    "dynamic_keywords": [
+      "Language Action",
+      "Action Alignment",
+      "Vision Language"
+    ]
+  },
+  {
+    "id": "paper-518",
+    "title": "Robotic Depowdering for Additive Manufacturing Via Pose Tracking",
+    "dynamic_keywords": [
+      "Robotic Depowdering",
+      "Manufacturing Depowdering",
+      "Pose Powder"
+    ]
+  },
+  {
+    "id": "paper-519",
+    "title": "Dynamic Motion/Force Control of Mobile Manipulators via Extended-UDE",
+    "dynamic_keywords": [
+      "Mobile Manipulator",
+      "Mobile Manipulators",
+      "Manipulator Dynamics"
+    ]
+  },
+  {
+    "id": "paper-520",
+    "title": "Simplification of Robotic System Model Analysis by Petri Net Meta-Model Property Transfer",
+    "dynamic_keywords": [
+      "Hierarchical Petri",
+      "Petri Nets",
+      "Robotic Model"
+    ]
+  },
+  {
+    "id": "paper-521",
+    "title": "Deformation-Recovery Diffusion Model (DRDM): Instance Deformation for Image Manipulation and Synthesis",
+    "dynamic_keywords": [
+      "Preserving Deformation",
+      "Deformed Images",
+      "Deformation Recovery"
+    ]
+  },
+  {
+    "id": "paper-522",
+    "title": "Multi-Momentum Observer Contact Estimation for Bipedal Robots",
+    "dynamic_keywords": [
+      "Bipedal Robots",
+      "Humanoids Legs",
+      "Estimate Feet"
+    ]
+  },
+  {
+    "id": "paper-523",
+    "title": "HypeRL: Hypernetwork-Based Reinforcement Learning for Control of Parametrized Dynamical Systems",
+    "dynamic_keywords": [
+      "Reinforcement Learning",
+      "Deep Reinforcement",
+      "Learning Parameter"
+    ]
+  },
+  {
+    "id": "paper-524",
+    "title": "Interactive Virtual Games: Winners for Deep Cognitive Assessment",
+    "dynamic_keywords": [
+      "Pixeldopa Tasks",
+      "Cognitive Measures",
+      "Cognitive Task"
+    ]
+  },
+  {
+    "id": "paper-525",
+    "title": "Occlusion-Aware Consistent Model Predictive Control for Robot Navigation in Occluded Obstacle-Dense Environments",
+    "dynamic_keywords": [
+      "Robot Navigation",
+      "Optimal Trajectory",
+      "Steering Robot"
+    ]
+  },
+  {
+    "id": "paper-526",
+    "title": "Towards Safe Path Tracking Using the Simplex Architecture",
+    "dynamic_keywords": [
+      "Path Planning",
+      "Learning Controller",
+      "Planning Algorithms"
+    ]
+  },
+  {
+    "id": "paper-527",
+    "title": "Localized Graph-Based Neural Dynamics Models for Terrain Manipulation",
+    "dynamic_keywords": [
+      "Robot Terrain",
+      "Represent Terrain",
+      "Surfaces Terrain"
+    ]
+  },
+  {
+    "id": "paper-528",
+    "title": "Neural-Augmented Kelvinlet for Real-Time Soft Tissue Deformation Modeling",
+    "dynamic_keywords": [
+      "Surgical Simulation",
+      "Simulation Surgical",
+      "Surgical Ai"
+    ]
+  },
+  {
+    "id": "paper-529",
+    "title": "A New Dataset and Performance Benchmark for Real-time Spacecraft Segmentation in Onboard Computers",
+    "dynamic_keywords": [
+      "Spacecraft Segmentation",
+      "Spacecraft Images",
+      "Annotated Spacecraft"
+    ]
+  },
+  {
+    "id": "paper-530",
+    "title": "Fast Task Planning with Neuro-Symbolic Relaxation",
+    "dynamic_keywords": [
+      "Symbolic Planner",
+      "Symbolic Planners",
+      "Task Planning"
+    ]
+  },
+  {
+    "id": "paper-531",
+    "title": "Hybrid Reward-Driven Reinforcement Learning for Efficient Quantum Circuit Synthesis",
+    "dynamic_keywords": [
+      "Quantum Computing",
+      "Quantum Circuits",
+      "Quantum Circuit"
+    ]
+  },
+  {
+    "id": "paper-532",
+    "title": "Visio-Verbal Teleimpedance Interface: Enabling Semi-Autonomous Control of Physical Interaction via Eye Tracking and Speech",
+    "dynamic_keywords": [
+      "Interaction Gaze",
+      "Operator Gaze",
+      "Gaze Verbal"
+    ]
+  },
+  {
+    "id": "paper-533",
+    "title": "Self-Augmented Robot Trajectory: Efficient Imitation Learning via Safe Self-augmentation with Demonstrator-annotated Precision",
+    "dynamic_keywords": [
+      "Imitation Learning",
+      "Autonomous Augmentation",
+      "Training Robot"
+    ]
+  },
+  {
+    "id": "paper-534",
+    "title": "PA-MPPI: Perception-Aware Model Predictive Path Integral Control for Quadrotor Navigation in Unknown Environments",
+    "dynamic_keywords": [
+      "Optimizing Quadrotor",
+      "Quadrotor Navigation",
+      "Path Planning"
+    ]
+  },
+  {
+    "id": "paper-535",
+    "title": "HuMam: Humanoid Motion Control via End-to-End Deep Reinforcement Learning with Mamba",
+    "dynamic_keywords": [
+      "Humanoid Mc",
+      "Humanoid Locomotion",
+      "Jvrc Humanoid"
+    ]
+  },
+  {
+    "id": "paper-536",
+    "title": "Finite elements and moving asymptotes accelerate quantum optimal control -- FEMMA",
+    "dynamic_keywords": [
+      "Spin Optimal",
+      "Spin Manipulation",
+      "Quantum Optimal"
+    ]
+  },
+  {
+    "id": "paper-537",
+    "title": "H2OFlow: Grounding Human-Object Affordances with 3D Generative Models and Dense Diffused Flows",
+    "dynamic_keywords": [
+      "3D Affordances",
+      "3D Affordance",
+      "Learns 3D"
+    ]
+  },
+  {
+    "id": "paper-538",
+    "title": "Theoretical study of orbital torque: Dependence on ferromagnet species and nonmagnetic layer thickness",
+    "dynamic_keywords": [
+      "Nonmagnetic Metals",
+      "Ferromagnetic Metals",
+      "Metals Nms"
+    ]
+  },
+  {
+    "id": "paper-539",
+    "title": "A Multimodal Manufacturing Safety Chatbot: Knowledge Base Design, Benchmark Development, and Evaluation of Multiple RAG Approaches",
+    "dynamic_keywords": [
+      "Training Chatbot",
+      "Multimodal Chatbot",
+      "Requirements Chatbot"
+    ]
+  },
+  {
+    "id": "paper-540",
+    "title": "CostNav: A Navigation Benchmark for Real-World Economic-Cost Evaluation of Physical AI Agents",
+    "dynamic_keywords": [
+      "Navigation Benchmark",
+      "Navigation Benchmarks",
+      "Economic Navigation"
+    ]
+  },
+  {
+    "id": "paper-541",
+    "title": "City Navigation in the Wild: Exploring Emergent Navigation from Web-Scale Knowledge in MLLMs",
+    "dynamic_keywords": [
+      "Multimodal Reasoning",
+      "City Navigation",
+      "Navigation Agents"
+    ]
+  },
+  {
+    "id": "paper-542",
+    "title": "Learning-Based Automated Adversarial Red-Teaming for Robustness Evaluation of Large Language Models",
+    "dynamic_keywords": [
+      "Adversarial Prompt",
+      "Vulnerability Discovery",
+      "Guided Adversarial"
+    ]
+  },
+  {
+    "id": "paper-543",
+    "title": "First Multi-Constellation Observations of Navigation Satellite Signals in the Lunar Domain by Post-Processing L1/L5 IQ Snapshots",
+    "dynamic_keywords": [
+      "Constellation Signal",
+      "Constellations Observable",
+      "Navigation Satellite"
+    ]
+  },
+  {
+    "id": "paper-544",
+    "title": "Sim2real Image Translation Enables Viewpoint-Robust Policies from Fixed-Camera Datasets",
+    "dynamic_keywords": [
+      "Robot Demonstrations",
+      "Imitation Learning",
+      "Camera Viewpoints"
+    ]
+  },
+  {
+    "id": "paper-545",
+    "title": "Proactive Local-Minima-Free Robot Navigation: Blending Motion Prediction with Safe Control",
+    "dynamic_keywords": [
+      "Obstacle Avoidance",
+      "Learn Barrier",
+      "Learned Barrier"
+    ]
+  },
+  {
+    "id": "paper-546",
+    "title": "Risk Awareness Injection: Calibrating Vision-Language Models for Safety without Compromising Utility",
+    "dynamic_keywords": [
+      "Recognize Unsafe",
+      "Detect Unsafe",
+      "Vulnerable Multimodal"
+    ]
+  },
+  {
+    "id": "paper-547",
+    "title": "OAT: Ordered Action Tokenization",
+    "dynamic_keywords": [
+      "Action Tokenization",
+      "Learned Action",
+      "Robot Actions"
+    ]
+  },
+  {
+    "id": "paper-548",
+    "title": "Force Generative Imitation Learning: Bridging Position Trajectory and Force Commands through Control Technique",
+    "dynamic_keywords": [
+      "Force Control",
+      "Force Generative",
+      "Force Commands"
+    ]
+  },
+  {
+    "id": "paper-549",
+    "title": "Thermal odometry and dense mapping using learned odometry and Gaussian splatting",
+    "dynamic_keywords": [
+      "Thermal Odometry",
+      "Odometry Mapping",
+      "Thermal Cameras"
+    ]
+  }
+]

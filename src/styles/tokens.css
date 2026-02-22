@@ -1,0 +1,277 @@
+/* Design Tokens - source of truth for theme and component styling */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Index5 design language */
+  --mn-font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mn-bg-base: #f8fafc;
+  --mn-bg-card: #ffffff;
+  --mn-text-strong: #0f172a;
+  --mn-text-main: #334155;
+  --mn-text-muted: #64748b;
+  --mn-border-subtle: rgba(148, 163, 184, 0.2);
+  --mn-shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --mn-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --mn-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --mn-transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --mn-transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --mn-brand-50: #f0fdfa;
+  --mn-brand-100: #ccfbf1;
+  --mn-brand-200: #99f6e4;
+  --mn-brand-300: #5eead4;
+  --mn-brand-400: #2dd4bf;
+  --mn-brand-500: #14b8a6;
+  --mn-brand-600: #0d9488;
+  --mn-brand-700: #0f766e;
+  --mn-brand-800: #115e59;
+  --mn-brand-900: #134e4a;
+
+  /* Base card tokens */
+  --card-w: 236px;
+  --gutter: 16px;
+  --radius: 8px;
+  --fz-title: 14px;
+  --fz-meta: 12px;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  --shadow-hov: 0 6px 15px rgba(0, 0, 0, 0.16);
+  --dur: 0.25s;
+  --font-prim: var(--mn-font-sans);
+
+  /* Animation & modal tokens */
+  --dur-snap: 0.45s;
+  --rail-w: 84px;
+  --fz-body: 15px;
+  --fz-btn: 13px;
+  --backdrop: rgba(0, 0, 0, 0.72);
+  --prim: #ff2741;
+  --prim-hov: #d71e36;
+
+  /* Profile page tokens */
+  --avatar: 128px;
+  --tab-h: 44px;
+  --banner-h: 260px;
+  --counter-gap: 24px;
+
+  /* Dark theme colors (default) */
+  --bg-primary: #000; /* Page bg pure black as specified */
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-tertiary: #999999;
+  --border-primary: rgba(255, 255, 255, 0.08);
+  --border-secondary: rgba(255, 255, 255, 0.12);
+  
+  /* Compatibility aliases (legacy names kept to avoid regressions) */
+  --bg-page: var(--bg-primary);
+  --bg-panel: var(--bg-secondary);
+  --bg-card: var(--bg-secondary);
+  --hover-bg: var(--bg-tertiary);
+  --accent: var(--prim);
+  --border-color: var(--border-primary);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-accent: var(--prim);
+  --font-family-base: var(--font-prim);
+  --font-family-title: var(--font-prim);
+  --radius-sm: 6px;
+  --radius-lg: 12px;
+  --padding: 24px;
+  --font-base: 14px;
+  --font-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  
+  /* Additional theme tokens */
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.3);
+  --hover-bg-accent: rgba(255,0,54,0.05);
+  --error-bg: rgba(255, 0, 31, 0.05);
+  --error-glow: rgba(255, 0, 31, 0.2);
+  --error-hover: rgba(255,0,31,0.8);
+  --overlay-bg: rgba(0,0,0,0.5);
+  --overlay-dark: rgba(0,0,0,0.7);
+  --color-tertiary: var(--text-tertiary);
+
+  /* New aliases for gradual migration */
+  --bg-page-modern: var(--mn-bg-base);
+  --card-modern: var(--mn-bg-card);
+  --text-modern: var(--mn-text-main);
+  --text-modern-strong: var(--mn-text-strong);
+  --text-modern-muted: var(--mn-text-muted);
+  --border-modern: var(--mn-border-subtle);
+}
+
+/* Light theme colors */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #e5e5e5;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-tertiary: #666666;
+  --border-primary: rgba(0, 0, 0, 0.08);
+  --border-secondary: rgba(0, 0, 0, 0.12);
+  
+  /* Compatibility aliases for light theme */
+  --bg-page: var(--bg-primary);
+  --bg-panel: var(--bg-secondary);
+  --bg-card: var(--bg-secondary);
+  --hover-bg: var(--bg-tertiary);
+  --accent: var(--prim);
+  --border-color: var(--border-primary);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-accent: var(--prim);
+  --font-family-base: var(--font-prim);
+  --font-family-title: var(--font-prim);
+  --radius-sm: 6px;
+  --radius-lg: 12px;
+  --padding: 24px;
+  --font-base: 14px;
+  --font-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  
+  /* Additional theme tokens for light theme */
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+  --hover-bg-accent: rgba(255,0,54,0.08);
+  --error-bg: rgba(255, 0, 31, 0.08);
+  --error-glow: rgba(255, 0, 31, 0.3);
+  --error-hover: rgba(255,0,31,0.9);
+  --overlay-bg: rgba(0,0,0,0.3);
+  --overlay-dark: rgba(0,0,0,0.5);
+  --color-tertiary: var(--text-tertiary);
+
+  /* Light theme specific FAB colors */
+  --fab-bg: #fff;
+  --fab-bg-hov: #f5f5f5;
+  --fab-clr: #000;
+  --fab-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+:root {
+  /* FAB (Floating Action Button) tokens */
+  --fab: 44px;
+  --fab-bg: #111;
+  --fab-bg-hov: #222;
+  --fab-clr: #fff;
+  --fab-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  /* Responsive breakpoints */
+  --mobile-max: 767px;
+  --tablet-min: 768px;
+  --tablet-max: 1023px;
+  --desktop-min: 1024px;
+  --desktop-max: 1439px;
+  --large-min: 1440px;
+}
+
+/* Responsive design token overrides - More flexible breakpoints */
+@media (max-width: 480px) {
+  :root {
+    --banner-h: 180px;
+    --avatar: 96px;
+    --card-w: 160px;
+    --gutter: 8px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  :root {
+    --card-w: 180px;
+    --gutter: 10px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  :root {
+    --card-w: 200px;
+    --gutter: 12px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --card-w: 220px;
+    --gutter: 14px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  :root {
+    --card-w: 230px;
+    --gutter: 15px;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1400px) {
+  :root {
+    --card-w: 235px;
+    --gutter: 16px;
+  }
+}
+
+@media (min-width: 1401px) and (max-width: 1600px) {
+  :root {
+    --avatar: 148px;
+    --card-w: 240px;
+    --gutter: 16px;
+  }
+}
+
+@media (min-width: 1601px) and (max-width: 1920px) {
+  :root {
+    --avatar: 148px;
+    --card-w: 245px;
+    --gutter: 18px;
+  }
+}
+
+@media (min-width: 1921px) {
+  :root {
+    --avatar: 148px;
+    --card-w: 250px;
+    --gutter: 20px;
+  }
+}
+
+/* Utility classes */
+.fade-up {
+  opacity: 0;
+  transform: translateY(4px);
+  animation: fade-up 0.35s forwards;
+}
+
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: scaleX(0.3);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Base transitions */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-prim);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}

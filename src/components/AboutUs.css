@@ -1,0 +1,50 @@
+.about-page {
+  padding: 24px;
+}
+
+.about-card {
+  max-width: 960px;
+  margin: 0 auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.about-card h1 {
+  margin: 0 0 12px 0;
+  font-size: 28px;
+  color: var(--text-primary);
+}
+
+.about-card > p {
+  margin: 0 0 24px 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.about-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+
+.about-item h2 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.about-item p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}

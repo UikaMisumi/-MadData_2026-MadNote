@@ -1,0 +1,244 @@
+/* Masonry Grid Layout - Flexible Responsive Columns */
+.masonry {
+  /* Dynamic columns based on available space */
+  column-width: var(--card-w);
+  column-gap: var(--gutter);
+  column-fill: balance;
+  padding: 0 calc(var(--gutter) / 2);
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 400px;
+  
+  /* Ensure smooth column transitions */
+  transition: column-width 0.3s ease, column-gap 0.3s ease;
+}
+
+/* Cards in columns */
+.masonry .xh-post {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: var(--gutter);
+  break-inside: avoid;
+  position: relative;
+}
+
+/* Flexible responsive columns - no fixed breakpoints */
+@media (max-width: 480px) {
+  .masonry {
+    column-count: 2;
+    column-width: auto;
+    column-gap: var(--gutter);
+    padding: 0 12px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 16px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 18px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 20px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 28px;
+  }
+}
+
+@media (min-width: 1401px) and (max-width: 1600px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 32px;
+  }
+}
+
+@media (min-width: 1601px) and (max-width: 1920px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 36px;
+  }
+}
+
+@media (min-width: 1921px) {
+  .masonry {
+    column-width: var(--card-w);
+    padding: 0 40px;
+    max-width: 2000px;
+  }
+}
+
+/* Empty state */
+.masonry-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-secondary);
+}
+
+.masonry-empty p {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Loading state */
+.masonry-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: var(--color-secondary);
+}
+
+.masonry-loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-primary);
+  border-top: 2px solid var(--color-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Masonry specific card positioning */
+.masonry .xh-post {
+  transition: all var(--dur) cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.masonry .xh-post:not(.expanding):hover {
+  transform: translateY(-4px);
+  z-index: 10;
+}
+
+/* Different layout modes */
+.masonry.posts {
+  /* Default masonry for Posts tab */
+}
+
+.masonry.saves {
+  /* Masonry for Saved posts */
+}
+
+.masonry.likes {
+  /* Masonry for Liked posts */
+}
+
+/* Profile specific adjustments */
+.profile-page .masonry {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* Container width limits for different screen sizes */
+@media (min-width: 1921px) {
+  .masonry {
+    max-width: 2400px;
+  }
+}
+
+@media (min-width: 1601px) and (max-width: 1920px) {
+  .masonry {
+    max-width: 1800px;
+  }
+}
+
+@media (min-width: 1401px) and (max-width: 1600px) {
+  .masonry {
+    max-width: 1500px;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .masonry {
+    max-width: 1300px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .masonry {
+    max-width: 1100px;
+  }
+}
+
+/* Performance optimizations */
+.masonry {
+  will-change: height;
+  contain: layout;
+}
+
+.masonry .xh-post {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Smooth transitions for layout changes */
+.masonry.layout-changing .xh-post {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Hide cards during expansion animation to prevent visual glitches */
+.masonry .xh-post.expanding + .xh-post {
+  transition-delay: 0.1s;
+}
+
+/* Ensure proper stacking during morph */
+.masonry .xh-post.expanding {
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Row-by-row grid layout mode (used in profile liked/saved collections). */
+.masonry.rows {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gutter);
+  column-width: auto;
+  column-count: initial;
+  column-gap: 0;
+  padding: 0 calc(var(--gutter) / 2);
+}
+
+.masonry.rows .xh-post {
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  break-inside: auto;
+}
+
+@media (max-width: 900px) {
+  .masonry.rows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .masonry.rows {
+    grid-template-columns: 1fr;
+  }
+}

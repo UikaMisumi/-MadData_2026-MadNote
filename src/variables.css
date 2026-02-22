@@ -1,0 +1,82 @@
+:root {
+  /* Legacy variable bridge. Canonical tokens are defined in src/styles/tokens.css */
+  --bg-page: var(--bg-primary, #0d0d0d);
+  --bg-panel: var(--bg-secondary, #1a1a1a);
+  --bg-card: var(--bg-secondary, #1a1a1a);
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-tertiary: #999999;
+  --accent: var(--prim, #ff2741);
+  --hover-bg: var(--bg-tertiary, #2a2a2a);
+
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-tertiary: var(--text-tertiary);
+  --color-accent: var(--prim, #ff2741);
+  --border-color: var(--border-primary, rgba(255, 255, 255, 0.08));
+
+  --font-family-base: var(
+    --font-prim,
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif
+  );
+  --font-family-title: var(--font-prim, 'Inter', sans-serif);
+
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+
+  --font-base: 14px;
+  --font-sm: 12px;
+  --font-lg: 18px;
+  --font-xl: 20px;
+
+  --radius-sm: 8px;
+  --radius-lg: 12px;
+
+  --gutter: 16px;
+  --padding: 24px;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--color-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-base);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+.logo {
+  font-family: var(--font-family-title);
+  font-size: var(--font-xl);
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}

@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MadNote — The Academic Pulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4',
+              400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e',
+              800: '#115e59', 900: '#134e4a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg-base: #f8fafc;
+      --bg-card: #ffffff;
+      --border-subtle: rgba(148, 163, 184, 0.2);
+      --shadow-soft: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+      --shadow-hover: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+      --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * { -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: var(--bg-base);
+      background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(13, 148, 136, 0.06), transparent),
+                        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(99, 102, 241, 0.03), transparent);
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    .masonry-grid { column-gap: 1.5rem; }
+    @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
+    @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+
+    .card {
+      break-inside: avoid;
+      margin-bottom: 1.5rem;
+      transition: transform 0.35s var(--transition-smooth), box-shadow 0.35s var(--transition-smooth),
+                  border-color 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-subtle);
+    }
+    .card.selected {
+      box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.4), var(--shadow-hover);
+    }
+
+    .fade-up {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.5s var(--transition-spring), opacity 0.4s ease;
+    }
+    .fade-up.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .modal-overlay { backdrop-filter: blur(8px); }
+    .reveal-block {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeReveal 0.6s var(--transition-spring) forwards;
+    }
+    @keyframes fadeReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .graph-container { height: 450px; width: 100%; }
+
+    .fullscreen-modal {
+      transform: translateY(24px);
+      opacity: 0;
+      transition: transform 0.4s var(--transition-spring), opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .fullscreen-modal.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .expand-recommendation {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s var(--transition-spring), opacity 0.5s ease;
+      opacity: 0;
+    }
+    .expand-recommendation.active {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .like-pop { animation: pop 0.35s var(--transition-spring); }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+
+    .dropdown-menu {
+      transform-origin: top right;
+      transform: scale(0.96);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s;
+    }
+    .group-account:hover .dropdown-menu {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .chip {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 0.375rem 0.75rem;
+      border-radius: 9999px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .chip:hover { transform: scale(1.02); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+      box-shadow: 0 4px 14px -2px rgba(13, 148, 136, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      box-shadow: 0 6px 20px -2px rgba(13, 148, 136, 0.4);
+    }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .nav-blur {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .card-stagger-1 { animation-delay: 0.05s; }
+    .card-stagger-2 { animation-delay: 0.1s; }
+    .card-stagger-3 { animation-delay: 0.15s; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-animate-in {
+      animation: cardIn 0.6s var(--transition-spring) forwards;
+    }
+
+    .gradient-border {
+      position: relative;
+      background: linear-gradient(white, white) padding-box,
+                  linear-gradient(135deg, #0d9488, #6366f1) border-box;
+      border: 1px solid transparent;
+    }
+
+    .text-balance { text-wrap: balance; }
+  </style>
+</head>
+<body class="text-slate-800 font-sans antialiased selection:bg-brand-100 selection:text-brand-900 relative overflow-x-hidden">
+
+<nav class="sticky top-0 z-30 nav-blur px-6 py-3.5 flex justify-between items-center">
+  <div class="flex items-center gap-3 cursor-pointer group">
+    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-brand-500/25 group-hover:shadow-brand-500/35 transition-shadow">
+      M
+    </div>
+    <div>
+      <h1 class="font-extrabold text-xl tracking-tight text-slate-900">MadNote</h1>
+      <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider -mt-0.5">The Academic Pulse</p>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <div class="hidden md:flex gap-2">
+      <span class="chip bg-slate-900 text-white shadow-sm">All Feed</span>
+      <span class="chip bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-slate-50">Robotics</span>
+      <span class="chip bg-white/80 text-slate-600 border border-slate-200/80 hover:bg-slate-50">Foundation Models</span>
+    </div>
+
+    <div class="relative group-account z-50">
+      <div class="flex items-center gap-2.5 cursor-pointer py-1.5 pl-1 pr-3 rounded-full hover:bg-slate-100/80 transition-colors">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold text-xs shadow-md">JD</div>
+        <div class="hidden md:block text-left">
+          <p class="font-semibold text-slate-800 text-sm leading-tight">John Doe</p>
+          <p class="text-[11px] text-slate-500">Researcher</p>
+        </div>
+        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+      </div>
+      <div class="dropdown-menu absolute right-0 mt-2 w-52 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/50">
+          <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-0.5">Account</p>
+          <p class="text-sm font-medium text-slate-800 truncate">johndoe@university.edu</p>
+        </div>
+        <div class="py-2">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700 rounded-lg mx-2 transition-colors">Profile</a>
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700 rounded-lg mx-2 transition-colors">Library</a>
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-brand-50 hover:text-brand-700 rounded-lg mx-2 transition-colors">Settings</a>
+        </div>
+        <div class="py-2 border-t border-slate-100">
+          <a href="#" class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg mx-2 transition-colors">Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-6 py-10">
+  <header class="mb-10">
+    <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Discover</h2>
+    <p class="text-slate-600 text-sm mt-1">AI-powered semantic lineage & cross-disciplinary insights</p>
+  </header>
+
+  <div class="masonry-grid" id="card-container">
+    <div class="card card-animate-in card-stagger-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-slate-200/80 relative group flex flex-col cursor-pointer" style="opacity:0">
+      <input type="checkbox" class="paper-checkbox absolute top-5 right-5 w-5 h-5 accent-brand-600 opacity-0 group-hover:opacity-100 transition-opacity z-10 cursor-pointer rounded" />
+      <div class="flex items-center gap-2 mb-3.5">
+        <span class="text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg text-xs font-semibold">Robotics</span>
+        <span class="text-slate-400 text-xs font-medium">968 likes</span>
+      </div>
+      <h2 class="text-lg font-bold leading-snug mb-3 text-slate-900 text-balance pointer-events-none">TOM-GS: Thermal Odometry & Dense Mapping with Gaussian Splatting</h2>
+      <div class="bg-amber-50/80 border-l-[3px] border-amber-400 p-3 rounded-r-lg mb-4 pointer-events-none">
+        <p class="text-sm text-amber-900/90 font-medium leading-relaxed"><strong class="font-semibold">TL;DR</strong> — First Gaussian Splatting SLAM for thermal cameras, outperforming existing methods in dark & smoke environments.</p>
+      </div>
+      <ul class="text-sm text-slate-600 space-y-2 mb-4 pointer-events-none">
+        <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">•</span><span><strong class="text-slate-700">Innovation:</strong> Learning-based odometry + GS-based dense mapping.</span></li>
+        <li class="flex items-start gap-2"><span class="text-amber-500 mt-0.5">•</span><span><strong class="text-slate-700">Robustness:</strong> Works in darkness, dust, and smoke.</span></li>
+      </ul>
+      <div class="mt-auto pt-4 border-t border-slate-100">
+        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Related</p>
+        <div class="flex flex-col gap-1.5">
+          <a href="#" class="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline line-clamp-1 relative z-10">Visual-Inertial Odometry in Adverse Weather</a>
+          <a href="#" class="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline line-clamp-1 relative z-10">3D Gaussian Splatting for Real-Time Radiance Fields</a>
+        </div>
+      </div>
+      <button onclick="openGraphModal('TOM-GS: Thermal Odometry')" class="mt-4 w-full bg-slate-50 hover:bg-brand-50 text-brand-700 font-semibold py-2.5 rounded-xl flex justify-center items-center gap-2 border border-slate-200/80 hover:border-brand-200 transition-all text-sm relative z-10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+        Explore Semantic Lineage
+      </button>
+    </div>
+
+    <div class="card card-animate-in card-stagger-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-slate-200/80 relative group flex flex-col cursor-pointer" style="opacity:0">
+      <input type="checkbox" class="paper-checkbox absolute top-5 right-5 w-5 h-5 accent-brand-600 opacity-0 group-hover:opacity-100 transition-opacity z-10 cursor-pointer rounded" />
+      <div class="flex items-center gap-2 mb-3.5">
+        <span class="text-violet-700 bg-violet-50 px-2.5 py-1 rounded-lg text-xs font-semibold">Foundation Models</span>
+        <span class="text-slate-400 text-xs font-medium">1.2k likes</span>
+      </div>
+      <h2 class="text-lg font-bold leading-snug mb-3 text-slate-900 text-balance pointer-events-none">Breaking Language Barriers: Cross-lingual Offensive Language Detection</h2>
+      <div class="bg-violet-50/80 border-l-[3px] border-violet-400 p-3 rounded-r-lg mb-4 pointer-events-none">
+        <p class="text-sm text-violet-900/90 font-medium leading-relaxed"><strong class="font-semibold">TL;DR</strong> — Systematic review of CLTL strategies for toxic content detection across languages.</p>
+      </div>
+      <ul class="text-sm text-slate-600 space-y-2 mb-4 pointer-events-none">
+        <li class="flex items-start gap-2"><span class="text-violet-500 mt-0.5">•</span><span><strong class="text-slate-700">Scale:</strong> 67 papers on cross-lingual scenarios.</span></li>
+        <li class="flex items-start gap-2"><span class="text-violet-500 mt-0.5">•</span><span><strong class="text-slate-700">Approach:</strong> Instance, feature, and parameter-level transfer.</span></li>
+      </ul>
+      <div class="mt-auto pt-4 border-t border-slate-100">
+        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Related</p>
+        <div class="flex flex-col gap-1.5">
+          <a href="#" class="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline line-clamp-1 relative z-10">Multilingual Hate Speech Detection with LLMs</a>
+          <a href="#" class="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline line-clamp-1 relative z-10">Zero-Shot Cross-Lingual Transfer</a>
+        </div>
+      </div>
+      <button onclick="openGraphModal('Cross-lingual Offensive Language Detection')" class="mt-4 w-full bg-slate-50 hover:bg-brand-50 text-brand-700 font-semibold py-2.5 rounded-xl flex justify-center items-center gap-2 border border-slate-200/80 hover:border-brand-200 transition-all text-sm relative z-10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+        Explore Semantic Lineage
+      </button>
+    </div>
+
+    <div class="card card-animate-in card-stagger-3 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-slate-200/80 relative group flex flex-col cursor-pointer" style="opacity:0">
+      <input type="checkbox" class="paper-checkbox absolute top-5 right-5 w-5 h-5 accent-brand-600 opacity-0 group-hover:opacity-100 transition-opacity z-10 cursor-pointer rounded" />
+      <div class="flex items-center gap-2 mb-3.5">
+        <span class="text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg text-xs font-semibold">Vision</span>
+        <span class="text-slate-400 text-xs font-medium">842 likes</span>
+      </div>
+      <h2 class="text-lg font-bold leading-snug mb-3 text-slate-900 text-balance pointer-events-none">Diffusion Models for 3D Scene Understanding</h2>
+      <div class="bg-emerald-50/80 border-l-[3px] border-emerald-400 p-3 rounded-r-lg mb-4 pointer-events-none">
+        <p class="text-sm text-emerald-900/90 font-medium leading-relaxed"><strong class="font-semibold">TL;DR</strong> — Unifying diffusion priors for geometry, semantics, and affordance prediction in indoor scenes.</p>
+      </div>
+      <ul class="text-sm text-slate-600 space-y-2 mb-4 pointer-events-none">
+        <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span><span><strong class="text-slate-700">Unified:</strong> Single model for multi-task 3D reasoning.</span></li>
+        <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span><span><strong class="text-slate-700">Benchmark:</strong> SOTA on ScanNet & Matterport3D.</span></li>
+      </ul>
+      <div class="mt-auto pt-4 border-t border-slate-100">
+        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Related</p>
+        <div class="flex flex-col gap-1.5">
+          <a href="#" class="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline line-clamp-1 relative z-10">Point Cloud Diffusion for 3D Generation</a>
+          <a href="#" class="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline line-clamp-1 relative z-10">Scene Diffusion with Layout Control</a>
+        </div>
+      </div>
+      <button onclick="openGraphModal('Diffusion 3D Scene Understanding')" class="mt-4 w-full bg-slate-50 hover:bg-brand-50 text-brand-700 font-semibold py-2.5 rounded-xl flex justify-center items-center gap-2 border border-slate-200/80 hover:border-brand-200 transition-all text-sm relative z-10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+        Explore Semantic Lineage
+      </button>
+    </div>
+  </div>
+</main>
+
+<div id="action-bar" class="fixed bottom-8 left-1/2 -translate-x-1/2 fade-up z-30">
+  <div class="bg-white/90 backdrop-blur-xl text-slate-800 px-6 py-3.5 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] flex items-center gap-6 border border-slate-200/60">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-brand-100 rounded-xl flex items-center justify-center text-brand-700 font-bold text-sm" id="selected-count">0</div>
+      <span class="text-sm font-semibold text-slate-600">Papers Selected</span>
+    </div>
+    <button id="insight-btn" class="btn-primary text-white text-sm font-bold px-5 py-2.5 rounded-xl flex items-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+      Generate Macro Insight
+    </button>
+  </div>
+</div>
+
+<div id="insight-modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-slate-900/50 modal-overlay" onclick="closeInsightModal()"></div>
+  <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl z-10 overflow-hidden transform transition-all p-8 relative border border-slate-100">
+    <button onclick="closeInsightModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition p-2 rounded-lg hover:bg-slate-100">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/30">M</div>
+      <div>
+        <h3 class="font-bold text-xl text-slate-900">Cross-Disciplinary AI Synthesis</h3>
+        <p class="text-xs text-brand-600 font-semibold mt-0.5 uppercase tracking-wider">Edge Compute Engine Active</p>
+      </div>
+    </div>
+    <div id="ai-response-container" class="min-h-[180px]">
+      <div id="loading-state" class="text-slate-500 text-sm flex items-center gap-3 font-medium">
+        <span class="w-5 h-5 rounded-full border-2 border-brand-500 border-t-transparent animate-spin flex-shrink-0"></span>
+        Synthesizing core innovations across selected domains...
+      </div>
+      <div id="structured-report" class="hidden space-y-5"></div>
+    </div>
+  </div>
+</div>
+
+<div id="graph-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-slate-900/70 modal-overlay" onclick="closeGraphModal()"></div>
+  <div class="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl z-10 overflow-hidden flex flex-col border border-slate-100">
+    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+      <div>
+        <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+          Technology Evolution Graph
+        </h3>
+        <p class="text-xs text-brand-600 font-semibold mt-0.5 uppercase tracking-wider">Semantic Lineage & Dependencies</p>
+      </div>
+      <button onclick="closeGraphModal()" class="text-slate-400 hover:text-slate-700 bg-white hover:bg-slate-100 rounded-xl p-2.5 transition border border-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+    </div>
+    <div id="echarts-container" class="flex-1 w-full bg-slate-50/50 min-h-0"></div>
+    <div class="px-6 py-3 bg-slate-900 text-slate-300 text-xs font-medium flex justify-center gap-8 border-t border-slate-800">
+      <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span> Fundamental Research</span>
+      <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-brand-500"></span> Current Focus</span>
+      <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Derived Applications</span>
+    </div>
+  </div>
+</div>
+
+<div id="paper-modal" class="fixed inset-0 w-full h-full bg-slate-100 z-[50] fullscreen-modal flex flex-col hidden overflow-hidden">
+
+  <div class="bg-white border-b border-slate-200 px-6 py-3.5 flex justify-between items-center z-20 shrink-0">
+    <div class="flex items-center gap-3">
+      <button id="close-modal-btn" class="group flex items-center gap-2 text-slate-600 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-xl transition font-medium text-sm border border-slate-200/80">
+        <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Back to Feed
+      </button>
+      <span class="px-2.5 py-1 bg-brand-50 text-brand-700 text-[10px] font-semibold uppercase tracking-wider rounded-lg border border-brand-100 hidden md:block">Immersive Reading</span>
+    </div>
+    <div class="flex items-center gap-2 text-sm text-slate-600 font-medium">
+      <div class="w-7 h-7 bg-brand-600 rounded-full flex items-center justify-center text-white font-bold text-xs">JD</div>
+      <span class="hidden md:block">John Doe</span>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto">
+    <div class="max-w-[1400px] mx-auto p-6 md:p-8 flex flex-col lg:flex-row gap-8">
+
+      <div class="lg:w-[65%] flex flex-col gap-6">
+        <div class="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-slate-100">
+          <h1 id="modal-title" class="text-2xl lg:text-3xl font-bold text-slate-900 leading-tight mb-4">Paper Title Placeholder</h1>
+          <p class="text-slate-500 text-sm mb-8 flex items-center gap-4 font-medium">
+            <span>Tianhao Zhou, Yujia Chen, et al.</span>
+            <span>Feb 2026</span>
+          </p>
+
+          <div class="flex gap-6 border-b border-slate-200 mb-8">
+            <button id="tab-ai" class="pb-3 text-sm font-semibold text-brand-600 border-b-2 border-brand-600 transition">AI Breakdown</button>
+            <button id="tab-org" class="pb-3 text-sm font-semibold text-slate-400 hover:text-slate-600 transition">Original Abstract</button>
+          </div>
+
+          <div id="content-ai" class="space-y-6">
+            <div>
+              <h3 class="text-base font-bold text-slate-800 pb-2 flex items-center gap-2">The Problem</h3>
+              <p class="text-slate-600 leading-relaxed">Existing thermal odometry approaches are predominantly geometric and often fail across diverse datasets. Darkness, dust, and smoke severely limit traditional optical sensors.</p>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-800 pb-2 flex items-center gap-2">The Method</h3>
+              <p class="text-slate-600 leading-relaxed">We propose TOM-GS, integrating <strong class="text-slate-800 bg-brand-50 px-1.5 py-0.5 rounded">learning-based odometry with Gaussian Splatting (GS)</strong> for dense mapping, with dedicated thermal image enhancement.</p>
+            </div>
+          </div>
+
+          <div id="content-org" class="hidden">
+            <p class="text-slate-600 leading-relaxed text-justify">
+              Thermal infrared sensors, with wavelengths longer than smoke particles, can capture imagery independent of darkness, dust, and smoke. This robustness has made them increasingly valuable for motion estimation and environmental perception in robotics. Existing thermal odometry and mapping approaches, however, are predominantly geometric and often fail across diverse datasets while lacking the ability to produce dense maps...
+            </p>
+          </div>
+
+          <div class="mt-10 pt-6 border-t border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <button id="btn-like" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-sm transition border border-slate-200/80 group">
+                <svg class="w-5 h-5 group-hover:-translate-y-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.514"></path></svg>
+                <span id="like-counter">968</span>
+              </button>
+              <button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-sm transition border border-slate-200/80">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.514"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="smart-recommendation-block" class="expand-recommendation gradient-border rounded-2xl overflow-hidden shadow-sm">
+          <div class="bg-white rounded-[15px] p-8 h-full">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center text-brand-600 text-lg font-bold">M</div>
+              <h3 class="font-bold text-slate-900">Because you liked this...</h3>
+            </div>
+            <p class="text-sm text-slate-500 mb-5">Edge AI computed these semantic matches for your research path:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <a href="#" class="block p-4 rounded-xl border border-slate-100 hover:border-brand-200 hover:bg-brand-50/50 transition">
+                <h4 class="text-sm font-semibold text-slate-800 hover:text-brand-700 transition mb-1">Visual-Inertial Odometry in Adverse Weather</h4>
+                <p class="text-xs text-slate-500 line-clamp-2">Explores similar robustness challenges using alternative sensor fusion.</p>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+          <h3 class="font-bold text-slate-900 mb-5 flex items-center gap-2">Discussions (1)</h3>
+          <div class="flex gap-4 mb-6">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-md">JD</div>
+            <div class="flex-1">
+              <textarea placeholder="Share your thoughts or critique..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 px-4 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition resize-none h-24"></textarea>
+              <div class="flex justify-end mt-2">
+                <button class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition">Post Comment</button>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-4 pt-6 border-t border-slate-100">
+            <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">JS</div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-semibold text-sm text-slate-800">Dr. J. Smith</span>
+                <span class="text-xs text-slate-400">2 hours ago</span>
+              </div>
+              <p class="text-sm text-slate-600 leading-relaxed">The integration of Gaussian Splatting here is brilliant. I wonder how it handles extreme thermal noise in high-temperature environments?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:w-[35%] flex flex-col gap-5">
+        <div class="sticky top-0 flex flex-col gap-5">
+
+          <div class="grid grid-cols-2 gap-3">
+            <button class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl flex justify-center items-center transition text-sm shadow-md">Read PDF</button>
+            <button class="w-full bg-white hover:bg-slate-50 text-slate-800 font-semibold py-3 rounded-xl flex justify-center items-center border border-slate-200 transition text-sm">GitHub</button>
+          </div>
+
+          <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white shadow-xl shadow-brand-500/25 relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
+            <h3 class="font-bold text-lg mb-2 relative z-10 flex items-center gap-2">Knowledge Graph</h3>
+            <p class="text-sm text-brand-100 mb-5 relative z-10">Launch the interactive lineage graph for this research.</p>
+            <button onclick="openGraphModal('Current Context Paper')" class="w-full bg-white hover:bg-brand-50 text-brand-700 font-semibold py-3 rounded-xl transition shadow-md relative z-10 text-sm">
+              Launch Graph
+            </button>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col min-h-[340px]">
+            <h3 class="font-bold text-slate-900 mb-0.5 flex items-center gap-2">Ask Paper</h3>
+            <p class="text-[10px] text-brand-600 font-semibold uppercase tracking-wider mb-4">Edge Inference</p>
+            <div class="flex-1 bg-slate-50 rounded-xl border border-slate-100 p-4 mb-4 overflow-y-auto min-h-[120px]">
+              <p class="text-xs text-slate-400 text-center py-4">Edge AI is ready. Ask anything about this paper.</p>
+            </div>
+            <div class="relative">
+              <input type="text" placeholder="e.g. What datasets were used?" class="w-full bg-white border border-slate-200 rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 transition">
+              <button class="absolute right-2 top-2 bg-brand-600 hover:bg-brand-700 text-white p-2 rounded-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Card animation on load
+  document.querySelectorAll('.card').forEach((card, i) => {
+    card.style.animationDelay = `${i * 0.08}s`;
+  });
+
+  // 1. Checkbox logic
+  const checkboxes = document.querySelectorAll('.paper-checkbox');
+  const actionBar = document.getElementById('action-bar');
+  const countSpan = document.getElementById('selected-count');
+  let selectedCount = 0;
+
+  checkboxes.forEach(box => {
+    box.addEventListener('change', (e) => {
+      const card = e.target.closest('.card');
+      if (e.target.checked) {
+        selectedCount++;
+        card.classList.add('selected', 'ring-2', 'ring-brand-500/30');
+        e.target.classList.remove('opacity-0');
+      } else {
+        selectedCount--;
+        card.classList.remove('selected', 'ring-2', 'ring-brand-500/30');
+        e.target.classList.add('opacity-0');
+      }
+      countSpan.innerText = selectedCount;
+      if (selectedCount > 0) actionBar.classList.add('show');
+      else actionBar.classList.remove('show');
+    });
+  });
+
+  // 2. Insight Modal
+  const insightBtn = document.getElementById('insight-btn');
+  const insightModal = document.getElementById('insight-modal');
+  const loadingState = document.getElementById('loading-state');
+  const structuredReport = document.getElementById('structured-report');
+
+  insightBtn.addEventListener('click', () => {
+    insightModal.classList.remove('hidden');
+    insightModal.classList.add('flex');
+    loadingState.style.display = 'flex';
+    structuredReport.classList.add('hidden');
+    structuredReport.innerHTML = '';
+    setTimeout(() => {
+      loadingState.style.display = 'none';
+      structuredReport.innerHTML = `
+        <div class="reveal-block" style="animation-delay:0.05s"><p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Targeted Domains</p><div class="flex gap-2"><span class="px-3 py-1.5 bg-slate-100 rounded-lg text-sm font-medium text-slate-700">Robotics & Vision</span><span class="px-3 py-1.5 bg-slate-100 rounded-lg text-sm font-medium text-slate-700">LLM Alignment</span></div></div>
+        <div class="reveal-block bg-brand-50/80 border border-brand-100 p-5 rounded-xl mt-4" style="animation-delay:0.3s"><p class="text-xs font-bold text-brand-800 uppercase tracking-wider mb-2">Shared Technical DNA</p><p class="text-slate-700 leading-relaxed text-sm">The core commonality lies in <strong class="text-brand-700">bypassing traditional data constraints via unsupervised learning</strong>.</p></div>
+        <div class="reveal-block bg-slate-900 p-5 rounded-xl text-white mt-4" style="animation-delay:0.5s"><p class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Macro Trend Prediction</p><p class="text-slate-200 leading-relaxed text-sm">Future research converges towards <strong class="text-white border-b-2 border-brand-400 pb-0.5">Constraint-Free Generalization</strong>.</p></div>
+      `;
+      structuredReport.classList.remove('hidden');
+    }, 1400);
+  });
+
+  function closeInsightModal() {
+    insightModal.classList.add('hidden');
+    insightModal.classList.remove('flex');
+  }
+
+  // 3. Graph Modal
+  const graphModal = document.getElementById('graph-modal');
+  let myChart = null;
+
+  function openGraphModal(paperTitle) {
+    graphModal.classList.remove('hidden');
+    graphModal.classList.add('flex');
+    setTimeout(() => {
+      if (!myChart) myChart = echarts.init(document.getElementById('echarts-container'));
+      renderGraph(paperTitle);
+    }, 100);
+  }
+
+  function closeGraphModal() {
+    graphModal.classList.add('hidden');
+    graphModal.classList.remove('flex');
+  }
+
+  function renderGraph(centerNodeName) {
+    const option = {
+      tooltip: { formatter: '{b}' },
+      animationDurationUpdate: 1200,
+      animationEasingUpdate: 'cubicOut',
+      series: [{
+        type: 'graph',
+        layout: 'force',
+        force: { repulsion: 1000, edgeLength: 120 },
+        roam: true,
+        label: { show: true, position: 'right', formatter: '{b}', fontSize: 12 },
+        data: [
+          { name: centerNodeName, symbolSize: 50, itemStyle: { color: '#0d9488' }, label: { fontSize: 13, fontWeight: 'bold' } },
+          { name: 'Core Foundation Theory', symbolSize: 32, itemStyle: { color: '#fb7185' } },
+          { name: 'Previous SOTA Model', symbolSize: 28, itemStyle: { color: '#fb7185' } },
+          { name: 'Future Application 1', symbolSize: 24, itemStyle: { color: '#34d399' } }
+        ],
+        edges: [
+          { source: 'Core Foundation Theory', target: centerNodeName, lineStyle: { width: 2, curveness: 0.2 } },
+          { source: 'Previous SOTA Model', target: centerNodeName, lineStyle: { width: 2, curveness: 0.2 } },
+          { source: centerNodeName, target: 'Future Application 1', lineStyle: { width: 2, curveness: 0.2, type: 'dashed' } }
+        ],
+        lineStyle: { color: 'source', curveness: 0.3 }
+      }]
+    };
+    myChart.setOption(option);
+  }
+
+  // 4. Paper Modal
+  const paperModal = document.getElementById('paper-modal');
+  const closeModalBtn = document.getElementById('close-modal-btn');
+  const modalTitle = document.getElementById('modal-title');
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.paper-checkbox') || e.target.closest('button') || e.target.closest('a')) return;
+      modalTitle.innerText = card.querySelector('h2').innerText;
+      resetLikeState();
+      openPaperModal();
+    });
+  });
+
+  function openPaperModal() {
+    paperModal.classList.remove('hidden');
+    setTimeout(() => paperModal.classList.add('open'), 10);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePaperModal() {
+    paperModal.classList.remove('open');
+    setTimeout(() => paperModal.classList.add('hidden'), 400);
+    document.body.style.overflow = 'auto';
+  }
+
+  closeModalBtn.addEventListener('click', closePaperModal);
+
+  // 5. Tabs
+  const tabAi = document.getElementById('tab-ai');
+  const tabOrg = document.getElementById('tab-org');
+  const contentAi = document.getElementById('content-ai');
+  const contentOrg = document.getElementById('content-org');
+
+  tabAi.addEventListener('click', () => {
+    tabAi.className = 'pb-3 text-sm font-semibold text-brand-600 border-b-2 border-brand-600 transition';
+    tabOrg.className = 'pb-3 text-sm font-semibold text-slate-400 hover:text-slate-600 transition';
+    contentAi.classList.remove('hidden');
+    contentOrg.classList.add('hidden');
+  });
+
+  tabOrg.addEventListener('click', () => {
+    tabOrg.className = 'pb-3 text-sm font-semibold text-brand-600 border-b-2 border-brand-600 transition';
+    tabAi.className = 'pb-3 text-sm font-semibold text-slate-400 hover:text-slate-600 transition';
+    contentOrg.classList.remove('hidden');
+    contentAi.classList.add('hidden');
+  });
+
+  // 6. Like
+  const btnLike = document.getElementById('btn-like');
+  const likeCounter = document.getElementById('like-counter');
+  const recommendationBlock = document.getElementById('smart-recommendation-block');
+  let isLiked = false;
+  let baseCount = 968;
+
+  function resetLikeState() {
+    isLiked = false;
+    likeCounter.innerText = baseCount;
+    btnLike.classList.remove('text-brand-600', 'bg-brand-50', 'border-brand-200');
+    btnLike.classList.add('text-slate-600', 'bg-slate-50', 'border-slate-200');
+    btnLike.querySelector('svg').classList.remove('fill-current');
+    recommendationBlock.classList.remove('active');
+  }
+
+  btnLike.addEventListener('click', () => {
+    btnLike.classList.remove('like-pop');
+    void btnLike.offsetWidth;
+    btnLike.classList.add('like-pop');
+    if (!isLiked) {
+      isLiked = true;
+      likeCounter.innerText = baseCount + 1;
+      btnLike.classList.remove('text-slate-600', 'bg-slate-50', 'border-slate-200');
+      btnLike.classList.add('text-brand-600', 'bg-brand-50', 'border-brand-200');
+      btnLike.querySelector('svg').classList.add('fill-current');
+      setTimeout(() => recommendationBlock.classList.add('active'), 300);
+    } else {
+      resetLikeState();
+    }
+  });
+</script>
+</body>
+</html>
