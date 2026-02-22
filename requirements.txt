@@ -7,3 +7,4 @@ bcrypt==3.2.0
 python-jose==3.5.0
 openai
 python-dotenv
+scikit-learn
