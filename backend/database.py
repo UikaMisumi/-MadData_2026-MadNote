@@ -127,13 +127,30 @@ class DataManager:
                     abs_df = pd.DataFrame(json.load(f))
                 if "title" in abs_df.columns and "abstract" in abs_df.columns:
                     abs_df["title_clean"] = abs_df["title"].astype(str).str.strip().str.lower()
-                    abs_df = abs_df.drop_duplicates(subset=["title_clean"])
-                    
-                    df = df.merge(abs_df[["title_clean", "abstract"]], on="title_clean", how="left", suffixes=("", "_merged"))
-                    
-                    if "abstract_merged" in df.columns:
-                        df["abstract"] = df["abstract_merged"]
-                        df = df.drop(columns=["abstract_merged"])
+                    abs_df = abs_df.drop_duplicates(subset=["title_clean"]).reset_index(drop=True)
+
+                    # Keep explicit source column to avoid overwrite ambiguity.
+                    df = df.merge(
+                        abs_df[["title_clean", "abstract"]].rename(columns={"abstract": "abstract_from_extract"}),
+                        on="title_clean",
+                        how="left",
+                    )
+
+                    if "abstract" not in df.columns:
+                        df["abstract"] = pd.NA
+
+                    missing_mask = df["abstract"].isna() | df["abstract"].astype(str).str.strip().eq("")
+                    df.loc[missing_mask, "abstract"] = df.loc[missing_mask, "abstract_from_extract"]
+                    df = df.drop(columns=["abstract_from_extract"], errors="ignore")
+
+                    # Fallback by id-index mapping when title-based match fails.
+                    id_index = pd.to_numeric(
+                        df["id"].astype(str).str.extract(r"(\d+)$")[0],
+                        errors="coerce",
+                    )
+                    missing_mask = df["abstract"].isna() | df["abstract"].astype(str).str.strip().eq("")
+                    fallback_series = id_index.map(abs_df["abstract"])
+                    df.loc[missing_mask, "abstract"] = fallback_series[missing_mask]
             except Exception as e:
                 print(f"Warning: Failed to merge abstracts: {e}")
 
