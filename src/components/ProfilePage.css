@@ -48,90 +48,6 @@
   background: linear-gradient(135deg, var(--mn-brand-500), var(--mn-brand-700));
 }
 
-.settings-container {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 8;
-}
-
-.gear {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 1px solid rgba(203, 213, 225, 0.95);
-  background: rgba(255, 255, 255, 0.9);
-  color: #475569;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.gear:hover {
-  border-color: #94a3b8;
-  background: #fff;
-  color: #0f172a;
-}
-
-.dropdown {
-  position: absolute;
-  top: 46px;
-  right: 0;
-  width: 188px;
-  background: #fff;
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  border-radius: 14px;
-  box-shadow: 0 26px 44px -28px rgba(15, 23, 42, 0.62);
-  padding: 8px;
-  margin: 0;
-  list-style: none;
-}
-
-.dropdown.hide {
-  display: none;
-}
-
-.dropdown li {
-  height: 38px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  color: #334155;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.dropdown li:hover {
-  background: var(--mn-brand-50);
-  color: var(--mn-brand-700);
-}
-
-.dropdown .divider {
-  height: 1px;
-  margin: 6px 4px;
-  padding: 0;
-  border-radius: 0;
-  background: rgba(226, 232, 240, 0.95);
-  cursor: default;
-}
-
-.dropdown .divider:hover {
-  background: rgba(226, 232, 240, 0.95);
-}
-
-.dropdown .danger {
-  color: #b91c1c;
-}
-
-.dropdown .danger:hover {
-  background: #fef2f2;
-  color: #b91c1c;
-}
-
 .bio {
   padding: 64px 24px 24px;
   text-align: center;
@@ -183,27 +99,6 @@
   border-color: var(--mn-brand-500);
   color: var(--mn-brand-700);
   background: var(--mn-brand-50);
-}
-
-.counters {
-  margin: 22px 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-}
-
-.counters li {
-  color: #475569;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.counters b {
-  color: var(--mn-text-strong);
-  margin-right: 6px;
-  font-weight: 800;
 }
 
 .profile-tabs {
@@ -311,11 +206,6 @@
 
   .bio .motto {
     font-size: 14px;
-  }
-
-  .counters {
-    gap: 16px;
-    flex-wrap: wrap;
   }
 
   .profile-tabs {
