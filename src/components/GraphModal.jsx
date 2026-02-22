@@ -1,54 +1,406 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './GraphModal.css';
+import axios from 'axios';
+import cytoscape from 'cytoscape';
 
-const GraphModal = ({ isOpen, onClose, title }) => {
+function applyRadialLayout(cy, centerId) {
+  if (!cy || !centerId) return;
+  const R1 = 130;
+  const R2 = 260;
+  const radiusJitter = 35;
+  const angleJitter = 0.35;
+  const globalRotation = Math.random() * 2 * Math.PI;
+
+  const byDepth = { 0: [], 1: [], 2: [] };
+  cy.nodes().forEach((node) => {
+    const d = node.data('depth');
+    if (d === 0) byDepth[0].push(node);
+    else if (d === 1) byDepth[1].push(node);
+    else byDepth[2].push(node);
+  });
+
+  byDepth[0].forEach((node) => node.position({ x: 0, y: 0 }));
+
+  [byDepth[1], byDepth[2]].forEach((list, idx) => {
+    const baseR = idx === 0 ? R1 : R2;
+    const n = list.length;
+    list.forEach((node, i) => {
+      let angle = n <= 1 ? Math.random() * 2 * Math.PI : (2 * Math.PI * i) / n - Math.PI / 2;
+      angle += (Math.random() - 0.5) * 2 * angleJitter;
+      const r = baseR + (Math.random() - 0.5) * 2 * radiusJitter;
+
+      const x = r * Math.cos(angle);
+      const y = r * Math.sin(angle);
+
+      const cos = Math.cos(globalRotation);
+      const sin = Math.sin(globalRotation);
+      node.position({ x: x * cos - y * sin, y: x * sin + y * cos });
+    });
+  });
+
+  cy.resize();
+  const centerNode = cy.getElementById(centerId);
+  if (centerNode.length) {
+    cy.fit(centerNode, 80);
+    cy.center(centerNode);
+  } else {
+    cy.fit(80);
+    cy.center();
+  }
+}
+
+async function fetchGraphCompatible() {
+  // Prefer the endpoint you originally built; fallback to the other branch endpoint
+  try {
+    const res = await axios.get('http://localhost:8000/api/v1/graph/global');
+    return res.data || { nodes: [], edges: [] };
+  } catch (e1) {
+    const res = await axios.get('http://localhost:8000/api/v1/graph/similarity', {
+      params: { threshold: 0.1, max_nodes: 500 },
+    });
+    return res.data || { nodes: [], edges: [] };
+  }
+}
+
+const GraphModal = ({ isOpen, onClose, title, nodeId = null, fixedMaxNodes = null }) => {
+  const containerRef = useRef(null);
+  const cyRef = useRef(null);
+  const shuffleLayoutRef = useRef(null);
+  const hoverTimerRef = useRef(null);
+  const globalGraphRef = useRef(null);
+
+  const [loading, setLoading] = useState(false);
+  const [tooltip, setTooltip] = useState({ title: '', summary: '', x: 0, y: 0, visible: false });
+  const [noDataMessage, setNoDataMessage] = useState('');
+
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+
+    // destroy old instance
+    if (cyRef.current) {
+      try { cyRef.current.destroy(); } catch (e) {}
+      cyRef.current = null;
+    }
+    globalGraphRef.current = null;
+
+    async function fetchAndRender() {
+      setLoading(true);
+      try {
+        if (!globalGraphRef.current) {
+          try {
+            const g = await fetchGraphCompatible();
+            globalGraphRef.current = g;
+          } catch (err) {
+            setNoDataMessage('Failed to load graph (backend not responding). Please ensure the backend is running.');
+            setLoading(false);
+            return;
+          }
+        }
+
+        if (cancelled) return;
+
+        const graph = globalGraphRef.current || { nodes: [], edges: [] };
+
+        // optionally trim nodes (client side)
+        let nodes = graph.nodes || [];
+        const maxN = fixedMaxNodes ?? null;
+        if (maxN && maxN > 0 && nodes.length > maxN) nodes = nodes.slice(0, maxN);
+
+        const nodeMap = new Map();
+        nodes.forEach((n) => nodeMap.set(n.id, n));
+
+        const adj = new Map();
+        const edgeList = [];
+        (graph.edges || []).forEach((e, idx) => {
+          if (!nodeMap.has(e.source) || !nodeMap.has(e.target)) return;
+          edgeList.push({ data: { id: `${e.source}-${e.target}-${idx}`, source: e.source, target: e.target, score: e.score } });
+          if (!adj.has(e.source)) adj.set(e.source, []);
+          if (!adj.has(e.target)) adj.set(e.target, []);
+          adj.get(e.source).push({ id: e.target, score: e.score });
+          adj.get(e.target).push({ id: e.source, score: e.score });
+        });
+
+        // find center
+        let centerId = nodeId;
+        if (!centerId && title) {
+          for (const n of nodes) {
+            if (n.title && n.title === title) { centerId = n.id; break; }
+          }
+        }
+
+        const EGO_DEPTH = 2;
+        const MAX_NEIGHBORS_PER_NODE = 50;
+        let filteredNodeIds = new Set();
+        const edgeKeySet = new Set();
+        let filteredEdges = [];
+        const centerDepthMap = {};
+
+        if (centerId && nodeMap.has(centerId)) {
+          const visited = new Set();
+          const q = [{ id: centerId, depth: 0 }];
+          visited.add(centerId);
+
+          while (q.length > 0) {
+            const cur = q.shift();
+            filteredNodeIds.add(cur.id);
+            centerDepthMap[cur.id] = cur.depth;
+
+            if (cur.depth >= EGO_DEPTH) continue;
+
+            const neighbors = (adj.get(cur.id) || [])
+              .slice()
+              .sort((a, b) => (b.score || 0) - (a.score || 0))
+              .slice(0, MAX_NEIGHBORS_PER_NODE);
+
+            for (const nb of neighbors) {
+              if (!visited.has(nb.id)) {
+                visited.add(nb.id);
+                q.push({ id: nb.id, depth: cur.depth + 1 });
+              }
+              const key = [cur.id, nb.id].sort().join('--');
+              if (!edgeKeySet.has(key)) {
+                edgeKeySet.add(key);
+                filteredEdges.push({
+                  data: {
+                    id: `${cur.id}-${nb.id}-${filteredEdges.length}`,
+                    source: cur.id,
+                    target: nb.id,
+                    score: nb.score,
+                  },
+                });
+              }
+            }
+          }
+        } else {
+          // fallback: show largest connected component
+          const connected = new Set();
+          edgeList.forEach((e) => { connected.add(e.data.source); connected.add(e.data.target); });
+
+          if (connected.size === 0) {
+            const elements = [];
+            if (nodes.length > 0) {
+              const rep = nodes[0];
+              elements.push({ data: { id: rep.id, label: rep.title } });
+            }
+
+            cyRef.current = cytoscape({
+              container: containerRef.current,
+              elements,
+              style: [
+                { selector: 'node', style: { label: '', 'background-color': '#2b6cb0', 'border-color': '#ffffff', 'border-width': 2, width: 12, height: 12 } },
+                { selector: 'edge', style: { 'line-color': '#cbd5e1', width: 2, opacity: 0.9 } },
+              ],
+              layout: { name: 'cose', animate: true, animationDuration: 400 },
+            });
+
+            try { cyRef.current.resize(); cyRef.current.fit(); cyRef.current.center(); } catch (e) {}
+            return;
+          }
+
+          const adjSimple = new Map();
+          edgeList.forEach((e) => {
+            const s = e.data.source;
+            const t = e.data.target;
+            if (!adjSimple.has(s)) adjSimple.set(s, new Set());
+            if (!adjSimple.has(t)) adjSimple.set(t, new Set());
+            adjSimple.get(s).add(t);
+            adjSimple.get(t).add(s);
+          });
+
+          const visited = new Set();
+          const comps = [];
+          for (const nid of connected) {
+            if (visited.has(nid)) continue;
+            const comp = new Set();
+            const q2 = [nid];
+            visited.add(nid);
+            while (q2.length) {
+              const c = q2.shift();
+              comp.add(c);
+              for (const nb of (adjSimple.get(c) || [])) {
+                if (!visited.has(nb)) { visited.add(nb); q2.push(nb); }
+              }
+            }
+            comps.push(comp);
+          }
+
+          comps.sort((a, b) => b.size - a.size);
+          const largest = comps[0] || new Set();
+          filteredNodeIds = new Set(Array.from(largest));
+          filteredEdges = edgeList.filter((e) => filteredNodeIds.has(e.data.source) && filteredNodeIds.has(e.data.target));
+        }
+
+        const filteredNodes = nodes.filter((n) => filteredNodeIds.has(n.id));
+        if (filteredNodes.length === 0 && filteredEdges.length === 0) {
+          setNoDataMessage('No graph data found for this paper.');
+        } else {
+          setNoDataMessage('');
+        }
+
+        const hasCenter = centerId && nodeMap.has(centerId);
+
+        const elements = [];
+        filteredNodes.forEach((n) => {
+          const data = { id: n.id, label: n.title, summary: n.summary || n.abstract || '' };
+          if (hasCenter && centerDepthMap[n.id] !== undefined) data.depth = centerDepthMap[n.id];
+          elements.push({ data });
+        });
+        filteredEdges.forEach((e, idx) => {
+          elements.push({ data: { id: `${e.data.source}-${e.data.target}-${idx}`, source: e.data.source, target: e.data.target, score: e.data.score } });
+        });
+
+        const layoutOpts = hasCenter
+          ? null
+          : { name: 'cose', nodeRepulsion: 8000, idealEdgeLength: 80, animate: true, animationDuration: 400 };
+
+        const nodeStyles = [
+          { selector: 'node', style: { label: '', 'background-color': '#7dd3fc', 'border-color': '#0ea5e9', 'border-width': 2, width: 12, height: 12 } },
+          { selector: 'node[depth=0]', style: { width: 28, height: 28, 'background-color': '#38bdf8', 'border-width': 3, 'border-color': '#fff' } },
+          { selector: 'node[depth=1]', style: { width: 18, height: 18 } },
+          { selector: 'node[depth=2]', style: { width: 12, height: 12 } },
+          { selector: 'edge', style: { 'line-color': '#bae6fd', width: 1.5, opacity: 0.85 } },
+          { selector: 'node:selected', style: { 'background-color': '#f97316', width: 20, height: 20 } },
+          { selector: 'node.hover', style: { 'background-color': '#f43f5e', width: 16, height: 16 } },
+        ];
+
+        if (!cyRef.current) {
+          cyRef.current = cytoscape({ container: containerRef.current, elements, style: nodeStyles });
+
+          cyRef.current.on('mouseover', 'node', (evt) => {
+            const n = evt.target;
+            n.addClass('hover');
+
+            if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+
+            const pos = evt.renderedPosition || { x: 0, y: 0 };
+            const rect = containerRef.current.getBoundingClientRect();
+            const x = rect.left + pos.x + 8;
+            const y = rect.top + pos.y + 8;
+
+            const t = (n.data('label') || '').toString().replace(/\s+/g, ' ').slice(0, 170);
+            const summaryRaw = n.data('summary') || n.data('abstract') || '';
+            const s = summaryRaw.toString().replace(/\s+/g, ' ').slice(0, 240);
+
+            hoverTimerRef.current = setTimeout(() => {
+              setTooltip({ title: t, summary: s, x, y, visible: true });
+              hoverTimerRef.current = null;
+            }, 200);
+          });
+
+          cyRef.current.on('mousemove', 'node', (evt) => {
+            const pos = evt.renderedPosition || { x: 0, y: 0 };
+            const rect = containerRef.current.getBoundingClientRect();
+            setTooltip((prev) => ({ ...prev, x: rect.left + pos.x + 8, y: rect.top + pos.y + 8 }));
+          });
+
+          cyRef.current.on('mouseout', 'node', (evt) => {
+            const n = evt.target;
+            n.removeClass('hover');
+            if (hoverTimerRef.current) {
+              clearTimeout(hoverTimerRef.current);
+              hoverTimerRef.current = null;
+            }
+            setTooltip({ title: '', summary: '', x: 0, y: 0, visible: false });
+          });
+
+          cyRef.current.on('tap', 'node', (evt) => {
+            const n = evt.target;
+            window.open(`/papers/${n.id()}`, '_blank');
+          });
+        } else {
+          const cy = cyRef.current;
+          cy.startBatch();
+          cy.elements().remove();
+          cy.add(elements);
+          cy.endBatch();
+        }
+
+        const cy = cyRef.current;
+
+        if (hasCenter && centerId) {
+          applyRadialLayout(cy, centerId);
+          shuffleLayoutRef.current = () => applyRadialLayout(cyRef.current, centerId);
+        } else {
+          shuffleLayoutRef.current = null;
+          cy.layout(layoutOpts).run().then(() => {
+            if (cancelled) return;
+            try {
+              cy.resize();
+              cy.fit(50);
+              cy.center();
+            } catch (e) {}
+          }).catch(() => {});
+        }
+      } catch (err) {
+        // ignore
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchAndRender().catch(() => {});
+
+    return () => {
+      cancelled = true;
+      if (hoverTimerRef.current) {
+        clearTimeout(hoverTimerRef.current);
+        hoverTimerRef.current = null;
+      }
+    };
+  }, [isOpen, nodeId, title, fixedMaxNodes]);
+
+  useEffect(() => {
+    return () => {
+      if (cyRef.current) {
+        try { cyRef.current.destroy(); } catch (e) {}
+        cyRef.current = null;
+      }
+    };
+  }, []);
+
   if (!isOpen) return null;
 
   return (
-    <div className="graph-modal" onClick={onClose}>
+    <div className="graph-modal" onClick={onClose} role="dialog" aria-modal="true">
       <div className="graph-panel" onClick={(e) => e.stopPropagation()}>
-        <div className="graph-head">
+        <header className="graph-head">
           <div>
-            <h3>Technology Evolution Graph</h3>
-            <p>Semantic lineage for: {title || 'Current paper'}</p>
+            <h3>{title || 'Knowledge Graph'}</h3>
+            <p>Similarity graph (click node to open paper) · Drag to pan, scroll to zoom</p>
           </div>
-          <button type="button" onClick={onClose}>Close</button>
-        </div>
+          <div className="graph-head-actions">
+            <button
+              type="button"
+              className="graph-btn-secondary"
+              onClick={() => shuffleLayoutRef.current?.()}
+              disabled={!shuffleLayoutRef.current}
+            >
+              Shuffle layout
+            </button>
+            <button type="button" onClick={onClose}>Close</button>
+          </div>
+        </header>
 
         <div className="graph-canvas">
-          <svg viewBox="0 0 900 420" role="img" aria-label="Knowledge graph">
-            <line x1="180" y1="120" x2="440" y2="210" className="edge" />
-            <line x1="190" y1="300" x2="440" y2="210" className="edge" />
-            <line x1="440" y1="210" x2="730" y2="210" className="edge dashed" />
-
-            <g transform="translate(120 80)">
-              <circle r="45" className="node-base" />
-              <text x="0" y="6" textAnchor="middle">Foundation</text>
-            </g>
-
-            <g transform="translate(120 300)">
-              <circle r="40" className="node-base" />
-              <text x="0" y="6" textAnchor="middle">Prev SOTA</text>
-            </g>
-
-            <g transform="translate(440 210)">
-              <circle r="58" className="node-center" />
-              <text x="0" y="0" textAnchor="middle" className="center-title">Current</text>
-              <text x="0" y="20" textAnchor="middle" className="center-sub">Focus</text>
-            </g>
-
-            <g transform="translate(780 210)">
-              <circle r="42" className="node-next" />
-              <text x="0" y="6" textAnchor="middle">Applications</text>
-            </g>
-          </svg>
+          {loading ? <div className="graph-loader">Loading graph…</div> : null}
+          <div ref={containerRef} id="cy" style={{ width: '100%', height: '100%', minHeight: 320 }} aria-label="Knowledge graph" />
+          {tooltip.visible ? (
+            <div
+              className="cy-tooltip"
+              style={{ left: tooltip.x, top: tooltip.y }}
+              role="tooltip"
+              aria-hidden={!tooltip.visible}
+            >
+              <div className="tt-title">{tooltip.title}</div>
+              {tooltip.summary ? <div className="tt-summary">{tooltip.summary}</div> : null}
+            </div>
+          ) : null}
         </div>
 
-        <div className="graph-legend">
-          <span><i className="dot base" /> Fundamental Research</span>
-          <span><i className="dot center" /> Current Focus</span>
-          <span><i className="dot next" /> Derived Applications</span>
-        </div>
+        {noDataMessage ? (
+          <div className="graph-fallback-notice" role="status">{noDataMessage}</div>
+        ) : null}
       </div>
     </div>
   );

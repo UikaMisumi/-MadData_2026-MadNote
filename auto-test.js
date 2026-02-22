@@ -1,35 +1,34 @@
 // 自动化测试脚本
 console.log('🚀 开始自动化测试...');
 
-// 等待页面加载
+// Wait for page load
 setTimeout(() => {
-  console.log('=== 测试1: 检查页面元素 ===');
-  
-  // 检查PostCard组件
+  console.log('=== Test 1: Check page elements ===');
+
   const postCards = document.querySelectorAll('.post-card');
-  console.log(`找到 ${postCards.length} 个PostCard组件`);
-  
+  console.log(`Found ${postCards.length} PostCard components`);
+
   if (postCards.length > 0) {
     const firstCard = postCards[0];
     const likeBtn = firstCard.querySelector('.like-btn');
     const saveBtn = firstCard.querySelector('.save-btn');
-    
-    console.log('第一个卡片的按钮状态:');
-    console.log('- 点赞按钮:', likeBtn ? '✅ 存在' : '❌ 不存在');
-    console.log('- 收藏按钮:', saveBtn ? '✅ 存在' : '❌ 不存在');
-    
+
+    console.log('First card button state:');
+    console.log('- Like button:', likeBtn ? '✅ present' : '❌ missing');
+    console.log('- Save button:', saveBtn ? '✅ present' : '❌ missing');
+
     if (likeBtn) {
-      console.log('- 点赞按钮类名:', likeBtn.className);
-      console.log('- 点赞按钮SVG:', likeBtn.querySelector('svg') ? '✅' : '❌');
+      console.log('- Like button class:', likeBtn.className);
+      console.log('- Like button SVG:', likeBtn.querySelector('svg') ? '✅' : '❌');
     }
-    
+
     if (saveBtn) {
       console.log('- 收藏按钮类名:', saveBtn.className);  
       console.log('- 收藏按钮SVG:', saveBtn.querySelector('svg') ? '✅' : '❌');
     }
   }
-  
-  console.log('=== 测试2: 检查localStorage ===');
+
+  console.log('=== Test 2: Check localStorage ===');
   console.log('likedPosts:', localStorage.getItem('likedPosts'));
   console.log('savedPosts:', localStorage.getItem('savedPosts'));
   
@@ -37,20 +36,20 @@ setTimeout(() => {
 
 // 测试点击功能
 setTimeout(() => {
-  console.log('=== 测试3: 模拟点击操作 ===');
-  
+  console.log('=== Test 3: Simulate clicks ===');
+
   const postCards = document.querySelectorAll('.post-card');
   if (postCards.length > 0) {
     const firstCard = postCards[0];
     const likeBtn = firstCard.querySelector('.like-btn');
     const saveBtn = firstCard.querySelector('.save-btn');
-    
+
     if (likeBtn) {
-      console.log('🔥 模拟点击点赞按钮...');
+      console.log('🔥 Simulating like button click...');
       likeBtn.click();
       
       setTimeout(() => {
-        console.log('点击后的状态:');
+        console.log('State after click:');
         console.log('- localStorage likedPosts:', localStorage.getItem('likedPosts'));
         console.log('- 按钮类名:', likeBtn.className);
       }, 500);

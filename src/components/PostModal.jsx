@@ -321,7 +321,7 @@ const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
             <section className="graph-cta">
               <h4>Knowledge Graph</h4>
               <p>Launch the lineage graph for this paper.</p>
-              <button type="button" onClick={() => onOpenGraph && onOpenGraph(post.title)}>Launch Graph</button>
+              <button type="button" onClick={() => onOpenGraph && onOpenGraph(post.id, post.title)}>Launch Graph</button>
             </section>
 
             <section className="ask-card">

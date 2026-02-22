@@ -78,9 +78,7 @@ function Sidebar() {
 
   const handleLogout = async () => {
     try {
-      // 执行登出操作
       logout();
-      // 跳转到登录页面
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -155,7 +153,7 @@ function Sidebar() {
                   } else {
                     navigate(item.path);
                   }
-                  setShowMore(false); // 关闭菜单
+                  setShowMore(false);
                 }}
               >
                 {item.isLogout && (

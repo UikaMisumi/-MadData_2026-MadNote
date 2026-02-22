@@ -1,10 +1,22 @@
+from __future__ import annotations
+
 from datetime import datetime
+import json
 import math
 import os
 import uuid
 
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+
+# database module access (for DATA_DIR)
+try:
+    from . import database as db_module  # type: ignore
+except Exception:
+    import database as db_module  # type: ignore
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Internal Modules
 try:
@@ -20,11 +32,10 @@ except ImportError:
 
 app = FastAPI(title="MadNote API", version="v1")
 AUTH_COOKIE_NAME = "madnote_token"
+
 COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "lax").strip().lower()
 COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").strip().lower() == "true"
-
 if COOKIE_SAMESITE == "none":
-    # Browsers require Secure when SameSite=None.
     COOKIE_SECURE = True
 
 cors_origins_env = os.getenv("CORS_ORIGINS", "").strip()
@@ -48,6 +59,9 @@ app.add_middleware(
 )
 
 
+# -------------------------
+# helpers
+# -------------------------
 def sanitize_user(user: dict | None):
     if not user:
         return None
@@ -186,7 +200,6 @@ def _collect_topic_keywords(primary_topic: str, secondary_topics: list[str], lim
         if not overlap:
             continue
 
-        # Primary topic carries stronger signal.
         row_weight = 0.0
         for key in overlap:
             row_weight += 1.2 if key == _norm_text(primary_topic) else 0.8
@@ -275,7 +288,6 @@ def _topic_match_score(primary_topic: str, secondary_topics: list[str], row: dic
         overlap = len(secondary.intersection(row_topics))
         secondary_hit = overlap / max(1, len(secondary))
 
-    # Primary topic dominates; secondary topics refine.
     return min(1.0, 0.7 * primary_hit + 0.3 * secondary_hit)
 
 
@@ -316,12 +328,17 @@ def _popularity_score(row: dict, max_likes: float, max_saves: float, max_citatio
     return 0.5 * likes_norm + 0.2 * saves_norm + 0.3 * cites_norm
 
 
+# -------------------------
+# health
+# -------------------------
 @app.get("/")
 async def health_check():
     return {"status": "ok", "rows": int(len(db_manager.df))}
 
 
-# --- Auth Routes ---
+# -------------------------
+# auth
+# -------------------------
 @app.post("/api/v1/auth/signup", status_code=201)
 async def signup(user_info: dict, response: Response):
     email = str(user_info.get("email", "")).strip()
@@ -351,6 +368,7 @@ async def signup(user_info: dict, response: Response):
 
     users[email] = new_user
     auth.save_users(users)
+
     token = auth.create_access_token({"sub": email})
     response.set_cookie(
         key=AUTH_COOKIE_NAME,
@@ -404,7 +422,9 @@ async def logout(response: Response, _: dict = Depends(get_current_user)):
     return {"success": True}
 
 
-# --- Paper & Feed Routes ---
+# -------------------------
+# papers
+# -------------------------
 @app.get("/api/v1/papers")
 async def get_papers(
     page: int = Query(1, ge=1),
@@ -425,7 +445,6 @@ async def get_papers(
     chunk, total, has_more = paginate_df(df, page, size)
     items = chunk.to_dict(orient="records")
     items = [inject_interaction_status(item, user) for item in items]
-
     return {"items": items, "page": page, "size": size, "has_more": has_more, "total": total}
 
 
@@ -452,7 +471,6 @@ async def search_papers(
     chunk, total, has_more = paginate_df(results, page, size)
     items = chunk.to_dict(orient="records")
     items = [inject_interaction_status(item, user) for item in items]
-
     return {"items": items, "page": page, "size": size, "has_more": has_more, "total": total}
 
 
@@ -461,11 +479,9 @@ async def get_paper(paper_id: str, user=Depends(get_current_user)):
     df = db_manager.df
     if df.empty:
         raise HTTPException(status_code=404, detail="Paper not found")
-
     rows = df[df["id"] == str(paper_id)]
     if rows.empty:
         raise HTTPException(status_code=404, detail="Paper not found")
-
     item = rows.iloc[0].to_dict()
     return inject_interaction_status(item, user)
 
@@ -514,7 +530,6 @@ async def recommendations(
     size: int = Query(10, ge=1, le=50),
     user=Depends(get_current_user),
 ):
-    # Baseline: fallback to feed ordering. Personal ranking can be added later.
     return await get_papers(page=page, size=size, category=None, user=user)
 
 
@@ -527,6 +542,7 @@ async def recommend_for_you(payload: dict, user=Depends(get_current_user)):
       "primary_topic": "AI for Science",
       "secondary_topics": ["HCI", "Multimodal"],
       "style_preference": "Practical",
+      "selected_keywords": ["..."] (optional),
       "page": 1,
       "size": 10
     }
@@ -554,7 +570,6 @@ async def recommend_for_you(payload: dict, user=Depends(get_current_user)):
         return {"items": [], "page": page, "size": size, "has_more": False, "total": 0}
 
     rows = df.to_dict(orient="records")
-
     max_likes = float(df.get("likes_count", 0).max() or 0)
     max_saves = float(df.get("saves_count", 0).max() or 0)
     max_citations = float(df.get("citations", 0).max() or 0)
@@ -566,7 +581,6 @@ async def recommend_for_you(payload: dict, user=Depends(get_current_user)):
         freshness = _freshness_score(row.get("update_date"))
         popularity = _popularity_score(row, max_likes, max_saves, max_citations)
 
-        # Small style preferences for phase-1 sorting flavor.
         style_boost = 0.0
         title_text = _norm_text(row.get("title"))
         if style_preference == "survey" and "survey" in title_text:
@@ -583,7 +597,6 @@ async def recommend_for_you(payload: dict, user=Depends(get_current_user)):
             + 0.05 * popularity
             + style_boost
         )
-
         row["_rank_score"] = round(float(score), 6)
         ranked.append(row)
 
@@ -613,7 +626,9 @@ async def recommend_for_you(payload: dict, user=Depends(get_current_user)):
     }
 
 
-# --- Interaction Routes ---
+# -------------------------
+# interactions
+# -------------------------
 @app.post("/api/v1/papers/{paper_id}/like")
 async def toggle_like(paper_id: str, user=Depends(get_current_user)):
     user = require_user(user)
@@ -668,7 +683,9 @@ async def get_interaction(paper_id: str, user=Depends(get_current_user)):
     return {"liked": liked, "saved": saved}
 
 
-# --- User Routes ---
+# -------------------------
+# users
+# -------------------------
 @app.get("/api/v1/users/{user_id}")
 async def get_user_profile(user_id: str):
     _, user, _ = find_user_by_id(user_id)
@@ -764,7 +781,9 @@ async def get_saved_papers(
     return {"items": items, "page": page, "size": size, "has_more": end < total, "total": total}
 
 
-# --- Comment Routes ---
+# -------------------------
+# comments
+# -------------------------
 @app.get("/api/v1/papers/{paper_id}/comments")
 async def get_comments(paper_id: str):
     return db_manager.comments.get(paper_id, [])
@@ -773,7 +792,6 @@ async def get_comments(paper_id: str):
 @app.post("/api/v1/papers/{paper_id}/comments", status_code=201)
 async def post_comment(paper_id: str, data: dict, user=Depends(get_current_user)):
     user = require_user(user)
-
     text = str(data.get("text", "")).strip()
     if not text:
         raise HTTPException(status_code=422, detail="text is required")
@@ -833,7 +851,6 @@ async def delete_comment(paper_id: str, comment_id: str, user=Depends(get_curren
     user = require_user(user)
     comments = db_manager.comments.get(paper_id, [])
 
-    # Try top-level delete first.
     for i, comment in enumerate(comments):
         if comment.get("id") == comment_id:
             if str(comment.get("author", {}).get("id")) != str(user.get("id")):
@@ -842,7 +859,6 @@ async def delete_comment(paper_id: str, comment_id: str, user=Depends(get_curren
             db_manager.save_comments()
             return {"success": True}
 
-    # Try reply delete.
     for comment in comments:
         replies = comment.get("replies", [])
         for i, reply in enumerate(replies):
@@ -856,6 +872,9 @@ async def delete_comment(paper_id: str, comment_id: str, user=Depends(get_curren
     raise HTTPException(status_code=404, detail="Comment not found")
 
 
+# -------------------------
+# misc
+# -------------------------
 @app.get("/api/v1/categories")
 async def get_categories():
     if db_manager.df.empty or "category" not in db_manager.df.columns:
@@ -890,3 +909,109 @@ async def get_recommend_keywords_expand(
         "secondary_topics": secondary,
         "seed_keywords": seed,
     }
+
+
+# -------------------------
+# graph (TF-IDF similarity)
+# -------------------------
+def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = None, top_k: int | None = None):
+    df = db_manager.df
+    if df.empty:
+        return {"nodes": [], "edges": []}
+
+    if max_nodes is not None and max_nodes > 0 and len(df) > max_nodes:
+        df = df.head(max_nodes)
+
+    abstracts = df["abstract"].astype(str).fillna("").tolist()
+    ids = df["id"].astype(str).tolist()
+    titles = df["title"].astype(str).tolist()
+
+    vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), min_df=2, max_df=0.9)
+    try:
+        X = vectorizer.fit_transform(abstracts)
+    except Exception:
+        return {"nodes": [{"id": ids[i], "title": titles[i]} for i in range(len(ids))], "edges": []}
+
+    nodes = [{"id": ids[i], "title": titles[i]} for i in range(len(ids))]
+    edges: list[dict] = []
+    n = len(ids)
+
+    try:
+        X_search = X
+        if n > 2000 and X.shape[1] > 100:
+            from sklearn.decomposition import TruncatedSVD
+            svd = TruncatedSVD(n_components=100)
+            X_search = svd.fit_transform(X)
+
+        from sklearn.neighbors import NearestNeighbors
+        radius = max(0.0, 1.0 - float(threshold))
+        nn = NearestNeighbors(radius=radius, metric="cosine", algorithm="brute")
+        nn.fit(X_search)
+        distances, indices = nn.radius_neighbors(X_search, return_distance=True)
+
+        for i_, (dists, inds) in enumerate(zip(distances, indices)):
+            for dist, j in zip(dists, inds):
+                if j <= i_:
+                    continue
+                score = 1.0 - float(dist)
+                if score >= float(threshold):
+                    edges.append({"source": ids[i_], "target": ids[j], "score": score})
+    except Exception:
+        sim_matrix = cosine_similarity(X)
+        for i in range(n):
+            for j in range(i + 1, n):
+                score = float(sim_matrix[i, j])
+                if score >= float(threshold):
+                    edges.append({"source": ids[i], "target": ids[j], "score": score})
+
+    if top_k is not None and top_k > 0:
+        neigh_map: dict[str, list[tuple[str, float]]] = {nid: [] for nid in ids}
+        for e in edges:
+            s = e["source"]
+            t = e["target"]
+            sc = float(e.get("score", 0.0))
+            neigh_map.setdefault(s, []).append((t, sc))
+            neigh_map.setdefault(t, []).append((s, sc))
+
+        kept = set()
+        new_edges: list[dict] = []
+        for s, nbs in neigh_map.items():
+            nbs_sorted = sorted(nbs, key=lambda x: x[1], reverse=True)[:top_k]
+            for t, sc in nbs_sorted:
+                a, b = (s, t) if s <= t else (t, s)
+                key = (a, b)
+                if key in kept:
+                    continue
+                kept.add(key)
+                new_edges.append({"source": s, "target": t, "score": sc})
+        edges = new_edges
+
+    return {"nodes": nodes, "edges": edges}
+
+
+@app.get("/api/v1/graph/global")
+async def graph_global(threshold: float = Query(0.1, ge=0.0, le=1.0)):
+    """
+    Global TF-IDF + cosine similarity graph.
+    Cached to backend/database/graph_global_{threshold}.json
+    """
+    cache_dir = db_module.DATA_DIR
+    cache_dir.mkdir(exist_ok=True)
+    cache_file = cache_dir / f"graph_global_{float(threshold):.2f}.json"
+
+    if cache_file.exists():
+        try:
+            with cache_file.open("r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+
+    graph = _compute_similarity_graph(threshold=threshold, max_nodes=None, top_k=None)
+
+    try:
+        with cache_file.open("w", encoding="utf-8") as f:
+            json.dump(graph, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+    return graph

@@ -49,7 +49,7 @@
   margin-left: 4px;
 }
 
-/* Like按钮激活状态 */
+/* Like button active state */
 .action-btn.liked {
   color: var(--color-accent);
 }
@@ -58,7 +58,7 @@
   color: var(--color-accent);
 }
 
-/* Save按钮相关样式 */
+/* Save button styles */
 .save-btn {
   position: relative;
 }
@@ -71,7 +71,7 @@
   color: #FFD700;
 }
 
-/* 保存成功提示 */
+/* Save success toast */
 .save-tooltip {
   position: absolute;
   top: -40px;
@@ -98,7 +98,7 @@
   border-top-color: var(--bg-tertiary);
 }
 
-/* 响应式设计 */
+/* Responsive */
 @media (max-width: 768px) {
   .action-bar {
     padding: 0 12px;
@@ -119,7 +119,7 @@
   }
 }
 
-/* 动画效果 */
+/* Animations */
 @keyframes fadeInTooltip {
   from {
     opacity: 0;
@@ -131,7 +131,7 @@
   }
 }
 
-/* 可访问性增强 */
+/* Accessibility */
 .action-btn:focus {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
@@ -142,7 +142,7 @@
   outline-offset: 2px;
 }
 
-/* 暗色主题适配 */
+/* Dark theme */
 @media (prefers-color-scheme: dark) {
   .save-tooltip {
     background: var(--bg-tertiary);

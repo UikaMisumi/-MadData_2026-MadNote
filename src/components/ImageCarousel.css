@@ -20,7 +20,7 @@
   transition: opacity 300ms ease-in-out;
 }
 
-/* 箭头按钮 */
+/* Arrow buttons */
 .carousel-arrow {
   position: absolute;
   top: 50%;
@@ -57,7 +57,7 @@
   fill: currentColor;
 }
 
-/* 图片计数器 */
+/* Image counter */
 .carousel-counter {
   position: absolute;
   bottom: 16px;
@@ -71,7 +71,7 @@
   font-weight: 500;
 }
 
-/* 切换动画 */
+/* Transition animation */
 .carousel-image-enter {
   opacity: 0;
   transform: scale(0.95);
