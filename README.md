@@ -1,5 +1,5 @@
 # MadData26 - MadNote: The Personalized Academic Discovery Platform
-
+![MadNote](./assets/madnote.png)
 ##  Inspiration
 Navigating the endless sea of academic papers can be overwhelming for researchers and students. We realized there was a lack of modern, engaging tools to discover and digest academic literature. We wanted to build a platform that feels as intuitive and addictive as a social media feed (like TikTok or Xiaohongshu), but is strictly tailored for academic research—helping users discover, explore, and interact with complex knowledge seamlessly.
 
@@ -26,10 +26,20 @@ To ensure maximum scalability and a lightning-fast user experience, we intention
   2. To create the "social media" vibe, we deployed **`Mistral-7B-Instruct-v0.3`** (4-bit quantized on an A100 GPU) to rewrite dry abstracts into engaging, emoji-rich JSON formats. 
   3. We utilized **`KeyBERT`** for precise n-gram keyword extraction to power our graph and search engine. 
   4. Finally, we engineered a robust **3-tier fallback URL fetcher** (Semantic Scholar API → ArXiv API → Google Scholar Direct Link) equipped with `difflib` similarity validation (≥85% threshold) to reliably guarantee accurate Open Access PDF links for every paper.
-* **Frontend**: Built as a responsive Single Page Application using **React** and **Vite**. We utilized **Cytoscape** and **ECharts** to render the complex paper similarity graphs smoothly in the browser.
-* **Backend & AI**: The core RESTful API is powered by **Python and FastAPI** with secure JWT authentication. For the LLM capabilities, we integrated the **DeepSeek API** using OpenAI-compatible endpoints to handle complex academic reasoning and multi-turn conversation memory.
-* **Recommendation Engine**: We utilized `scikit-learn` (`TfidfVectorizer` & `NearestNeighbors`) on the backend to dynamically compute paper similarities based on their textual content. Our ranking algorithm assigns dynamic weights to user preferences to serve the most relevant content.
+* **Frontend (React + Vite & Data Visualization)**: 
+  * **Architecture & Performance**: Built as a blazing-fast Single Page Application (SPA) using **React** and **Vite**. We implemented custom React Hooks (e.g., `useInfiniteScroll`) to lazily load our massive paper feed without compromising frame rates, and utilized the **Context API** for seamless global state management (Authentication, Theme, and Post caching).
+  * **Interactive Knowledge Graph**: To make academic exploration visual, we integrated **Cytoscape.js** and **ECharts**. These libraries render our pre-calculated similarity matrices into a highly interactive node-graph, allowing users to drag, zoom, and visually discover connected papers based on TF-IDF proximity.
 
+* **Backend & AI Integration (FastAPI + DeepSeek)**: 
+  * **High-Concurrency API**: The core RESTful backend is powered by **Python and FastAPI** (running on Uvicorn). It handles complex routing for user profiles, paginated feeds, and nested community comments.
+  * **Enterprise-Grade Security**: We built a stateless authentication flow using JSON Web Tokens (**JWT**) via `python-jose`, coupled with `passlib` and `bcrypt` for secure, salted password hashing.
+  * **Context-Aware LLM Chatbot**: For the "Chat with Paper" feature, we integrated the highly logical **DeepSeek API** (`deepseek-chat`). We engineered a custom conversation handler that strictly injects the specific paper's abstract into the system prompt and manually orchestrates a sliding window of the `messages` list to achieve seamless **Multi-Turn Memory**.
+
+* **Recommendation Engine & NLP (scikit-learn)**: 
+  * **Vectorization & Similarity**: We utilized **`scikit-learn`** to build the core of our discovery algorithm. By passing the rewritten abstracts and KeyBERT tags through a `TfidfVectorizer`, we converted unstructured text into high-dimensional sparse matrices. 
+  * **Nearest Neighbors Matching**: We then applied the `NearestNeighbors` algorithm (using Cosine Similarity) to mathematically map the distance between all 550+ papers in the database.
+  * **Dynamic Ranking**: Instead of a simple chronological feed, our algorithm computes a composite ranking score. It dynamically weights content-based TF-IDF similarity against user-engagement metrics (such as simulated citations, user likes, and saves) to continuously serve the most relevant "For-You" content.
+    
 ##  Challenges we ran into
 * **Taming LLM Outputs at Scale**: Forcing the local Mistral-7B model to output strictly formatted JSON for 550 papers without hallucination required extensive Prompt Engineering and regex parsing.
 * **Graph Optimization**: Calculating and rendering a dense similarity network for hundreds of papers was computationally heavy. We optimized this by implementing `TruncatedSVD` for dimensionality reduction and caching the graph output locally.
@@ -58,14 +68,14 @@ To ensure maximum scalability and a lightning-fast user experience, we intention
   * To power our recommendation and visualization engine, we applied advanced NLP and machine learning techniques, specifically using **`scikit-learn`** to build a **TF-IDF Vectorizer** and compute **Cosine Similarity** matrices.
   * We utilized **TruncatedSVD** for dimensionality reduction to efficiently render the global knowledge graph in the frontend.
 
-## 🤖 AI Usage & Citations
+## AI Usage & Citations
 In strict compliance with the hackathon rules, we explicitly cite the use of the following Artificial Intelligence models and tools within our project:
 * **Mistral-7B-Instruct-v0.3**: Deployed locally via HuggingFace for offline data pre-processing (reframing academic abstracts into JSON social media posts).
 * **DeepSeek API (deepseek-chat)**: Integrated into our backend to power the real-time "Chat with Paper" multi-turn conversational assistant.
 * **KeyBERT**: Used in our Python data pipeline for precise n-gram keyword extraction from raw text.
 * **Claude (Anthropic)**: Used strictly as a pair-programming and ideation assistant to help format boilerplate code, debug frontend CSS, and refine project documentation during the hackathon.
 
-## 🛠️ Originality & Hackathon Compliance
+## Originality & Hackathon Compliance
 * **Built from Scratch**: The entire architecture, frontend SPA, backend API, and data pipeline were conceptualized and coded originally by our team strictly during the **MadData26 Hackathon** timeframe. 
 * **Team Track**: This project is submitted under the **[General Track / Qualcomm Track]** by our dedicated team of **[Team Size, e.g., 4]** members.
 
