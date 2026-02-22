@@ -76,6 +76,43 @@
   line-height: 1.55;
 }
 
+.home-load-more-wrap {
+  margin: 18px 0 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.home-load-more-btn {
+  min-width: 156px;
+  height: 42px;
+  border: 1px solid rgba(203, 213, 225, 0.95);
+  border-radius: 999px;
+  background: #fff;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.home-load-more-btn:hover:not(:disabled) {
+  border-color: var(--mn-brand-500);
+  color: var(--mn-brand-700);
+  background: var(--mn-brand-50);
+}
+
+.home-load-more-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.home-load-more-end {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .home-page {
     padding-top: 18px;

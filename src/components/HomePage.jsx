@@ -8,7 +8,7 @@ import GraphModal from './GraphModal';
 import './HomePage.css';
 
 function HomePage({ searchTerm }) {
-  const { posts } = usePosts();
+  const { posts, hasMore, isLoading, loadMore } = usePosts();
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -87,14 +87,33 @@ function HomePage({ searchTerm }) {
         )}
 
         {filteredPosts.length > 0 ? (
-          <MasonryGrid
-            posts={filteredPosts}
-            showStats={true}
-            showPrivBadge={false}
-            selectedIds={selectedIds}
-            onToggleSelect={handleToggleSelect}
-            onOpenGraph={handleOpenGraph}
-          />
+          <>
+            <MasonryGrid
+              posts={filteredPosts}
+              showStats={true}
+              showPrivBadge={false}
+              selectedIds={selectedIds}
+              onToggleSelect={handleToggleSelect}
+              onOpenGraph={handleOpenGraph}
+            />
+
+            {!searchTerm && (
+              <div className="home-load-more-wrap">
+                {hasMore ? (
+                  <button
+                    type="button"
+                    className="home-load-more-btn"
+                    onClick={loadMore}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Loading...' : 'Load more'}
+                  </button>
+                ) : (
+                  <p className="home-load-more-end">All papers loaded</p>
+                )}
+              </div>
+            )}
+          </>
         ) : (
           <div className="home-empty">
             {searchTerm ? (
