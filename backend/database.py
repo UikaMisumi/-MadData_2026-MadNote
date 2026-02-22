@@ -144,7 +144,7 @@ class DataManager:
                 csv_df = pd.read_csv(csv_path)
                 if "title" in csv_df.columns:
                     csv_df["title_clean"] = csv_df["title"].astype(str).str.strip().str.lower()
-                    csv_df = csv_df.drop_duplicates(subset=["title_clean"])
+                    csv_df = csv_df.drop_duplicates(subset=["title_clean"]).reset_index(drop=True)
 
                     cols_to_merge = ["title_clean"]
                     target_cols = ["authors", "category", "update_date", "citations"]
@@ -159,6 +159,26 @@ class DataManager:
                         for col in target_cols:
                             if f"{col}_old" in df.columns:
                                 df = df.drop(columns=[f"{col}_old"])
+
+                        # Minimal fallback: when rewritten titles fail to match, recover metadata
+                        # via stable id pattern (paper-<row_index>) aligned with CSV row index.
+                        id_index = pd.to_numeric(
+                            df["id"].astype(str).str.extract(r"(\d+)$")[0],
+                            errors="coerce",
+                        )
+                        for col in target_cols:
+                            if col not in csv_df.columns:
+                                continue
+                            if col not in df.columns:
+                                df[col] = pd.NA
+
+                            if col in ["authors", "category", "update_date"]:
+                                missing_mask = df[col].isna() | df[col].astype(str).str.strip().eq("")
+                            else:
+                                missing_mask = df[col].isna()
+
+                            fallback_series = id_index.map(csv_df[col])
+                            df.loc[missing_mask, col] = fallback_series[missing_mask]
             except Exception as e:
                 print(f"Warning: Failed to merge CSV data: {e}")
 
