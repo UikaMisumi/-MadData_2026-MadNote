@@ -70,7 +70,7 @@ To ensure maximum scalability and a lightning-fast user experience, we intention
 
 ## AI Usage & Citations
 In strict compliance with the hackathon rules, we explicitly cite the use of the following Artificial Intelligence models and tools within our project:
-* **Mistral-7B-Instruct-v0.3**: Deployed locally via HuggingFace for offline data pre-processing (reframing academic abstracts into JSON social media posts).
+* **Mistral-7B-Instruct-v0.3**: Deployed in Colab-A100-Machine via HuggingFace for offline data pre-processing (reframing academic abstracts into JSON social media posts).
 * **DeepSeek API (deepseek-chat)**: Integrated into our backend to power the real-time "Chat with Paper" multi-turn conversational assistant.
 * **KeyBERT**: Used in our Python data pipeline for precise n-gram keyword extraction from raw text.
 * **Claude (Anthropic)**: Used strictly as a pair-programming and ideation assistant to help format boilerplate code, debug frontend CSS, and refine project documentation during the hackathon.
