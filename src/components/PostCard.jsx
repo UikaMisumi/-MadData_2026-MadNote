@@ -42,6 +42,9 @@ const PostCard = ({
   const related = Array.isArray(post.related_titles)
     ? post.related_titles.slice(0, 2)
     : (post.tags || []).slice(0, 2).map((tag) => `Related topic: ${String(tag).replace(/_/g, ' ')}`);
+  const keyPointText = Array.isArray(post.keywords) && post.keywords.length > 0
+    ? post.keywords.filter(Boolean).slice(0, 3).join(' / ')
+    : (secondSentence || 'Open this paper for detailed insights.');
 
   const categoryClass = (() => {
     const c = topicLabel.toLowerCase();
@@ -153,7 +156,7 @@ const PostCard = ({
 
       <ul className="highlights">
         <li><strong>Author:</strong> {post.author?.name || 'Anonymous'}</li>
-        <li><strong>Key point:</strong> {secondSentence || 'Open this paper for detailed insights.'}</li>
+        <li><strong>Key point:</strong> {keyPointText}</li>
       </ul>
 
       <div className="related">
