@@ -52,7 +52,7 @@ We architected MadNote with a robust, modern tech stack and a heavy focus on dat
 In strict compliance with the hackathon rules, we explicitly cite the use of the following Artificial Intelligence models and tools within our project:
 * **Mistral-7B-Instruct-v0.3**: Deployed locally via HuggingFace for offline data pre-processing (reframing academic abstracts into JSON social media posts).
 * **DeepSeek API (deepseek-chat)**: Integrated into our backend to power the real-time "Chat with Paper" multi-turn conversational assistant.
-* **KeyBERT**: Used in our Python data pipeline for precise n-gram keyword extraction from raw text.
+* **KeyBERT**: Used in our ipynb Python data pipeline for precise n-gram keyword extraction from raw text.
 * **GitHub Copilot / AI Assistants**: Used strictly as pair-programming assistants to help format boilerplate code and debug frontend CSS during the hackathon.
 
 ## Originality & Hackathon Compliance
