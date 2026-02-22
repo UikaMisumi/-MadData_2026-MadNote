@@ -4,6 +4,16 @@ import uuid
 
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+import json
+
+# database module access (for DATA_DIR)
+try:
+    from . import database as db_module  # type: ignore
+except Exception:
+    import database as db_module  # type: ignore
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Internal Modules
 try:
@@ -824,3 +834,67 @@ async def get_recommend_keywords_expand(
         "secondary_topics": secondary,
         "seed_keywords": seed,
     }
+
+
+def _compute_similarity_graph(threshold: float = 0.5, max_nodes: int | None = None):
+    df = db_manager.df
+    if df.empty:
+        return {"nodes": [], "edges": []}
+
+    if max_nodes is not None and max_nodes > 0 and len(df) > max_nodes:
+        df = df.head(max_nodes)
+
+    abstracts = df["abstract"].astype(str).fillna("").tolist()
+    ids = df["id"].astype(str).tolist()
+    titles = df["title"].astype(str).tolist()
+
+    vectorizer = TfidfVectorizer(stop_words="english")
+    try:
+        X = vectorizer.fit_transform(abstracts)
+    except Exception:
+        return {"nodes": [{"id": ids[i], "title": titles[i]} for i in range(len(ids))], "edges": []}
+
+    sim_matrix = cosine_similarity(X)
+
+    nodes = [{"id": ids[i], "title": titles[i]} for i in range(len(ids))]
+    edges = []
+    n = len(ids)
+    for i in range(n):
+        for j in range(i + 1, n):
+            score = float(sim_matrix[i, j])
+            if score >= float(threshold):
+                edges.append({"source": ids[i], "target": ids[j], "score": score})
+
+    return {"nodes": nodes, "edges": edges}
+
+
+@app.get("/api/v1/graph/similarity")
+async def graph_similarity(
+    threshold: float = Query(0.5, ge=0.0, le=1.0),
+    max_nodes: int | None = Query(None, ge=1),
+):
+    """
+    Compute a TF-IDF + Cosine similarity graph from paper abstracts.
+    Returns nodes and edges where edge.score >= threshold.
+    Results are cached per-threshold in the `backend/database` folder to avoid recomputation.
+    """
+    cache_dir = db_module.DATA_DIR
+    cache_dir.mkdir(exist_ok=True)
+    cache_file = cache_dir / f"graph_similarity_{float(threshold):.2f}.json"
+
+    if cache_file.exists():
+        try:
+            with cache_file.open("r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+
+    graph = _compute_similarity_graph(threshold=threshold, max_nodes=max_nodes)
+
+    try:
+        with cache_file.open("w", encoding="utf-8") as f:
+            json.dump(graph, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+    return graph
