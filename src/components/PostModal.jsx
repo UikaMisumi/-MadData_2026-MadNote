@@ -1,60 +1,84 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePosts } from '../contexts/PostsContext';
 import { useAuth } from '../contexts/AuthContext';
 import CommentInput from './CommentInput';
 import CommentItem from './CommentItem';
 import './PostModal.css';
 
-const PostModal = ({ post, isOpen, onClose }) => {
+const PostModal = ({ post, isOpen, onClose, onOpenGraph }) => {
   const { updateLikeCount, updateSaveCount, getComments, addComment, addReply, deleteComment } = usePosts();
   const { user } = useAuth();
+
+  const modalRef = useRef(null);
+  const [activeTab, setActiveTab] = useState('ai');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLiked, setIsLiked] = useState(post?.is_liked ?? false);
   const [isSaved, setIsSaved] = useState(post?.is_saved ?? false);
   const [likesCount, setLikesCount] = useState(post?.likes_count ?? post?.likesCount ?? 0);
   const [savesCount, setSavesCount] = useState(post?.saves_count ?? post?.savesCount ?? 0);
-  const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState([]);
   const [replyTarget, setReplyTarget] = useState(null);
-  const modalRef = useRef(null);
+  const [showRecommendations, setShowRecommendations] = useState(false);
+  const [askValue, setAskValue] = useState('');
 
-  // Load comments from API when modal opens
-  useEffect(() => {
-    if (isOpen && post) {
-      setIsLiked(post.is_liked ?? false);
-      setIsSaved(post.is_saved ?? false);
-      setLikesCount(post.likes_count ?? post.likesCount ?? 0);
-      setSavesCount(post.saves_count ?? post.savesCount ?? 0);
-      setCurrentSlide(0);
-      setReplyTarget(null);
-      document.body.style.overflow = 'hidden';
+  const mediaItems = useMemo(() => {
+    if (!post) return [];
+    if (Array.isArray(post.media) && post.media.length > 0) return post.media;
+    return [{ type: 'image', url: post.image_url || post.image || post.imageUrl }];
+  }, [post]);
 
-      getComments(post.id).then(setComments);
+  const related = useMemo(() => {
+    if (!post) return [];
+    if (Array.isArray(post.related_titles)) return post.related_titles.slice(0, 2);
+    if (Array.isArray(post.tags)) return post.tags.slice(0, 2).map((tag) => `Related topic: ${tag}`);
+    return [];
+  }, [post]);
 
-      const handleKeyDown = (e) => {
-        switch (e.key) {
-          case 'Escape': onClose(); break;
-          case 'ArrowLeft': prevSlide(); break;
-          case 'ArrowRight': nextSlide(); break;
-          case 'l': case 'L':
-            if (!e.ctrlKey && !e.metaKey) handleLike();
-            break;
-          case 's': case 'S':
-            if (!e.ctrlKey && !e.metaKey) handleSave();
-            break;
-          case 'c': case 'C':
-            if (!e.ctrlKey && !e.metaKey) focusCommentBox();
-            break;
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.body.style.overflow = '';
-        document.removeEventListener('keydown', handleKeyDown);
-      };
+  const authorsText = useMemo(() => {
+    if (!post) return 'Anonymous';
+    if (Array.isArray(post.authors)) {
+      return post.authors.filter(Boolean).join(', ') || post.author?.name || 'Anonymous';
     }
+    if (typeof post.authors === 'string') {
+      return post.authors || post.author?.name || 'Anonymous';
+    }
+    return post.author?.name || 'Anonymous';
+  }, [post]);
+
+  useEffect(() => {
+    if (!isOpen || !post) return;
+
+    setActiveTab('ai');
+    setCurrentSlide(0);
+    setReplyTarget(null);
+    setShowRecommendations(false);
+    setAskValue('');
+    setIsLiked(post.is_liked ?? false);
+    setIsSaved(post.is_saved ?? false);
+    setLikesCount(post.likes_count ?? post.likesCount ?? 0);
+    setSavesCount(post.saves_count ?? post.savesCount ?? 0);
+    document.body.style.overflow = 'hidden';
+
+    getComments(post.id).then(setComments);
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (mediaItems.length > 0 && e.key === 'ArrowLeft') {
+        setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
+      }
+      if (mediaItems.length > 0 && e.key === 'ArrowRight') {
+        setCurrentSlide((prev) => (prev + 1) % mediaItems.length);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, post?.id]);
+
+  if (!isOpen || !post) return null;
 
   const handleBackdropClick = (e) => {
     if (e.target === modalRef.current) onClose();
@@ -64,12 +88,14 @@ const PostModal = ({ post, isOpen, onClose }) => {
     if (!user) return;
     const nextLiked = !isLiked;
     setIsLiked(nextLiked);
-    setLikesCount(prev => nextLiked ? prev + 1 : Math.max(0, prev - 1));
-
+    setLikesCount((prev) => (nextLiked ? prev + 1 : Math.max(0, prev - 1)));
     const result = await updateLikeCount(post.id);
     if (result) {
       setIsLiked(result.liked);
       setLikesCount(result.likes_count);
+      setShowRecommendations(result.liked);
+    } else {
+      setShowRecommendations(nextLiked);
     }
   };
 
@@ -77,8 +103,7 @@ const PostModal = ({ post, isOpen, onClose }) => {
     if (!user) return;
     const nextSaved = !isSaved;
     setIsSaved(nextSaved);
-    setSavesCount(prev => nextSaved ? prev + 1 : Math.max(0, prev - 1));
-
+    setSavesCount((prev) => (nextSaved ? prev + 1 : Math.max(0, prev - 1)));
     const result = await updateSaveCount(post.id);
     if (result) {
       setIsSaved(result.saved);
@@ -86,239 +111,223 @@ const PostModal = ({ post, isOpen, onClose }) => {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/#/`;
     if (navigator.share) {
-      navigator.share({ title: post.title, url: window.location.href });
+      try {
+        await navigator.share({ title: post.title, url: shareUrl });
+      } catch {
+        // Ignore cancellation from native share dialog.
+      }
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      await navigator.clipboard.writeText(shareUrl);
+      alert('Link copied to clipboard.');
     }
-  };
-
-  const scrollToComments = () => {
-    document.getElementById('comments')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const focusCommentBox = () => {
-    document.getElementById('comment-input')?.focus();
-  };
-
-  const nextSlide = () => {
-    const count = post.media ? post.media.length : 1;
-    setCurrentSlide(prev => (prev + 1) % count);
-  };
-
-  const prevSlide = () => {
-    const count = post.media ? post.media.length : 1;
-    setCurrentSlide(prev => (prev - 1 + count) % count);
   };
 
   const handleCommentSubmit = async (text) => {
     if (!text.trim()) return;
+
     try {
       if (replyTarget) {
         const newReply = await addReply(post.id, replyTarget.id, text.trim());
-        setComments(prev => prev.map(c =>
-          c.id === replyTarget.id
-            ? { ...c, replies: [...(c.replies || []), newReply] }
-            : c
-        ));
+        setComments((prev) => prev.map((c) => (
+          c.id === replyTarget.id ? { ...c, replies: [...(c.replies || []), newReply] } : c
+        )));
         setReplyTarget(null);
       } else {
         const newComment = await addComment(post.id, text.trim());
-        setComments(prev => [...prev, newComment]);
+        setComments((prev) => [...prev, newComment]);
       }
     } catch (err) {
       console.error('PostModal: comment submit failed', err);
     }
   };
 
-  const handleReplyClick = (comment) => {
-    setReplyTarget(comment);
-    setTimeout(() => {
-      document.querySelector('.comment-textarea')?.focus();
-    }, 100);
-  };
-
-  const handleCancelReply = () => setReplyTarget(null);
-
-  const handleReply = async (commentId, replyText) => {
-    if (!replyText.trim()) return;
+  const handleReply = async (commentId, text) => {
+    if (!text.trim()) return;
     try {
-      const newReply = await addReply(post.id, commentId, replyText.trim());
-      setComments(prev => prev.map(c =>
-        c.id === commentId
-          ? { ...c, replies: [...(c.replies || []), newReply] }
-          : c
-      ));
+      const newReply = await addReply(post.id, commentId, text.trim());
+      setComments((prev) => prev.map((c) => (
+        c.id === commentId ? { ...c, replies: [...(c.replies || []), newReply] } : c
+      )));
     } catch (err) {
       console.error('PostModal: reply failed', err);
     }
-  };
-
-  const handleCommentLike = () => {
-    // Comment liking is handled in-place inside CommentItem;
-    // no global state sync needed.
   };
 
   const handleCommentDelete = async (commentId, isReply = false, parentCommentId = null) => {
     try {
       await deleteComment(post.id, commentId);
       if (isReply && parentCommentId) {
-        setComments(prev => prev.map(c =>
+        setComments((prev) => prev.map((c) => (
           c.id === parentCommentId
-            ? { ...c, replies: (c.replies || []).filter(r => r.id !== commentId) }
+            ? { ...c, replies: (c.replies || []).filter((r) => r.id !== commentId) }
             : c
-        ));
+        )));
       } else {
-        setComments(prev => prev.filter(c => c.id !== commentId));
+        setComments((prev) => prev.filter((c) => c.id !== commentId));
       }
     } catch (err) {
       console.error('PostModal: delete comment failed', err);
     }
   };
 
-  if (!isOpen || !post) return null;
-
-  const mediaItems = post.media || [{ type: 'image', url: post.image_url || post.image || post.imageUrl }];
-  const hasMultipleMedia = mediaItems.length > 1;
-
   return (
-    <div
-      className={`post-modal ${isOpen ? 'open' : ''}`}
-      ref={modalRef}
-      onClick={handleBackdropClick}
-    >
-      <div className="panel">
-        {/* Media Section */}
-        <section className="media">
-          <div className="swiper">
-            <div className="slide active">
-              {mediaItems[currentSlide]?.type === 'video' ? (
-                <video src={mediaItems[currentSlide].url} controls autoPlay muted loop />
-              ) : (
-                <img
-                  src={mediaItems[currentSlide]?.url}
-                  alt={post.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                />
-              )}
-            </div>
+    <div className={`post-modal ${isOpen ? 'open' : ''}`} ref={modalRef} onClick={handleBackdropClick}>
+      <div className="paper-shell">
+        <div className="paper-topbar">
+          <button className="back-btn" type="button" onClick={onClose}>Back to Feed</button>
+          <div className="top-user">
+            <span>{user?.name || 'Guest'}</span>
           </div>
+        </div>
 
-          {hasMultipleMedia && (
-            <>
-              <button className="nav prev" onClick={prevSlide}>‹</button>
-              <button className="nav next" onClick={nextSlide}>›</button>
-              <div className="dots">
-                {mediaItems.map((_, index) => (
-                  <button
-                    key={index}
-                    className={`dot ${index === currentSlide ? 'active' : ''}`}
-                    onClick={() => setCurrentSlide(index)}
-                  />
+        <div className="paper-body">
+          <div className="paper-main">
+            <section className="paper-hero">
+              <h1 className="paper-title">{post.title}</h1>
+              <p className="paper-meta">
+                {authorsText}
+                {' · '}
+                {post.update_date || 'Unknown date'}
+              </p>
+
+              <div className="paper-tabs">
+                <button
+                  type="button"
+                  className={activeTab === 'ai' ? 'active' : ''}
+                  onClick={() => setActiveTab('ai')}
+                >
+                  AI Breakdown
+                </button>
+                <button
+                  type="button"
+                  className={activeTab === 'original' ? 'active' : ''}
+                  onClick={() => setActiveTab('original')}
+                >
+                  Original Abstract
+                </button>
+              </div>
+
+              <div className="paper-content">
+                {activeTab === 'ai' ? (
+                  <div className="section-grid">
+                    <section>
+                      <h3>The Problem</h3>
+                      <p>{post.ai_summary || post.abstract || 'No AI summary available yet.'}</p>
+                    </section>
+                    <section>
+                      <h3>The Method</h3>
+                      <p>{post.abstract || post.description || post.content || 'No method details available.'}</p>
+                    </section>
+                  </div>
+                ) : (
+                  <p>{post.abstract || post.content || post.description || 'No original abstract available.'}</p>
+                )}
+              </div>
+
+              <div className="paper-actions">
+                <button type="button" className={`paper-act ${isLiked ? 'active' : ''}`} onClick={handleLike}>
+                  Like {likesCount}
+                </button>
+                <button type="button" className={`paper-act ${isSaved ? 'active' : ''}`} onClick={handleSave}>
+                  Save {savesCount}
+                </button>
+                <button type="button" className="paper-act" onClick={handleShare}>Share</button>
+              </div>
+            </section>
+
+            <section className={`recommend-block ${showRecommendations ? 'show' : ''}`}>
+              <h3>Because you liked this...</h3>
+              <p>Semantic matches for your reading path.</p>
+              <div className="recommend-list">
+                {(related.length > 0 ? related : ['No recommendation generated yet.']).map((item, idx) => (
+                  <div key={`${post.id}-rec-${idx}`} className="recommend-item">{item}</div>
                 ))}
               </div>
-            </>
-          )}
-        </section>
+            </section>
 
-        {/* Action Rail */}
-        <aside className="rail">
-          <button
-            className={`rail-btn ${isLiked ? 'active' : ''}`}
-            onClick={handleLike}
-            data-act="like"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-            <span>{likesCount}</span>
-          </button>
+            <section className="comments-shell" id="comments">
+              <h3>Discussions ({comments.length})</h3>
+              <CommentInput
+                onSubmit={handleCommentSubmit}
+                placeholder={replyTarget ? `Reply to @${replyTarget.author?.name || 'Anonymous'}...` : 'Share your thoughts...'}
+                replyTo={replyTarget}
+                onCancelReply={() => setReplyTarget(null)}
+              />
+              <div className="comment-list">
+                {comments.length > 0 ? comments.map((comment, idx) => (
+                  <CommentItem
+                    key={comment.id || idx}
+                    comment={comment}
+                    onReply={handleReply}
+                    onLike={() => {}}
+                    onDelete={handleCommentDelete}
+                    currentUser={user}
+                    onReplyClick={setReplyTarget}
+                    replyTarget={replyTarget}
+                  />
+                )) : (
+                  <p className="empty-comments">No comments yet. Be the first to comment.</p>
+                )}
+              </div>
+            </section>
+          </div>
 
-          <button className="rail-btn" onClick={scrollToComments} data-act="comment">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-            </svg>
-            <span>Comment</span>
-          </button>
-
-          <button
-            className={`rail-btn ${isSaved ? 'active' : ''}`}
-            onClick={handleSave}
-            data-act="save"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
-            </svg>
-            <span>{savesCount}</span>
-          </button>
-
-          <button className="rail-btn" onClick={handleShare} data-act="share">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
-            </svg>
-            <span>Share</span>
-          </button>
-        </aside>
-
-        {/* Content Sheet */}
-        <article className="sheet">
-          <header>
-            <img
-              className="avatar"
-              src={post.author?.avatar || '/default-avatar.png'}
-              alt={post.author?.name || 'User'}
-            />
-            <div className="author">
-              <h2 className="title">{post.title}</h2>
-              <span className="nick">@{post.author?.username || post.author?.name || 'user'}</span>
-            </div>
-          </header>
-
-          <section className="body">
-            <p>{post.ai_summary || post.abstract || post.content || post.description || 'No description available.'}</p>
-          </section>
-
-          <section className="comments" id="comments">
-            <h3>Comments ({comments.length})</h3>
-            <div className="comment-list">
-              {comments.length > 0 ? comments.map((comment, index) => (
-                <CommentItem
-                  key={comment.id || index}
-                  comment={comment}
-                  onReply={handleReply}
-                  onLike={handleCommentLike}
-                  onDelete={handleCommentDelete}
-                  currentUser={user}
-                  onReplyClick={handleReplyClick}
-                  replyTarget={replyTarget}
-                />
-              )) : (
-                <div className="no-comments">
-                  <div className="no-comments-icon">💬</div>
-                  <p>No comments yet. Be the first to comment!</p>
+          <aside className="paper-side">
+            <section className="media-card">
+              <div className="media-view">
+                {mediaItems[currentSlide]?.type === 'video' ? (
+                  <video src={mediaItems[currentSlide]?.url} controls autoPlay muted loop />
+                ) : (
+                  <img src={mediaItems[currentSlide]?.url} alt={post.title} />
+                )}
+              </div>
+              {mediaItems.length > 1 && (
+                <div className="media-nav">
+                  <button type="button" onClick={() => setCurrentSlide((prev) => (prev - 1 + mediaItems.length) % mediaItems.length)}>
+                    Prev
+                  </button>
+                  <span>{currentSlide + 1}/{mediaItems.length}</span>
+                  <button type="button" onClick={() => setCurrentSlide((prev) => (prev + 1) % mediaItems.length)}>
+                    Next
+                  </button>
                 </div>
               )}
+            </section>
+
+            <div className="side-actions">
+              <button type="button">Read PDF</button>
+              <button type="button">GitHub</button>
             </div>
-          </section>
 
-          <CommentInput
-            onSubmit={handleCommentSubmit}
-            placeholder={replyTarget ? `回复 @${replyTarget.author?.name || 'Anonymous'}...` : 'Add a comment...'}
-            replyTo={replyTarget}
-            onCancelReply={handleCancelReply}
-          />
-        </article>
+            <section className="graph-cta">
+              <h4>Knowledge Graph</h4>
+              <p>Launch the lineage graph for this paper.</p>
+              <button type="button" onClick={() => onOpenGraph && onOpenGraph(post.title)}>Launch Graph</button>
+            </section>
 
-        <button className="close-btn" onClick={onClose}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
+            <section className="ask-card">
+              <h4>Ask Paper</h4>
+              <p>Edge inference is ready.</p>
+              <div className="ask-log">Ask anything about this paper.</div>
+              <div className="ask-input">
+                <input
+                  type="text"
+                  placeholder="e.g. What datasets were used?"
+                  value={askValue}
+                  onChange={(e) => setAskValue(e.target.value)}
+                />
+                <button type="button">Send</button>
+              </div>
+            </section>
+          </aside>
+        </div>
       </div>
     </div>
   );
 };
 
 export default PostModal;
+

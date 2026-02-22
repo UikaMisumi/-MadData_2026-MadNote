@@ -51,11 +51,12 @@ export const PostsProvider = ({ children }) => {
     }
   }, [isLoading]);
 
-  // Trigger fetch when page or category changes
+  // Trigger fetch when page/category/auth user changes.
+  // Login/logout resets the list; include user id so we always refetch after reset.
   useEffect(() => {
     fetchPosts(page, category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, category]);
+  }, [page, category, user?.id]);
 
   const loadMore = () => {
     if (hasMore && !isLoading) {

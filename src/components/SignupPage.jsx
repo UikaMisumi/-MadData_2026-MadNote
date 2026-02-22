@@ -14,20 +14,14 @@ function SignupPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Validation rules
+  // Validation rules aligned with backend: only required checks on signup form.
   const validateEmail = (v) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!v) return 'Email is required.';
-    if (!emailRegex.test(v)) return 'Please enter a valid email address.';
     return '';
   };
 
   const validatePassword = (v) => {
     if (!v) return 'Password is required.';
-    if (v.length < 8) return 'Password must be at least 8 characters.';
-    if (!/[A-Z]/.test(v) || !/[a-z]/.test(v) || !/\d/.test(v)) {
-      return 'Password must include uppercase, lowercase, and a number.';
-    }
     return '';
   };
 
@@ -69,12 +63,14 @@ function SignupPage() {
     setSignupError('');
 
     try {
-      // POST /api/v1/auth/signup  â€” backend generates username if not provided
+      // POST /api/v1/auth/signup  â€?backend generates username if not provided
       const data = await apiSignup(email.trim(), password, '');
       login(data.user, data.token);
       navigate('/');
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === 0) {
+        setSignupError('Backend is not running on http://localhost:8000.');
+      } else if (err.status === 400) {
         setErrors((prev) => ({ ...prev, email: 'Email already exists. Please use a different email.' }));
       } else {
         setSignupError('Registration failed. Please try again.');
@@ -114,8 +110,8 @@ function SignupPage() {
             <span>Email</span>
             <input
               id="signup-email-input"
-              type="email"
-              placeholder="Enter your email"
+              type="text"
+              placeholder="Enter account name or email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={handleEmailBlur}
@@ -147,7 +143,6 @@ function SignupPage() {
               aria-required="true"
               aria-describedby={errors.password ? 'password-error' : undefined}
               className={errors.password ? 'input-error' : ''}
-              minLength={8}
             />
             {errors.password && (
               <span className="error-message" id="password-error" role="alert">
@@ -172,7 +167,6 @@ function SignupPage() {
               aria-required="true"
               aria-describedby={errors.confirmPassword ? 'confirm-password-error' : undefined}
               className={errors.confirmPassword ? 'input-error' : ''}
-              minLength={8}
             />
             {errors.confirmPassword && (
               <span className="error-message" id="confirm-password-error" role="alert">

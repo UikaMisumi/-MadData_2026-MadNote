@@ -3,7 +3,17 @@ import { usePosts } from '../contexts/PostsContext';
 import { useAuth } from '../contexts/AuthContext';
 import './PostCard.css';
 
-const PostCard = ({ post, onClick, showKebab = false, onDelete }) => {
+const PostCard = ({
+  post,
+  onClick,
+  showKebab = false,
+  onDelete,
+  isSelected = false,
+  onToggleSelect,
+  onOpenGraph,
+  onLikeToggle,
+  onSaveToggle,
+}) => {
   const { updateLikeCount, updateSaveCount } = usePosts();
   const { user } = useAuth();
   const [isLiked, setIsLiked] = useState(post.is_liked ?? false);
@@ -56,7 +66,9 @@ const PostCard = ({ post, onClick, showKebab = false, onDelete }) => {
     const nextLiked = !isLiked;
     setIsLiked(nextLiked);
     setLikesCount((prev) => (nextLiked ? prev + 1 : Math.max(0, prev - 1)));
-    const result = await updateLikeCount(post.id);
+    const result = onLikeToggle
+      ? await onLikeToggle(post.id)
+      : await updateLikeCount(post.id);
     if (result) {
       setIsLiked(result.liked);
       setLikesCount(result.likes_count);
@@ -69,7 +81,9 @@ const PostCard = ({ post, onClick, showKebab = false, onDelete }) => {
     const nextSaved = !isSaved;
     setIsSaved(nextSaved);
     setSavesCount((prev) => (nextSaved ? prev + 1 : Math.max(0, prev - 1)));
-    const result = await updateSaveCount(post.id);
+    const result = onSaveToggle
+      ? await onSaveToggle(post.id)
+      : await updateSaveCount(post.id);
     if (result) {
       setIsSaved(result.saved);
       setSavesCount(result.saves_count);
@@ -87,6 +101,20 @@ const PostCard = ({ post, onClick, showKebab = false, onDelete }) => {
 
   return (
     <article className={`xh-post ${isDeleting ? 'deleting' : ''}`} onClick={handleCardClick}>
+      {onToggleSelect && (
+        <input
+          type="checkbox"
+          className="paper-checkbox"
+          checked={isSelected}
+          onChange={(e) => {
+            e.stopPropagation();
+            onToggleSelect(post.id, e.target.checked);
+          }}
+          onClick={(e) => e.stopPropagation()}
+          aria-label={`Select ${post.title}`}
+        />
+      )}
+
       {showKebab && (
         <div className="kebab-container">
           <button className="kebab" onClick={(e) => { e.stopPropagation(); setShowKebabMenu((v) => !v); }}>
@@ -129,7 +157,14 @@ const PostCard = ({ post, onClick, showKebab = false, onDelete }) => {
         </div>
       </div>
 
-      <button className="lineage-btn" type="button" onClick={(e) => e.stopPropagation()}>
+      <button
+        className="lineage-btn"
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpenGraph && onOpenGraph(post.title);
+        }}
+      >
         Explore Semantic Lineage
       </button>
 

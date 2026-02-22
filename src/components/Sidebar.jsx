@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
 function Sidebar() {
   const [showMore, setShowMore] = useState(false);
+  const sidebarRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
@@ -54,6 +55,16 @@ function Sidebar() {
     ...(isAuthenticated ? [{ label: 'Logout', action: 'logout', isLogout: true }] : [])
   ];
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (showMore && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setShowMore(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showMore]);
+
 
   const handleItemClick = (item) => {
     if (item.disabled) return;
@@ -78,7 +89,7 @@ function Sidebar() {
 
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" ref={sidebarRef}>
       <div className="sidebar-content">
         {menuItems.map((item) => (
           <button
@@ -118,8 +129,10 @@ function Sidebar() {
         <div className="sidebar-divider"></div>
         
         <button 
-          className="sidebar-btn more-btn"
+          className={`sidebar-btn more-btn ${showMore ? 'open' : ''}`}
           onClick={() => setShowMore(!showMore)}
+          aria-expanded={showMore}
+          aria-haspopup="menu"
         >
           <span className="icon">
             <svg viewBox="0 0 24 24" width="20" height="20">
@@ -127,6 +140,7 @@ function Sidebar() {
             </svg>
           </span>
           <span className="label">More</span>
+          <span className={`more-caret ${showMore ? 'up' : ''}`}>⌃</span>
         </button>
         
         {showMore && (

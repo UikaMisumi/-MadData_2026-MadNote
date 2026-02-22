@@ -1,0 +1,127 @@
+.graph-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 72;
+  background: rgba(2, 6, 23, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.graph-panel {
+  width: min(1100px, 100%);
+  height: min(760px, 92vh);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 30px 90px -34px rgba(2, 6, 23, 0.8);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.graph-head {
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.graph-head h3 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+.graph-head p {
+  margin: 4px 0 0;
+  color: var(--mn-brand-700);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.graph-head button {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.graph-canvas {
+  background: #f8fafc;
+  padding: 10px;
+}
+
+.graph-canvas svg {
+  width: 100%;
+  height: 100%;
+}
+
+.edge {
+  stroke: #94a3b8;
+  stroke-width: 3;
+}
+
+.edge.dashed {
+  stroke-dasharray: 8 8;
+}
+
+.node-base {
+  fill: #fb7185;
+}
+
+.node-center {
+  fill: var(--mn-brand-600);
+}
+
+.node-next {
+  fill: #34d399;
+}
+
+.graph-canvas text {
+  fill: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.graph-canvas .center-title {
+  font-size: 16px;
+}
+
+.graph-canvas .center-sub {
+  font-size: 13px;
+}
+
+.graph-legend {
+  background: #0f172a;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.dot.base { background: #fb7185; }
+.dot.center { background: var(--mn-brand-600); }
+.dot.next { background: #34d399; }

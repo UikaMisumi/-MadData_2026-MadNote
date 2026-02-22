@@ -55,28 +55,27 @@ class DataManager:
 
     def load_data(self):
         """
-        Loads and merges data strictly adhering to the original mapping rules,
-        but using robust file resolution and safe fallback mechanisms.
+        Loads and merges data strictly adhering to the specified mapping rules.
         """
         # 1. Load the Base Table (final_posts_en.json)
+        # This provides 'id', 'innovation' (used for ai_summary & the_problem), and 'social_content' (used for the_method)
         main_json_path = self._resolve_existing("final_posts_en.json")
         if main_json_path:
             with main_json_path.open("r", encoding="utf-8") as f:
                 df = pd.DataFrame(json.load(f))
         else:
-            # Fallback: Try reading CSV if the JSON is missing to prevent total failure
+            # Fallback to prevent total crash
             csv_path_fallback = self._resolve_existing("xiaohongshu_full_topics.csv")
             if csv_path_fallback:
                 df = pd.read_csv(csv_path_fallback)
             else:
                 return pd.DataFrame()
 
-        # Ensure ID column exists
         if "id" not in df.columns:
             df["id"] = [f"paper-{i}" for i in range(len(df))]
         df["id"] = df["id"].astype(str)
 
-        # Prepare a cleaned title for merging (lowercase, stripped)
+        # Prepare a cleaned title for merging
         title_col = "display_title" if "display_title" in df.columns else "title"
         if title_col in df.columns:
             df["title_clean"] = df[title_col].astype(str).str.strip().str.lower()
@@ -132,7 +131,6 @@ class DataManager:
                     if len(cols_to_merge) > 1:
                         df = df.merge(csv_df[cols_to_merge], on="title_clean", how="left", suffixes=("_old", ""))
                         
-                        # Clean up conflicting columns by trusting the CSV metadata
                         for col in target_cols:
                             if f"{col}_old" in df.columns:
                                 df = df.drop(columns=[f"{col}_old"])
@@ -146,27 +144,44 @@ class DataManager:
         if "title" not in df.columns:
             df["title"] = "Untitled"
 
+        # Apply specific mappings for ai_summary and the_problem
         if "innovation" in df.columns:
             df["ai_summary"] = df["innovation"]
-        if "ai_summary" not in df.columns:
-            df["ai_summary"] = ""
+            df["the_problem"] = df["innovation"]
+        
+        # Apply specific mapping for the_method
+        if "social_content" in df.columns:
+            df["the_method"] = df["social_content"]
             
         if "dynamic_keywords" in df.columns:
             df["keywords"] = df["dynamic_keywords"]
         
         if "imageUrl" in df.columns:
             df["image_url"] = df["imageUrl"]
-        if "image_url" not in df.columns:
-            df["image_url"] = None
 
         if "likesCount" in df.columns:
             df["likes_count"] = df["likesCount"]
         
-        # --- Default Values (Reverting to original script standards) ---
+        # --- Default Values & Fallbacks ---
 
         if "abstract" not in df.columns:
             df["abstract"] = ""
         df["abstract"] = df["abstract"].fillna("")
+
+        if "ai_summary" not in df.columns:
+            df["ai_summary"] = ""
+        df["ai_summary"] = df["ai_summary"].fillna("")
+
+        if "the_problem" not in df.columns:
+            df["the_problem"] = ""
+        df["the_problem"] = df["the_problem"].fillna("")
+
+        if "the_method" not in df.columns:
+            df["the_method"] = ""
+        df["the_method"] = df["the_method"].fillna("")
+
+        if "image_url" not in df.columns:
+            df["image_url"] = None
 
         if "citations" not in df.columns:
             df["citations"] = 0
@@ -184,8 +199,9 @@ class DataManager:
             df["likes_count"] = 0
         df["likes_count"] = pd.to_numeric(df["likes_count"], errors='coerce').fillna(0).astype(int)
         
-        # Saves explicitly initialized to 0 based on original logic
-        df["saves_count"] = 0
+        if "saves_count" not in df.columns:
+            df["saves_count"] = 0
+        df["saves_count"] = pd.to_numeric(df["saves_count"], errors='coerce').fillna(0).astype(int)
 
         # --- List Standardization ---
         
@@ -220,7 +236,7 @@ class DataManager:
         df["author"] = df["authors"].apply(synthesize_author)
 
         # --- Cleanup ---
-        drop_cols = ["title_clean", "display_title", "innovation", "dynamic_keywords", "imageUrl", "likesCount"]
+        drop_cols = ["title_clean", "display_title", "innovation", "social_content", "dynamic_keywords", "imageUrl", "likesCount"]
         df = df.drop(columns=[c for c in drop_cols if c in df.columns], errors="ignore")
 
         return df

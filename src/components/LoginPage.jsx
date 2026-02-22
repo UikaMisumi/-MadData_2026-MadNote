@@ -53,7 +53,9 @@ function LoginPage() {
       login(data.user, data.token);
       navigate('/');
     } catch (err) {
-      if (err.status === 401) {
+      if (err.status === 0) {
+        setLoginError('Backend is not running on http://localhost:8000.');
+      } else if (err.status === 401) {
         setLoginError('Invalid email or password.');
       } else {
         setLoginError('Login failed. Please try again.');
@@ -96,8 +98,8 @@ function LoginPage() {
             <span>Email</span>
             <input
               id="email-input"
-              type="email"
-              placeholder="Enter your email"
+              type="text"
+              placeholder="Enter account name or email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={handleEmailBlur}

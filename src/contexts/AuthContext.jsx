@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { apiLogout } from '../api';
+import { apiLogout, apiMe, setAuthToken, clearAuthToken } from '../api';
 
 const AuthContext = createContext();
 
@@ -16,21 +16,23 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Restore session from localStorage (token + user cache)
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const restoreSession = async () => {
+      try {
+        const data = await apiMe();
+        setUser(data.user || null);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    setIsLoading(false);
+    restoreSession();
   }, []);
 
-  // Called after a successful login or signup API response
+  // Called after a successful login or signup API response.
   const login = (userData, token) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', token);
+    setAuthToken(token);
     setUser(userData);
   };
 
@@ -38,16 +40,14 @@ export const AuthProvider = ({ children }) => {
     try {
       await apiLogout();
     } catch {
-      // Ignore server errors — clear session regardless
+      // Ignore server errors and clear session regardless.
     }
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    clearAuthToken();
     setUser(null);
   };
 
   const updateUser = (userData) => {
     const updatedUser = { ...user, ...userData };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
     setUser(updatedUser);
   };
 
