@@ -59,6 +59,28 @@ function IntroOverlay() {
     };
   }, [visible]);
 
+  useEffect(() => {
+    const handleReopen = () => {
+      setVisible(true);
+      setIsExiting(false);
+      setBubblesShown(true);
+      setStage('topic');
+      setSelectedTopic('');
+      setSecondaryTopics([]);
+      setKeywordOptions([]);
+      setSelectedKeywords([]);
+      setExpansionOptions([]);
+      setSelectedExpansion([]);
+      setLoadingKeywords(false);
+      setLoadingExpansion(false);
+    };
+
+    window.addEventListener('mn:open-intro-overlay', handleReopen);
+    return () => {
+      window.removeEventListener('mn:open-intro-overlay', handleReopen);
+    };
+  }, []);
+
   const handleOverlayClick = () => {
     if (!bubblesShown) setBubblesShown(true);
   };

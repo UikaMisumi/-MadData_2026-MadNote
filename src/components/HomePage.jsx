@@ -66,11 +66,26 @@ function HomePage() {
     setShowGraphModal(true);
   };
 
+  const handleReselectBubbles = () => {
+    window.dispatchEvent(new CustomEvent('mn:open-intro-overlay'));
+  };
+
   return (
     <div className="home-page">
       <div className="home-content">
         <header className="discover-head fade-up">
-          <h2>{isDiscoverMode ? 'Discover For You' : 'Discover'}</h2>
+          <div className="discover-head-row">
+            <h2>{isDiscoverMode ? 'Discover For You' : 'Discover'}</h2>
+            {isDiscoverMode && (
+              <button
+                type="button"
+                className="discover-reselect-btn"
+                onClick={handleReselectBubbles}
+              >
+                Re-select Bubbles
+              </button>
+            )}
+          </div>
           <p>{discoverSubtitle}</p>
         </header>
 
